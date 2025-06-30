@@ -16,6 +16,11 @@ struct Temp {
 impl Temp {
     fn update(&mut self, new_temp: f32) {
         self.cur_temp = new_temp;
+        //Clear NaNs first
+        if self.min_temp.is_nan() { self.min_temp = new_temp };
+        if self.max_temp.is_nan() { self.max_temp = new_temp }
+        //Then check min/max
+        if self.cur_temp < self.min_temp { self.min_temp = new_temp; }
         if self.cur_temp > self.max_temp { self.max_temp = new_temp; }
         if self.min_temp.is_nan() {
             self.min_temp = new_temp;
