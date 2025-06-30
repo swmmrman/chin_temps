@@ -22,9 +22,6 @@ impl Temp {
         //Then check min/max
         if self.cur_temp < self.min_temp { self.min_temp = new_temp; }
         if self.cur_temp > self.max_temp { self.max_temp = new_temp; }
-        if self.min_temp.is_nan() {
-            self.min_temp = new_temp;
-        }
     }
     fn new() -> Temp {
         Temp {
@@ -81,7 +78,7 @@ impl EvapData {
 }
 
 fn main() {
-    let lines: u16 = 4;
+    let lines: u16 = 6;
     let mut port = serialport::new("/dev/ttyACM0", 115200)
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
