@@ -21,8 +21,11 @@ fn main() {
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
-                let text = String::from_utf8_lossy(&serial_buff[..t]);
-                print!("{}",text);
+                if(t > 48) {continue};
+                if(t < 40) {continue};
+                let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
+                parse_raw(text);
+                //print!("{}",text);
             },
             //From the examples..  Do nothing if timed out.
             Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
