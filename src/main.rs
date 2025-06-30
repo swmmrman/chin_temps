@@ -27,7 +27,15 @@ fn main() {
                 if t < 40 {continue};
                 let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
                 let data = parse_raw(text);
-                println!("{:?}",data);
+                println!("Out: {}f {}f\r\nIn: {}% {}% \r\nTD: {} HD: {}",
+                    data.temp2,
+                    data.humid2,
+                    data.temp1,
+                    data.temp2,
+                    data.temp1 - data.temp2,
+                    data.humid1 - data.humid2
+                )
+                
             },
             //From the examples..  Do nothing if timed out.
             Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
