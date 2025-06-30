@@ -91,6 +91,7 @@ fn main() {
                 if t < 32 {continue};
                 let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
                 let vals = text[0..text.len()-2].split(",").collect::<Vec<_>>();
+                //Check for 7 to be there.
                 if vals.len() < 8 {continue;}
                 data.update(vals);
                 // let data = parse_raw(text);
