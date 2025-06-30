@@ -2,6 +2,9 @@ use serialport;
 use std::io::{self,Read};
 use std::time::Duration;
 use std::thread::sleep;
+use crossterm::{ExecutableCommand,
+    cursor::{MoveUp}
+};
 
 #[derive(Debug)]
 struct EvapData {
@@ -20,6 +23,7 @@ fn main() {
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
     let mut serial_buff: Vec<u8> = vec![0; 256];
+    print!("\n\n\n");
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
@@ -27,6 +31,7 @@ fn main() {
                 if t < 40 {continue};
                 let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
                 let data = parse_raw(text);
+                let _ = io::stdout().execute(MoveUp(3));
                 println!("Out: {:.2}f {:.2}%\r\nIn: {:.2}f {:.2}% \r\nTD: {:.2}f HD: {:.2}%",
                     data.temp1,
                     data.humid1,
@@ -34,7 +39,7 @@ fn main() {
                     data.humid2,
                     data.temp2 - data.temp1,
                     data.humid2 - data.humid1
-                )
+                );
                 
             },
             //From the examples..  Do nothing if timed out.
