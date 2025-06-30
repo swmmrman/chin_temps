@@ -49,4 +49,5 @@ fn parse_raw(raw_string: String) {
         ldr:            vals[6].parse::<i32>().unwrap(),
         valve_status:   vals[7].parse::<i8>().unwrap(),
     };
+    println!("{:?}", raw_data);
 }
