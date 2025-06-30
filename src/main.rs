@@ -1,9 +1,10 @@
 use serialport;
 use std::io::{self,Read};
+use std::str::FromStr;
 use std::time::Duration;
 use std::thread::sleep;
 use crossterm::{ExecutableCommand,
-    cursor::{MoveUp}
+    cursor::{MoveUp,MoveDown}
 };
 
 #[derive(Debug)]
@@ -15,7 +16,7 @@ struct EvapData {
     humid2: f32,
     humid3: f32,
     ldr: i32,
-    valve_status: i8,    
+    valve_status: i8,
 }
 
 impl EvapData {
@@ -49,12 +50,13 @@ impl EvapData {
 }
 
 fn main() {
+    let lines: u16 = 4;
     let mut port = serialport::new("/dev/ttyACM0", 115200)
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
     let mut serial_buff: Vec<u8> = vec![0; 256];
     let mut data = EvapData::new();
-    print!("\n\n\n");
+    print!("{}","\n".repeat(lines.into()));
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
@@ -64,7 +66,7 @@ fn main() {
                 let vals = text[0..text.len()-2].split(",").collect::<Vec<_>>();
                 data.update(vals);
                 // let data = parse_raw(text);
-                let _ = io::stdout().execute(MoveUp(3));
+                let _ = io::stdout().execute(MoveUp(lines));
                 println!("Out: {:.2}f {:.2}%\r\nIn:  {:.2}f {:.2}% \r\nTD:  {:.2}f HD: {:.2}%\nValve: {}",
                     data.temp1,
                     data.humid1,
