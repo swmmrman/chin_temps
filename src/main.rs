@@ -88,7 +88,7 @@ fn main() {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
                 if t > 48 {continue};
-                if t < 40 {continue};
+                if t < 32 {continue};
                 let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
                 let vals = text[0..text.len()-2].split(",").collect::<Vec<_>>();
                 data.update(vals);
