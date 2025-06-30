@@ -11,6 +11,7 @@ fn main() {
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(_) => {
+                serial_buff.clear();
                 let text = String::from_utf8_lossy(&serial_buff);
                 println!("{}",text);
             },
