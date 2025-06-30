@@ -3,6 +3,7 @@ use std::io::{self,Read};
 use std::time::Duration;
 use std::thread::sleep;
 
+#[derive(Debug)]
 struct EvapData {
     temp1: f32,
     temp2: f32,
@@ -10,6 +11,7 @@ struct EvapData {
     humid1: f32,    
     humid2: f32,
     humid3: f32,
+    ldr: i32,
     valve_status: i8,    
 }
 
