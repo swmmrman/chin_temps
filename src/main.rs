@@ -32,6 +32,20 @@ impl EvapData {
     fn new() -> EvapData{
         EvapData { temp1: -70.0f32, temp2: -70.0f32, temp3: -70.0f32, humid1: -50.0f32, humid2: -50.0f32, humid3: -50.0f32, ldr: -500, valve_status: -1 }
     }
+    fn get_delta_t(&self) -> f32 {
+        self.temp2 - self.temp1
+    }
+    fn get_delta_h(&self) -> f32 {
+        self.humid2 - self.humid1
+    }
+    fn valve_status(&self) -> String {
+        match self.valve_status{
+            0 => "Off  ".to_string(),
+            1 => "On   ".to_string(),
+            2 => "Wait ".to_string(),
+            _ => "What?".to_string(),
+        }
+    }
 }
 
 fn main() {
