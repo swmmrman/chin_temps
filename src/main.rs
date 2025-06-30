@@ -93,14 +93,16 @@ fn main() {
                 data.update(vals);
                 // let data = parse_raw(text);
                 let _ = io::stdout().execute(MoveUp(lines));
-                println!("Out: {:.2}f {:.2}%\r\nIn:  {:.2}f {:.2}% \r\nTD:  {:.2}f HD: {:.2}%\nValve: {}",
+                println!("Out: {:.2}f {:.2}%\r\nIn:  {:.2}f {:.2}% \r\nTD:  {:.2}f HD: {:.2}%\nValve: {}\nMax Temps:\nIn:{:.2}f Out:{:.2}f",
                     data.temp1.get_cur(),
                     data.humid1,
                     data.temp2.get_cur(),
                     data.humid2,
                     data.get_delta_t(),
                     data.get_delta_h(),
-                    data.valve_status()
+                    data.valve_status(),
+                    data.temp1.max_temp,
+                    data.temp2.max_temp,
                 );
                 
             },
