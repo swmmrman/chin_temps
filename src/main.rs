@@ -10,10 +10,9 @@ fn main() {
     let mut serial_buff: Vec<u8> = vec![0; 256];
     loop {
         match port.read(serial_buff.as_mut_slice()) {
-            Ok(_) => {
-                serial_buff.clear();
-                let text = String::from_utf8_lossy(&serial_buff);
-                println!("{}",text);
+            Ok(t) => {
+                let text = String::from_utf8_lossy(&serial_buff[..t]);
+                print!("{}",text);
             },
             //From the examples..  Do nothing if timed out.
             Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
