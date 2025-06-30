@@ -5,6 +5,8 @@ use std::thread::sleep;
 use crossterm::{ExecutableCommand,
     cursor::{MoveUp}
 };
+extern crate chrono;
+use chrono::Local;
 
 struct Temp {
     min_temp: f32,
@@ -81,6 +83,8 @@ fn main() {
     let mut port = serialport::new("/dev/ttyACM0", 115200)
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
+    let date = Local::now();
+    println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
     let mut serial_buff: Vec<u8> = vec![0; 256];
     let mut data = EvapData::new();
     print!("{}","\n".repeat(lines.into()));
