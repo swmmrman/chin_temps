@@ -26,8 +26,8 @@ fn main() {
                 if t > 48 {continue};
                 if t < 40 {continue};
                 let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
-                parse_raw(text);
-                //print!("{}",text);
+                let data = parse_raw(text);
+                println!("{:?}",data);
             },
             //From the examples..  Do nothing if timed out.
             Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
@@ -37,7 +37,7 @@ fn main() {
         sleep(Duration::from_millis(500));
     }
 }
-fn parse_raw(raw_string: String) {
+fn parse_raw(raw_string: String) -> EvapData {
     let vals = raw_string[0..raw_string.len()-2].split(",").collect::<Vec<_>>();
     let raw_data = EvapData {
         temp1:          vals[0].parse::<f32>().unwrap(),
@@ -49,5 +49,5 @@ fn parse_raw(raw_string: String) {
         ldr:            vals[6].parse::<i32>().unwrap(),
         valve_status:   vals[7].parse::<i8>().unwrap(),
     };
-    println!("{:?}", raw_data);
+    raw_data
 }
