@@ -27,13 +27,13 @@ fn main() {
                 if t < 40 {continue};
                 let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
                 let data = parse_raw(text);
-                println!("Out: {}f {}f\r\nIn: {}% {}% \r\nTD: {} HD: {}",
+                println!("Out: {:.2}f {:.2}%\r\nIn: {:.2}f {:.2}% \r\nTD: {:.2}f HD: {:.2}%",
+                    data.temp1,
+                    data.humid1,
                     data.temp2,
                     data.humid2,
-                    data.temp1,
-                    data.temp2,
-                    data.temp1 - data.temp2,
-                    data.humid1 - data.humid2
+                    data.temp2 - data.temp1,
+                    data.humid2 - data.humid1
                 )
                 
             },
