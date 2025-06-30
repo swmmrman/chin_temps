@@ -4,7 +4,7 @@ use std::str::FromStr;
 use std::time::Duration;
 use std::thread::sleep;
 use crossterm::{ExecutableCommand,
-    cursor::{MoveUp,MoveDown}
+    cursor::{MoveUp}
 };
 
 #[derive(Debug)]
