@@ -37,6 +37,14 @@ fn main() {
 }
 fn parse_raw(raw_string: String) {
     let vals = raw_string[0..raw_string.len()-2].split(",").collect::<Vec<_>>();
-    
-    println!("{:?}",vals);
+    let raw_data = EvapData {
+        vals[0].parse::<f32>().unwrap(),
+        vals[1].parse::<f32>().unwrap(),
+        vals[2].parse::<f32>().unwrap(),
+        vals[3].parse::<f32>().unwrap(),
+        vals[4].parse::<f32>().unwrap(),
+        vals[5].parse::<f32>().unwrap(),
+        vals[6].parse::<i8>().unwrap(),
+    }
+    println!("{:?}",EvapData);
 }
