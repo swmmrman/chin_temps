@@ -35,3 +35,8 @@ fn main() {
         sleep(Duration::from_millis(500));
     }
 }
+fn parse_raw(raw_string: String) {
+    let vals = raw_string[0..raw_string.len()-2].split(",");
+    
+    println!("{:?}",vals.collect::<Vec<_>>());
+}
