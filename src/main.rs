@@ -23,8 +23,8 @@ fn main() {
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
-                if(t > 48) {continue};
-                if(t < 40) {continue};
+                if t > 48 {continue};
+                if t < 40 {continue};
                 let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
                 parse_raw(text);
                 //print!("{}",text);
