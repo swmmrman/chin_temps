@@ -32,6 +32,6 @@ fn main() {
             //Print error otherwise
             Err(e) => eprintln!("{:?}", e),
         }
-        sleep(Duration::from_millis(100));
+        sleep(Duration::from_millis(500));
     }
 }
