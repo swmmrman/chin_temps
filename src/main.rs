@@ -36,7 +36,7 @@ fn main() {
     }
 }
 fn parse_raw(raw_string: String) {
-    let vals = raw_string[0..raw_string.len()-2].split(",");
+    let vals = raw_string[0..raw_string.len()-2].split(",").collect::<Vec<_>>();
     
-    println!("{:?}",vals.collect::<Vec<_>>());
+    println!("{:?}",vals);
 }
