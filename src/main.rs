@@ -18,11 +18,28 @@ struct EvapData {
     valve_status: i8,    
 }
 
+impl EvapData {
+    fn update(&mut self, vals: Vec<&str>) {
+        self.temp1 = vals[0].parse::<f32>().unwrap();
+        self.temp2 = vals[1].parse::<f32>().unwrap();
+        self.temp3 = vals[2].parse::<f32>().unwrap();
+        self.humid1 = vals[3].parse::<f32>().unwrap();
+        self.humid2 = vals[4].parse::<f32>().unwrap();
+        self.humid3 = vals[5].parse::<f32>().unwrap();
+        self.ldr = vals[6].parse::<i32>().unwrap();
+        self.valve_status = vals[7].parse::<i8>().unwrap();
+    }
+    fn new() -> EvapData{
+        EvapData { temp1: -70.0f32, temp2: -70.0f32, temp3: -70.0f32, humid1: -50.0f32, humid2: -50.0f32, humid3: -50.0f32, ldr: -500, valve_status: -1 }
+    }
+}
+
 fn main() {
     let mut port = serialport::new("/dev/ttyACM0", 115200)
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
     let mut serial_buff: Vec<u8> = vec![0; 256];
+    let mut data = EvapData::new();
     print!("\n\n\n");
     loop {
         match port.read(serial_buff.as_mut_slice()) {
@@ -30,7 +47,9 @@ fn main() {
                 if t > 48 {continue};
                 if t < 40 {continue};
                 let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
-                let data = parse_raw(text);
+                let vals = text[0..text.len()-2].split(",").collect::<Vec<_>>();
+                data.update(vals);
+                // let data = parse_raw(text);
                 let _ = io::stdout().execute(MoveUp(3));
                 println!("Out: {:.2}f {:.2}%\r\nIn: {:.2}f {:.2}% \r\nTD: {:.2}f HD: {:.2}%",
                     data.temp1,
@@ -50,17 +69,4 @@ fn main() {
         sleep(Duration::from_millis(500));
     }
 }
-fn parse_raw(raw_string: String) -> EvapData {
-    let vals = raw_string[0..raw_string.len()-2].split(",").collect::<Vec<_>>();
-    let raw_data = EvapData {
-        temp1:          vals[0].parse::<f32>().unwrap(),
-        temp2:          vals[1].parse::<f32>().unwrap(),
-        temp3:          vals[2].parse::<f32>().unwrap(),
-        humid1:         vals[3].parse::<f32>().unwrap(),
-        humid2:         vals[4].parse::<f32>().unwrap(),
-        humid3:         vals[5].parse::<f32>().unwrap(),
-        ldr:            vals[6].parse::<i32>().unwrap(),
-        valve_status:   vals[7].parse::<i8>().unwrap(),
-    };
-    raw_data
-}
+
