@@ -1,6 +1,5 @@
 use serialport;
 use std::io::{self,Read};
-use std::str::FromStr;
 use std::time::Duration;
 use std::thread::sleep;
 use crossterm::{ExecutableCommand,
