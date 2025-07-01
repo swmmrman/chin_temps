@@ -133,8 +133,14 @@ impl EvapData {
 }
 
 fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut dev = "ACM0";
+    if args.len() > 1 {
+        dev = &args[1];
+    }
+    let dev_path = format!("/dev/tty{}", dev);
     let lines: u16 = 8;
-    let mut port = serialport::new("/dev/ttyACM0", 115200)
+    let mut port = serialport::new(dev_path, 115200)
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
     let mut date = Local::now();
