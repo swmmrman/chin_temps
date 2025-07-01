@@ -1,4 +1,4 @@
-use serialport;
+use serialport::{self, new};
 use std::io::{self,Read};
 use std::time::Duration;
 use std::thread::sleep;
@@ -62,6 +62,19 @@ impl RH {
     }
     fn get_cur(&self) -> f32 {
         self.cur_rh
+    }
+    fn update(&mut self, new_val: f32) {
+        if self.min_rh.is_nan() {
+            self.min_rh = new_val;
+            self.max_rh = new_val;
+        }
+        else if self.min_rh < new_val {
+            self.min_rh = new_val;
+        }
+        else if self.max_rh > new_val {
+            self.max_rh = new_val;
+        }
+        self.cur_rh = new_val;
     }
 }
 
