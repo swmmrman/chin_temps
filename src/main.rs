@@ -47,6 +47,16 @@ struct RH {
     cur_rh: f32
 }
 
+impl RH {
+    fn new() -> RH{
+        RH {
+            min_rh: f32::NAN,
+            max_rh: f32::NAN,
+            cur_rh: f32::NAN,
+        }
+    }
+}
+
 //#[derive(Debug)]
 struct EvapData {
     temp1: Temp,
