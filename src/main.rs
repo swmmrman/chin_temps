@@ -68,10 +68,10 @@ impl RH {
             self.min_rh = new_val;
             self.max_rh = new_val;
         }
-        else if self.min_rh < new_val {
+        else if self.min_rh > new_val {
             self.min_rh = new_val;
         }
-        else if self.max_rh > new_val {
+        else if self.max_rh < new_val {
             self.max_rh = new_val;
         }
         self.cur_rh = new_val;
