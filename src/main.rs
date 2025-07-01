@@ -41,6 +41,12 @@ impl Temp {
     }
 }
 
+struct RH {
+    min_rh: f32,
+    max_rh: f32,
+    cur_rh: f32
+}
+
 //#[derive(Debug)]
 struct EvapData {
     temp1: Temp,
