@@ -171,9 +171,8 @@ fn main() {
                     cur_day = days;
                     data.clear();
                     println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
-                    print!("{}", "\n".repeat(lines.into()));
+                    print!("\n{}", "\n".repeat(lines.into()));
                 }
-                
             },
             //From the examples..  Do nothing if timed out.
             Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
