@@ -6,7 +6,7 @@ use crossterm::{ExecutableCommand,
     cursor::{MoveUp}
 };
 extern crate chrono;
-use chrono::{prelude, Datelike, Local};
+use chrono::{Datelike, Local};
 
 struct Temp {
     min_temp: f32,
@@ -54,7 +54,7 @@ impl RH {
             max_rh: f32::NAN,
             cur_rh: f32::NAN,
         }
-    }
+    }c
 }
 
 //#[derive(Debug)]
