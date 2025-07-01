@@ -6,7 +6,7 @@ use crossterm::{ExecutableCommand,
     cursor::{MoveUp}
 };
 extern crate chrono;
-use chrono::{Local,Datelike};
+use chrono::{prelude, Datelike, Local};
 
 struct Temp {
     min_temp: f32,
@@ -85,6 +85,10 @@ impl EvapData {
         self.temp1.clear();
         self.temp2.clear();
         self.temp3.clear();
+        self.humid1 = -50.0f32;
+        self.humid2 = -50.0f32;
+        self.humid3 = -50.0f32;
+        self.valve_status = -1;
     }
 }
 
@@ -95,7 +99,7 @@ fn main() {
         .open().expect("failed to open port");
     let mut date = Local::now();
     println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
-    let cur_day: i32 = date.num_days_from_ce();
+    let mut cur_day: i32 = date.num_days_from_ce();
     let mut serial_buff: Vec<u8> = vec![0; 256];
     let mut data = EvapData::new();
     print!("{}","\n".repeat(lines.into()));
@@ -125,8 +129,12 @@ fn main() {
                     data.temp1.max_temp,
                 );
                 date = Local::now();
-                if date.num_days_from_ce() != cur_day {
-                    std::process::exit(0);
+                let days = date.num_days_from_ce();
+                if days != cur_day {
+                    cur_day = days;
+                    data.clear();
+                    println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
+                    print!("{}", "\n".repeat(lines.into()));
                 }
                 
             },
