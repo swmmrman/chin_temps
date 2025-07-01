@@ -139,7 +139,7 @@ fn main() {
         dev = &args[1];
     }
     let dev_path = format!("/dev/tty{}", dev);
-    let lines: u16 = 8;
+    let lines: u16 = 10;
     let mut port = serialport::new(dev_path, 115200)
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
@@ -163,7 +163,7 @@ fn main() {
                 data.update(vals);
                 // let data = parse_raw(text);
                 let _ = io::stdout().execute(MoveUp(lines));
-                println!("Out: {: >7.2}f {: >7.2}%\r\nIn:  {: >7.2}f {: >7.2}% \r\nDiff:{: >7.2}f {: >7.2}%\nValve: {}\nMax Temps:\t\t\t\tMin Temps:\nIn:{: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\nMax RH:\t\t\t\t\tMax TDs:\nIn:{: >7.2}%  Out:{: >7.2}%\t\tHigh: {: >7.2}f  Low: {: >7.2}f",
+                println!("Out: {: >7.2}f {: >7.2}%\r\nIn:  {: >7.2}f {: >7.2}% \r\nDiff:{: >7.2}f {: >7.2}%\nValve: {}\nMax Temps:\t\t\t\tMin Temps:\nIn:{: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\nMax RH:\t\t\t\t\tMax TDs:\nIn:{: >7.2}%  Out:{: >7.2}%\t\tHigh: {: >7.2}f  Low: {: >7.2}f\nMin RH:\nIn:{: >7.2}%  Out:{: >7.2}%",
                     data.temp1.get_cur(),
                     data.humid1.get_cur(),
                     data.temp2.get_cur(),
@@ -179,6 +179,8 @@ fn main() {
                     data.humid1.max_rh,
                     data.deltas.max_temp,
                     data.deltas.min_temp,
+                    data.humid2.min_rh,
+                    data.humid1.min_rh,
                 );
                 date = Local::now();
                 let days = date.num_days_from_ce();
