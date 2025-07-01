@@ -88,6 +88,7 @@ struct EvapData {
     humid3: RH,
     ldr: i32,
     valve_status: i8,
+    deltas: Temp,
 }
 
 impl EvapData {
@@ -100,9 +101,10 @@ impl EvapData {
         self.humid3.update(vals[5].parse::<f32>().unwrap());
         self.ldr = vals[6].parse::<i32>().unwrap();
         self.valve_status = vals[7].parse::<i8>().unwrap();
+        self.deltas.update(self.get_delta_t());
     }
     fn new() -> EvapData{
-        EvapData { temp1: Temp::new(), temp2: Temp::new(), temp3: Temp::new(), humid1: RH::new(), humid2: RH::new(), humid3: RH::new(), ldr: -500, valve_status: -1 }
+        EvapData { temp1: Temp::new(), temp2: Temp::new(), temp3: Temp::new(), humid1: RH::new(), humid2: RH::new(), humid3: RH::new(), ldr: -500, valve_status: -1, deltas: Temp::new() }
     }
     fn get_delta_t(&self) -> f32 {
         self.temp2.get_cur() - self.temp1.get_cur()
@@ -126,6 +128,7 @@ impl EvapData {
         self.humid2.clear();
         self.humid3.clear();
         self.valve_status = -1;
+        self.deltas.clear();
     }
 }
 
@@ -154,7 +157,7 @@ fn main() {
                 data.update(vals);
                 // let data = parse_raw(text);
                 let _ = io::stdout().execute(MoveUp(lines));
-                println!("Out: {:.2}f {:.2}%\r\nIn:  {:.2}f {:.2}% \r\nTD:  {:.2}f HD: {:.2}%\nValve: {}\nMax Temps:\t\t\t\tMin Temps:\nIn:{:.2}f Out:{:.2}f\t\t\tIn: {:.2}  Out: {:.2}\nMax RH:\nIn:{:.2}%, Out:{:.2}%",
+                println!("Out: {:.2}f {:.2}%\r\nIn:  {:.2}f {:.2}% \r\nTD:  {:.2}f HD: {:.2}%\nValve: {}\nMax Temps:\t\t\t\tMin Temps:\nIn:{:.2}f Out:{:.2}f\t\t\tIn: {:.2}  Out: {:.2}\nMax RH:\t\t\t\t\tMax TDs:\nIn:{:.2}%, Out:{:.2}%\t\t\tHigh: {:.2}f  Low:{:.2}f",
                     data.temp1.get_cur(),
                     data.humid1.get_cur(),
                     data.temp2.get_cur(),
@@ -167,7 +170,9 @@ fn main() {
                     data.temp2.min_temp,
                     data.temp1.min_temp,
                     data.humid2.max_rh,
-                    data.humid1.max_rh
+                    data.humid1.max_rh,
+                    data.deltas.max_temp,
+                    data.deltas.min_temp,
                 );
                 date = Local::now();
                 let days = date.num_days_from_ce();
