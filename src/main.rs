@@ -40,7 +40,7 @@ impl Temp {
 struct EvapData {
     temp1: Temp,
     temp2: Temp,
-    temp3: f32,
+    temp3: Temp,
     humid1: f32,    
     humid2: f32,
     humid3: f32,
@@ -52,7 +52,7 @@ impl EvapData {
     fn update(&mut self, vals: Vec<&str>) {
         self.temp1.update(vals[0].parse::<f32>().unwrap());
         self.temp2.update(vals[1].parse::<f32>().unwrap());
-        self.temp3 = vals[2].parse::<f32>().unwrap();
+        self.temp3.update(vals[2].parse::<f32>().unwrap());
         self.humid1 = vals[3].parse::<f32>().unwrap();
         self.humid2 = vals[4].parse::<f32>().unwrap();
         self.humid3 = vals[5].parse::<f32>().unwrap();
@@ -60,7 +60,7 @@ impl EvapData {
         self.valve_status = vals[7].parse::<i8>().unwrap();
     }
     fn new() -> EvapData{
-        EvapData { temp1: Temp::new(), temp2: Temp::new(), temp3: -70.0f32, humid1: -50.0f32, humid2: -50.0f32, humid3: -50.0f32, ldr: -500, valve_status: -1 }
+        EvapData { temp1: Temp::new(), temp2: Temp::new(), temp3: Temp::new(), humid1: -50.0f32, humid2: -50.0f32, humid3: -50.0f32, ldr: -500, valve_status: -1 }
     }
     fn get_delta_t(&self) -> f32 {
         self.temp2.get_cur() - self.temp1.get_cur()
