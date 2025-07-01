@@ -6,7 +6,7 @@ use crossterm::{ExecutableCommand,
     cursor::{MoveUp}
 };
 extern crate chrono;
-use chrono::Local;
+use chrono::{Local,Datelike};
 
 struct Temp {
     min_temp: f32,
@@ -83,8 +83,9 @@ fn main() {
     let mut port = serialport::new("/dev/ttyACM0", 115200)
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
-    let date = Local::now();
+    let mut date = Local::now();
     println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
+    let cur_day: i32 = date.num_days_from_ce();
     let mut serial_buff: Vec<u8> = vec![0; 256];
     let mut data = EvapData::new();
     print!("{}","\n".repeat(lines.into()));
@@ -113,6 +114,10 @@ fn main() {
                     data.temp2.max_temp,
                     data.temp1.max_temp,
                 );
+                date = Local::now();
+                if date.num_days_from_ce() != cur_day {
+                    std::process::exit(0);
+                }
                 
             },
             //From the examples..  Do nothing if timed out.
