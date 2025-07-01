@@ -83,9 +83,9 @@ struct EvapData {
     temp1: Temp,
     temp2: Temp,
     temp3: Temp,
-    humid1: f32,    
-    humid2: f32,
-    humid3: f32,
+    humid1: RH,    
+    humid2: RH,
+    humid3: RH,
     ldr: i32,
     valve_status: i8,
 }
@@ -95,20 +95,20 @@ impl EvapData {
         self.temp1.update(vals[0].parse::<f32>().unwrap());
         self.temp2.update(vals[1].parse::<f32>().unwrap());
         self.temp3.update(vals[2].parse::<f32>().unwrap());
-        self.humid1 = vals[3].parse::<f32>().unwrap();
-        self.humid2 = vals[4].parse::<f32>().unwrap();
-        self.humid3 = vals[5].parse::<f32>().unwrap();
+        self.humid1.update(vals[3].parse::<f32>().unwrap());
+        self.humid2.update(vals[4].parse::<f32>().unwrap());
+        self.humid3.update(vals[5].parse::<f32>().unwrap());
         self.ldr = vals[6].parse::<i32>().unwrap();
         self.valve_status = vals[7].parse::<i8>().unwrap();
     }
     fn new() -> EvapData{
-        EvapData { temp1: Temp::new(), temp2: Temp::new(), temp3: Temp::new(), humid1: -50.0f32, humid2: -50.0f32, humid3: -50.0f32, ldr: -500, valve_status: -1 }
+        EvapData { temp1: Temp::new(), temp2: Temp::new(), temp3: Temp::new(), humid1: RH::new(), humid2: RH::new(), humid3: RH::new(), ldr: -500, valve_status: -1 }
     }
     fn get_delta_t(&self) -> f32 {
         self.temp2.get_cur() - self.temp1.get_cur()
     }
     fn get_delta_h(&self) -> f32 {
-        self.humid2 - self.humid1
+        self.humid2.get_cur() - self.humid1.get_cur()
     }
     fn valve_status(&self) -> String {
         match self.valve_status{
@@ -122,9 +122,9 @@ impl EvapData {
         self.temp1.clear();
         self.temp2.clear();
         self.temp3.clear();
-        self.humid1 = -50.0f32;
-        self.humid2 = -50.0f32;
-        self.humid3 = -50.0f32;
+        self.humid1.clear();
+        self.humid2.clear();
+        self.humid3.clear();
         self.valve_status = -1;
     }
 }
@@ -156,9 +156,9 @@ fn main() {
                 let _ = io::stdout().execute(MoveUp(lines));
                 println!("Out: {:.2}f {:.2}%\r\nIn:  {:.2}f {:.2}% \r\nTD:  {:.2}f HD: {:.2}%\nValve: {}\nMax Temps:\nIn:{:.2}f Out:{:.2}f",
                     data.temp1.get_cur(),
-                    data.humid1,
+                    data.humid1.get_cur(),
                     data.temp2.get_cur(),
-                    data.humid2,
+                    data.humid2.get_cur(),
                     data.get_delta_t(),
                     data.get_delta_h(),
                     data.valve_status(),
