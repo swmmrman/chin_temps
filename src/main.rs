@@ -54,7 +54,15 @@ impl RH {
             max_rh: f32::NAN,
             cur_rh: f32::NAN,
         }
-    }c
+    }
+    fn clear(&mut self) {
+        self.min_rh = f32::NAN;
+        self.max_rh = f32::NAN;
+        self.cur_rh = f32::NAN;
+    }
+    fn get_cur(&self) -> f32 {
+        self.cur_rh
+    }
 }
 
 //#[derive(Debug)]
