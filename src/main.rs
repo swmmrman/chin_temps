@@ -130,7 +130,7 @@ impl EvapData {
 }
 
 fn main() {
-    let lines: u16 = 6;
+    let lines: u16 = 8;
     let mut port = serialport::new("/dev/ttyACM0", 115200)
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
@@ -154,7 +154,7 @@ fn main() {
                 data.update(vals);
                 // let data = parse_raw(text);
                 let _ = io::stdout().execute(MoveUp(lines));
-                println!("Out: {:.2}f {:.2}%\r\nIn:  {:.2}f {:.2}% \r\nTD:  {:.2}f HD: {:.2}%\nValve: {}\nMax Temps:\nIn:{:.2}f Out:{:.2}f",
+                println!("Out: {:.2}f {:.2}%\r\nIn:  {:.2}f {:.2}% \r\nTD:  {:.2}f HD: {:.2}%\nValve: {}\nMax Temps:\t\t\t\tMin Temps:\nIn:{:.2}f Out:{:.2}f\t\t\tIn: {:.2}  Out: {:.2}\nMax RH:\nIn:{:.2}%, Out:{:.2}%",
                     data.temp1.get_cur(),
                     data.humid1.get_cur(),
                     data.temp2.get_cur(),
@@ -164,6 +164,10 @@ fn main() {
                     data.valve_status(),
                     data.temp2.max_temp,
                     data.temp1.max_temp,
+                    data.temp2.min_temp,
+                    data.temp1.min_temp,
+                    data.humid2.max_rh,
+                    data.humid1.max_rh
                 );
                 date = Local::now();
                 let days = date.num_days_from_ce();
