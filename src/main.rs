@@ -34,6 +34,11 @@ impl Temp {
     fn get_cur(&self) -> f32 {
         self.cur_temp
     }
+    fn clear(&mut self) {
+        self.cur_temp = f32::NAN;
+        self.min_temp = f32::NAN;
+        self.max_temp = f32::NAN;
+    }
 }
 
 //#[derive(Debug)]
@@ -75,6 +80,11 @@ impl EvapData {
             2 => "Wait ".to_string(),
             _ => "What?".to_string(),
         }
+    }
+    fn clear(&mut self) {
+        self.temp1.clear();
+        self.temp2.clear();
+        self.temp3.clear();
     }
 }
 
