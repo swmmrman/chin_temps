@@ -1,4 +1,4 @@
-use serialport::{self, new};
+use serialport;
 use std::io::{self,Read};
 use std::time::Duration;
 use std::thread::sleep;
