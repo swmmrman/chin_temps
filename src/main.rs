@@ -187,8 +187,8 @@ fn main() {
                 if days != cur_day {
                     cur_day = days;
                     data.clear();
-                    println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
-                    print!("\n{}", "\n".repeat(lines.into()));
+                    println!("\n{}", date.format("%m-%d-%Y %H:%M:%S"));
+                    print!("{}", "\n".repeat(lines.into()));
                 }
             },
             //From the examples..  Do nothing if timed out.
