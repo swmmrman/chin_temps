@@ -193,6 +193,10 @@ fn main() {
             },
             //From the examples..  Do nothing if timed out.
             Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
+            Err(ref e) if e.kind() == io::ErrorKind::BrokenPipe => {
+                println!("Pipe is broken, device unplugged or double access.");
+                std::process::exit(1);   
+            },
             //Print error otherwise
             Err(e) => eprintln!("{:?}", e),
         }
