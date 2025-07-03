@@ -6,10 +6,11 @@ pub mod serial_parser{
     }
 
     impl Parser {
-        pub fn add_and_return(&mut self, input: &Vec<u8>) -> Vec<String> {
+        pub fn add_and_return(&mut self, input: &Vec<u8>) -> Option<Vec<String>> {
             Self::convert_add(self,input);
-            let output: String = Self::get_completed();
-            Self::clear_completed(self);
+            let output= Self::get_completed();
+            Self::convert_to_vec(self);
+            output.
             //more here
             output
         }
@@ -20,12 +21,23 @@ pub mod serial_parser{
             }
             self.partial.push_str(&outstring);
         }
-        fn get_completed() -> String {
-            String::new()
+        fn get_completed(&mut self) -> Option<String> {
+            let mut outstring = String::new();
+            if self.partial.contains("\r\n") {
+                let index = outstring.find("\r\n").unwrap();
+                outstring = self.partial[index + 2..].to_string();
+                Some(outstring)
+            }
+            else { 
+                None
+            }
         }
         fn clear_completed(&mut self) {
             self.last_completed = self.completed.clone();
             self.completed = String::new();
+        }
+        fn convert_to_vec(input: String) -> Vec<String> {
+            
         }
     }
     pub fn new() -> Parser {
