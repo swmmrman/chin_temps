@@ -157,8 +157,7 @@ fn main() {
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
-                if t > 48 {continue};
-                if t < 32 {continue};
+                if t > 48 {continue}; // Discard Initial buffer.
                 let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
                 let vals = text[0..text.len()-2].split(",").collect::<Vec<_>>();
                 //Check for empty values in the vec.
