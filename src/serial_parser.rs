@@ -6,8 +6,8 @@ pub mod serial_parser{
     }
 
     impl Parser {
-        pub fn add_and_return(&mut self, input: &Vec<u8>) -> Option<Vec<String>> {
-            Self::convert_add(self,input);
+        pub fn add_and_return(&mut self, input: &[u8], t:usize) -> Option<Vec<String>> {
+            Self::convert_add(self,&input[..t]);
             let out = match Self::get_completed(self) {
                 Some(val_string) => {
                     let output = Self::convert_to_vec(val_string);
@@ -20,7 +20,7 @@ pub mod serial_parser{
             };
             Some(out)
         }
-        fn convert_add(&mut self, incoming_vec: &Vec<u8>) {
+        fn convert_add(&mut self, incoming_vec: &[u8]) {
             let mut outstring = String::new();
             for byte in incoming_vec {
                 outstring.push(*byte as char);
