@@ -25,7 +25,7 @@ pub mod serial_parser{
             let mut outstring = String::new();
             if self.partial.contains("\r\n") {
                 let index = outstring.find("\r\n").unwrap();
-                outstring = self.partial[index + 2..].to_string();
+                outstring = self.partial[..index].to_string();
                 Some(outstring)
             }
             else { 
