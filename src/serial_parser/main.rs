@@ -1,21 +1,28 @@
-pub mod parser{
-    struct parsed_data{
+pub mod serail_parser{
+    struct parser {
         partial: String,
         completed: String,
-    }
-    pub fn add_and_return(input: Vec<u8>) -> Vec<String> {
-
+        last_completed: String
     }
     pub fn new() -> parser {
-
+        parser {
+            partial: String::new(),
+            completed: String::new(),
+            last_completed: String::new(),
+        }
     }
-    fn convert_add(&mut self) {
+    impl parser {
+        pub fn add_and_return(input: Vec<u8>) -> Vec<String> {
 
-    }
-    fn get_completed(&self) -> String {
+        }
+        fn convert_add(&mut self) {
 
-    }
-    fn clear_completed(&mut self) {
-        
+        }
+        fn get_completed(&self) -> String {
+
+        }
+        fn clear_completed(&mut self) {
+
+        }
     }
 }
