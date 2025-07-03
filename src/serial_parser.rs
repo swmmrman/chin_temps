@@ -42,6 +42,7 @@ pub mod serial_parser{
             if self.partial.contains("\r\n") {
                 let index = outstring.find("\r\n").unwrap();
                 outstring = self.partial[..index].to_string();
+                self.partial = self.partial[index +2..].to_owned();
             }
         }
         fn clear_completed(&mut self) {
