@@ -11,6 +11,7 @@ pub mod serial_parser{
             let out = match Self::get_completed(self) {
                 Some(val_string) => {
                     let output = Self::convert_to_vec(val_string);
+                    self.clear_completed();
                     output
                 }
                 None => {
