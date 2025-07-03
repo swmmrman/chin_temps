@@ -49,7 +49,12 @@ pub mod serial_parser{
             self.completed = String::new();
         }
         fn convert_to_vec(input: String) -> Vec<String> {
-            
+            let parts = input.split(",");
+            let mut out_vec = Vec::new();
+            for part in parts {
+                out_vec.push(part.to_string());
+            }
+            out_vec
         }
     }
     pub fn new() -> Parser {
