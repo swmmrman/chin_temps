@@ -1,3 +1,4 @@
+mod serial_parser;
 use serialport;
 use std::io::{self,Read};
 use std::time::Duration;
@@ -16,6 +17,7 @@ struct Temp {
 
 impl Temp {
     fn update(&mut self, new_temp: f32) {
+        let parser = serial_parser::serial_parser::new();
         //filter off errors on the first temp
         let temp_diff = self.cur_temp - &new_temp;
         if temp_diff.abs() < 10.0f32 {self.cur_temp = new_temp;}
