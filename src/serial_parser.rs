@@ -24,6 +24,7 @@ pub mod serial_parser{
             String::new()
         }
         fn clear_completed(&mut self) {
+            self.last_completed = self.completed.clone();
             self.completed = String::new();
         }
     }
