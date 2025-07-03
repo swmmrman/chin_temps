@@ -8,10 +8,16 @@ pub mod serial_parser{
     impl Parser {
         pub fn add_and_return(&mut self, input: &Vec<u8>) -> Option<Vec<String>> {
             Self::convert_add(self,input);
-            let val_string= Self::get_completed();
-            Self::convert_to_vec(val_string);
-            //more here
-            output
+            let out = match Self::get_completed(self) {
+                Some(val_string) => {
+                    let output = Self::convert_to_vec(val_string);
+                    output
+                }
+                None => {
+                    return None
+                }
+            };
+            Some(out)
         }
         fn convert_add(&mut self, incoming_vec: &Vec<u8>) {
             let mut outstring = String::new();
