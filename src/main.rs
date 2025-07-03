@@ -154,19 +154,15 @@ fn main() {
     let mut serial_buff: Vec<u8> = vec![0; 256];
     let mut data = EvapData::new();
     print!("{}","\n".repeat(lines.into()));
-    let reader = serial_parser::serial_parser::new();
+    let mut reader = serial_parser::serial_parser::new();
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
                 if t > 48 {continue}; // Discard Initial buffer.
-                // let text = String::from_utf8_lossy(&serial_buff[..t]).to_string();
-                // let vals = text[0..text.len()-2].split(",").collect::<Vec<_>>();
-                // //Check for empty values in the vec.
-                // if vals.contains(&"") {continue;}
-                // //Check for 7 to be there.
-                // if vals.len() < 8 {continue;}
-                let vals = reader.add_and_return(&serial_buff[..t]);
-                data.update(vals);
+                match reader.add_and_return(&serial_buff, t) {
+                    Some(vals) => { data.update(vals); }
+                    None => ()
+                };
                 // let data = parse_raw(text);
                 let _ = io::stdout().execute(MoveUp(lines));
                 println!("Out: {: >7.2}f {: >7.2}%\r\nIn:  {: >7.2}f {: >7.2}% \r\nDiff:{: >7.2}f {: >7.2}%\nValve: {}\nMax Temps:\t\t\t\tMin Temps:\nIn:{: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\nMax RH:\t\t\t\t\tMax TDs:\nIn:{: >7.2}%  Out:{: >7.2}%\t\tHigh: {: >7.2}f  Low: {: >7.2}f\nMin RH:\nIn:{: >7.2}%  Out:{: >7.2}%",
