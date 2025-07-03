@@ -38,10 +38,9 @@ pub mod serial_parser{
             }
         }
         fn check_partial(&mut self) {
-            let mut outstring = String::new();
             if self.partial.contains("\r\n") {
-                let index = outstring.find("\r\n").unwrap();
-                outstring = self.partial[..index].to_string();
+                let index = self.partial.find("\r\n").unwrap();
+                self.completed = self.partial[..index].to_string();
                 self.partial = self.partial[index +2..].to_owned();
             }
         }
