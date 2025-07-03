@@ -148,7 +148,7 @@ fn main() {
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
     let mut date = Local::now();
-    println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
+    println!("{} {}", date.format("%m-%d-%Y %H:%M:%S"), date.num_days_from_ce());
     let mut cur_day: i32 = date.num_days_from_ce();
     let mut serial_buff: Vec<u8> = vec![0; 256];
     let mut data = EvapData::new();
@@ -183,12 +183,13 @@ fn main() {
                     data.humid2.min_rh,
                     data.humid1.min_rh,
                 );
-                date = Local::now();
-                let days = date.num_days_from_ce();
+                let new_date = Local::now();
+                let days = new_date.num_days_from_ce();
+                print!("{}\r", days);
                 if days != cur_day {
                     cur_day = days;
                     data.clear();
-                    println!("\n{}", date.format("%m-%d-%Y %H:%M:%S"));
+                    println!("\n{} {}", new_date.format("%m-%d-%Y %H:%M:%S"), days);
                     print!("{}", "\n".repeat(lines.into()));
                 }
             },
