@@ -13,7 +13,11 @@ pub mod serail_parser{
     }
     impl parser {
         pub fn add_and_return(input: Vec<u8>) -> Vec<String> {
-
+            convert_add(input);
+            let output = get_completed();
+            clear_completed;
+            //more here
+            output
         }
         fn convert_add(&mut self, incoming_vec: &Vec<u8>) {
             let outstring = String::new();
