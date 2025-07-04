@@ -41,25 +41,7 @@ fn main() {
                 };
                 // let data = parse_raw(text);
                 let _ = io::stdout().execute(MoveUp(lines));
-                println!("Out: {: >7.2}f {: >7.2}%\r\nIn:  {: >7.2}f {: >7.2}% \r\nDiff:{: >7.2}f {: >7.2}%\nValve: {}\nMax Temps:\t\t\t\tMin Temps:\nIn:{: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\nMax RH:\t\t\t\t\tMax TDs:\nIn:{: >7.2}%  Out:{: >7.2}%\t\tHigh: {: >7.2}f  Low: {: >7.2}f\nMin RH:\nIn:{: >7.2}%  Out:{: >7.2}%",
-                    data.temp1.get_cur(),
-                    data.humid1.get_cur(),
-                    data.temp2.get_cur(),
-                    data.humid2.get_cur(),
-                    data.get_delta_t(),
-                    data.get_delta_h(),
-                    data.valve_status(),
-                    data.temp2.max_temp,
-                    data.temp1.max_temp,
-                    data.temp2.min_temp,
-                    data.temp1.min_temp,
-                    data.humid2.max_rh,
-                    data.humid1.max_rh,
-                    data.deltas.max_temp,
-                    data.deltas.min_temp,
-                    data.humid2.min_rh,
-                    data.humid1.min_rh,
-                );
+                println!("{}", data.get_evap_data());
                 let new_date = Local::now();
                 let days = new_date.num_days_from_ce();
                 print!("{}\r", days);
