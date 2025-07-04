@@ -24,7 +24,7 @@ fn main() {
     let mut port = serialport::new(dev_path, 115200)
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
-    let mut date = Local::now();
+    let date = Local::now();
     println!("{} {}", date.format("%m-%d-%Y %H:%M:%S"), date.num_days_from_ce());
     let mut cur_day: i32 = date.num_days_from_ce();
     let mut serial_buff: Vec<u8> = vec![0; 256];
