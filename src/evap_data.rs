@@ -1,9 +1,9 @@
-pub mod evap_self {
+pub mod evap_data {
     use crate::temp::temp;
     use crate::rh::rh;
 
 //#[derive(Debug)]
-    pub struct Evapself {
+    pub struct EvapData {
         pub temp1: temp::Temp,
         pub temp2: temp::Temp,
         pub temp3: temp::Temp,
@@ -15,7 +15,7 @@ pub mod evap_self {
         pub deltas: temp::Temp,
     }
 
-    impl Evapself {
+    impl EvapData {
         pub fn update(&mut self, vals: Vec<String>) {
             self.temp1.update(vals[0].parse::<f32>().unwrap());
             self.temp2.update(vals[1].parse::<f32>().unwrap());
@@ -51,7 +51,7 @@ pub mod evap_self {
             self.valve_status = -1;
             self.deltas.clear();
         }
-        pub fn get_evap(&self) -> String {
+        pub fn get_evap_data(&self) -> String {
             format!("Out: {: >7.2}f {: >7.2}%\r\nIn:  {: >7.2}f {: >7.2}% \r\nDiff:{: >7.2}f {: >7.2}%\nValve: {}\nMax Temps:\t\t\t\tMin Temps:\nIn:{: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\nMax RH:\t\t\t\t\tMax TDs:\nIn:{: >7.2}%  Out:{: >7.2}%\t\tHigh: {: >7.2}f  Low: {: >7.2}f\nMin RH:\nIn:{: >7.2}%  Out:{: >7.2}%",
                 self.temp1.get_cur(),
                 self.humid1.get_cur(),
@@ -74,8 +74,8 @@ pub mod evap_self {
         }
     }
 
-    pub fn new() -> Evapself{
-        Evapself { 
+    pub fn new() -> EvapData{
+        EvapData { 
             temp1:temp::new(),
             temp2:temp::new(),
             temp3:temp::new(),
