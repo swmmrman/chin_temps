@@ -14,6 +14,12 @@ pub mod rh {
         pub fn get_cur(&self) -> f32 {
             self.cur_rh
         }
+        pub fn get_min(&self) -> f32 {
+            self.min_rh
+        }
+        pub fn get_max(&self) -> f32 {
+            self.max_rh
+        }
         pub fn update(&mut self, new_val: f32) {
             if self.min_rh.is_nan() {
                 self.min_rh = new_val;
