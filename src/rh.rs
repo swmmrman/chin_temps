@@ -29,7 +29,7 @@ pub mod rh {
         }
     }
 
-    fn new() -> RH{
+    pub fn new() -> RH{
         RH {
             min_rh: f32::NAN,
             max_rh: f32::NAN,

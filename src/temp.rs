@@ -18,13 +18,6 @@ pub mod temp {
             if self.cur_temp < self.min_temp { self.min_temp = new_temp; }
             if self.cur_temp > self.max_temp { self.max_temp = new_temp; }
         }
-        pub fn new() -> Temp {
-            Temp {
-                min_temp: f32::NAN,
-                max_temp: f32::NAN,
-                cur_temp: f32::NAN
-            }
-        }
         pub fn get_cur(&self) -> f32 {
             self.cur_temp
         }
@@ -32,6 +25,14 @@ pub mod temp {
             self.cur_temp = f32::NAN;
             self.min_temp = f32::NAN;
             self.max_temp = f32::NAN;
+        }
+    }
+
+    pub fn new() -> Temp {
+        Temp {
+            min_temp: f32::NAN,
+            max_temp: f32::NAN,
+            cur_temp: f32::NAN
         }
     }
 }

@@ -55,15 +55,15 @@ pub mod evap_data {
 
     pub fn new() -> EvapData{
         EvapData { 
-            temp1: temp::Temp::new(),
-            temp2: temp::Temp::new(),
-            temp3: temp::Temp::new(),
-            humid1: rh::RH::new(),
-            humid2: rh::RH::new(),
-            humid3: rh::RH::new(),
+            temp1:temp::new(),
+            temp2:temp::new(),
+            temp3:temp::new(),
+            humid1: rh::new(),
+            humid2: rh::new(),
+            humid3: rh::new(),
             ldr: -500,
             valve_status: -1,
-            deltas: temp::Temp::new()
+            deltas:temp::new()
         }
     }
 }
