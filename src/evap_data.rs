@@ -1,9 +1,9 @@
-pub mod evap_data {
+pub mod evap_self {
     use crate::temp::temp;
     use crate::rh::rh;
 
 //#[derive(Debug)]
-    pub struct EvapData {
+    pub struct Evapself {
         pub temp1: temp::Temp,
         pub temp2: temp::Temp,
         pub temp3: temp::Temp,
@@ -15,7 +15,7 @@ pub mod evap_data {
         pub deltas: temp::Temp,
     }
 
-    impl EvapData {
+    impl Evapself {
         pub fn update(&mut self, vals: Vec<String>) {
             self.temp1.update(vals[0].parse::<f32>().unwrap());
             self.temp2.update(vals[1].parse::<f32>().unwrap());
@@ -51,10 +51,31 @@ pub mod evap_data {
             self.valve_status = -1;
             self.deltas.clear();
         }
+        pub fn get_evap(&self) -> String {
+            format!("Out: {: >7.2}f {: >7.2}%\r\nIn:  {: >7.2}f {: >7.2}% \r\nDiff:{: >7.2}f {: >7.2}%\nValve: {}\nMax Temps:\t\t\t\tMin Temps:\nIn:{: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\nMax RH:\t\t\t\t\tMax TDs:\nIn:{: >7.2}%  Out:{: >7.2}%\t\tHigh: {: >7.2}f  Low: {: >7.2}f\nMin RH:\nIn:{: >7.2}%  Out:{: >7.2}%",
+                self.temp1.get_cur(),
+                self.humid1.get_cur(),
+                self.temp2.get_cur(),
+                self.humid2.get_cur(),
+                self.get_delta_t(),
+                self.get_delta_h(),
+                self.valve_status(),
+                self.temp2.get_max(),
+                self.temp1.get_max(),
+                self.temp2.get_min(),
+                self.temp1.get_min(),
+                self.humid2.get_max(),
+                self.humid1.get_max(),
+                self.deltas.get_max(),
+                self.deltas.get_min(),
+                self.humid2.get_min(),
+                self.humid1.get_min(),
+            )
+        }
     }
 
-    pub fn new() -> EvapData{
-        EvapData { 
+    pub fn new() -> Evapself{
+        Evapself { 
             temp1:temp::new(),
             temp2:temp::new(),
             temp3:temp::new(),
