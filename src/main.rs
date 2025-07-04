@@ -1,5 +1,8 @@
 mod serial_parser;
 mod evap_data;
+mod temp;
+mod rh;
+
 use serialport;
 use std::io::{self,Read};
 use std::time::Duration;
@@ -9,79 +12,6 @@ use crossterm::{ExecutableCommand,
 };
 extern crate chrono;
 use chrono::{Datelike, Local};
-
-struct Temp {
-    min_temp: f32,
-    max_temp: f32,
-    cur_temp: f32,
-}
-
-impl Temp {
-    fn update(&mut self, new_temp: f32) {
-        //filter off errors on the first temp
-        let temp_diff = self.cur_temp - &new_temp;
-        if temp_diff.abs() < 10.0f32 {self.cur_temp = new_temp;}
-        //Clear NaNs first
-        if self.cur_temp.is_nan() { self.cur_temp = new_temp }
-        if self.min_temp.is_nan() { self.min_temp = new_temp }
-        if self.max_temp.is_nan() { self.max_temp = new_temp }
-        //Then check min/max
-        if self.cur_temp < self.min_temp { self.min_temp = new_temp; }
-        if self.cur_temp > self.max_temp { self.max_temp = new_temp; }
-    }
-    fn new() -> Temp {
-        Temp {
-            min_temp: f32::NAN,
-            max_temp: f32::NAN,
-            cur_temp: f32::NAN
-        }
-    }
-    fn get_cur(&self) -> f32 {
-        self.cur_temp
-    }
-    fn clear(&mut self) {
-        self.cur_temp = f32::NAN;
-        self.min_temp = f32::NAN;
-        self.max_temp = f32::NAN;
-    }
-}
-
-struct RH {
-    min_rh: f32,
-    max_rh: f32,
-    cur_rh: f32
-}
-
-impl RH {
-    fn new() -> RH{
-        RH {
-            min_rh: f32::NAN,
-            max_rh: f32::NAN,
-            cur_rh: f32::NAN,
-        }
-    }
-    fn clear(&mut self) {
-        self.min_rh = f32::NAN;
-        self.max_rh = f32::NAN;
-        self.cur_rh = f32::NAN;
-    }
-    fn get_cur(&self) -> f32 {
-        self.cur_rh
-    }
-    fn update(&mut self, new_val: f32) {
-        if self.min_rh.is_nan() {
-            self.min_rh = new_val;
-            self.max_rh = new_val;
-        }
-        else if self.min_rh > new_val {
-            self.min_rh = new_val;
-        }
-        else if self.max_rh < new_val {
-            self.max_rh = new_val;
-        }
-        self.cur_rh = new_val;
-    }
-}
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();

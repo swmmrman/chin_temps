@@ -1,20 +1,22 @@
-mod evap_data {
+pub mod evap_data {
+    use crate::temp::temp;
+    use crate::rh::rh;
 
 //#[derive(Debug)]
-    struct EvapData {
-        temp1: Temp,
-        temp2: Temp,
-        temp3: Temp,
-        humid1: RH,    
-        humid2: RH,
-        humid3: RH,
+    pub struct EvapData {
+        pub temp1: temp::Temp,
+        pub temp2: temp::Temp,
+        pub temp3: temp::Temp,
+        pub humid1: rh::RH,    
+        pub humid2: rh::RH,
+        pub humid3: rh::RH,
         ldr: i32,
-        valve_status: i8,
-        deltas: Temp,
+        pub valve_status: i8,
+        pub deltas: temp::Temp,
     }
 
     impl EvapData {
-        fn update(&mut self, vals: Vec<String>) {
+        pub fn update(&mut self, vals: Vec<String>) {
             self.temp1.update(vals[0].parse::<f32>().unwrap());
             self.temp2.update(vals[1].parse::<f32>().unwrap());
             self.temp3.update(vals[2].parse::<f32>().unwrap());
@@ -24,9 +26,6 @@ mod evap_data {
             self.ldr = vals[6].parse::<i32>().unwrap();
             self.valve_status = vals[7].parse::<i8>().unwrap();
             self.deltas.update(self.get_delta_t());
-        }
-        fn new() -> EvapData{
-            EvapData { temp1: Temp::new(), temp2: Temp::new(), temp3: Temp::new(), humid1: RH::new(), humid2: RH::new(), humid3: RH::new(), ldr: -500, valve_status: -1, deltas: Temp::new() }
         }
         fn get_delta_t(&self) -> f32 {
             self.temp2.get_cur() - self.temp1.get_cur()
@@ -52,5 +51,9 @@ mod evap_data {
             self.valve_status = -1;
             self.deltas.clear();
         }
+    }
+
+    pub fn new() -> EvapData{
+        EvapData { temp1: Temp::new(), temp2: Temp::new(), temp3: Temp::new(), humid1: RH::new(), humid2: RH::new(), humid3: RH::new(), ldr: -500, valve_status: -1, deltas: Temp::new() }
     }
 }
