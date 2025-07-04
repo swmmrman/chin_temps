@@ -21,6 +21,12 @@ pub mod temp {
         pub fn get_cur(&self) -> f32 {
             self.cur_temp
         }
+        pub fn get_min(&self) -> f32 {
+            self.min_temp
+        }
+        pub fn get_max(&self) -> f32 {
+            self.max_temp
+        }
         pub fn clear(&mut self) {
             self.cur_temp = f32::NAN;
             self.min_temp = f32::NAN;
