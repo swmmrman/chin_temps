@@ -21,6 +21,7 @@ fn main() {
     }
     let dev_path = format!("/dev/tty{}", dev);
     let lines: u16 = 10;
+    let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
     let mut port = serialport::new(dev_path, 115200)
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
@@ -36,7 +37,10 @@ fn main() {
             Ok(t) => {
                 if t > 48 {continue}; // Discard Initial buffer.
                 match reader.add_and_return(&serial_buff, t) {
-                    Some(vals) => { data.update(vals); }
+                    Some(vals) => { 
+                        data.update(vals);
+                        sleep_time = 500; //Raise sleep time after first completed.
+                    }
                     None => ()
                 };
                 // let data = parse_raw(text);
@@ -60,7 +64,7 @@ fn main() {
             //Print error otherwise
             Err(e) => eprintln!("{:?}", e),
         }
-        sleep(Duration::from_millis(500));
+        sleep(Duration::from_millis(sleep_time));
     }
 }
 
