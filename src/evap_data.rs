@@ -41,7 +41,7 @@ pub mod evap_data {
                 _ => "What?".to_string(),
             }
         }
-        fn clear(&mut self) {
+        pub fn clear(&mut self) {
             self.temp1.clear();
             self.temp2.clear();
             self.temp3.clear();
