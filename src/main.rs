@@ -47,7 +47,7 @@ fn main() {
                 if days != cur_day {
                     cur_day = days;
                     data.clear();
-                    println!("\n{} {}", new_date.format("%m-%d-%Y %H:%M:%S"), days);
+                    println!("\n{}", new_date.format("%m-%d-%Y %H:%M:%S"));
                     print!("{}", "\n".repeat(lines.into()));
                 }
             },
