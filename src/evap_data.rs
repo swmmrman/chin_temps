@@ -17,15 +17,20 @@ pub mod evap_data {
 
     impl EvapData {
         pub fn update(&mut self, vals: Vec<String>) {
-            self.temp1.update(vals[0].parse::<f32>().unwrap());
-            self.temp2.update(vals[1].parse::<f32>().unwrap());
-            self.temp3.update(vals[2].parse::<f32>().unwrap());
-            self.humid1.update(vals[3].parse::<f32>().unwrap());
-            self.humid2.update(vals[4].parse::<f32>().unwrap());
-            self.humid3.update(vals[5].parse::<f32>().unwrap());
-            self.ldr = vals[6].parse::<i32>().unwrap();
-            self.valve_status = vals[7].parse::<i8>().unwrap();
-            self.deltas.update(self.get_delta_t());
+            match validate(&vals) {
+                true => {
+                    self.temp1.update(vals[0].parse::<f32>().unwrap());
+                    self.temp2.update(vals[1].parse::<f32>().unwrap());
+                    self.temp3.update(vals[2].parse::<f32>().unwrap());
+                    self.humid1.update(vals[3].parse::<f32>().unwrap());
+                    self.humid2.update(vals[4].parse::<f32>().unwrap());
+                    self.humid3.update(vals[5].parse::<f32>().unwrap());
+                    self.ldr = vals[6].parse::<i32>().unwrap();
+                    self.valve_status = vals[7].parse::<i8>().unwrap();
+                    self.deltas.update(self.get_delta_t());
+                }
+                false => (),
+            }
         }
         fn get_delta_t(&self) -> f32 {
             self.temp2.get_cur() - self.temp1.get_cur()
@@ -86,5 +91,24 @@ pub mod evap_data {
             valve_status: -1,
             deltas:temp::new()
         }
+    }
+    fn validate(vals: &Vec<String>) -> bool {
+        for val in &vals[0..5] {
+            match val.parse::<f32>() {
+            Ok(_) => {
+                continue;
+            }
+            _ => return false
+            }
+        }
+        match &vals[6].parse::<i32>() {
+            Ok(_) => (),
+            _ => return false
+        }
+        match &vals[7].parse::<i8>() {
+            Ok(_) => (),
+            _ => return false
+        }
+        true
     }
 }
