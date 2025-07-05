@@ -42,6 +42,9 @@ pub mod serial_parser{
             if self.partial.contains("\r\n") {
                 let index = self.partial.find("\r\n").unwrap();
                 self.completed = self.partial[..index].to_string();
+                //count the commas, discard if < 8 fields.(CSV formatted)
+                let commas = self.completed.matches(",").count();
+                if commas != 7 { self.clear_completed(); }
                 self.partial = self.partial[index +2..].to_owned();
             }
         }
