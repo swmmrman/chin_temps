@@ -1,7 +1,7 @@
 use crate::temp::temp;
 use crate::rh::rh;
 
-struct sensor {
+struct Sensor {
     id: String,
     temperature: temp::Temp,
     humidity: rh::RH
@@ -41,5 +41,12 @@ impl sensor {
                 }
             }
         }
+    }
+}
+fn new(identifier: String) -> self::Sensor {
+    Sensor {
+        id: identifier,
+        temperature: temp::new(),
+        humidity: rh::new(),
     }
 }
