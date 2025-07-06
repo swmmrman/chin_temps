@@ -51,7 +51,7 @@ impl Sensor {
         }
     }
 }
-fn new(identifier: String) -> self::Sensor {
+fn new(identifier: String) -> Sensor {
     Sensor {
         id: identifier,
         temperature: temp::new(),
