@@ -1,34 +1,41 @@
 use crate::temp::temp;
 use crate::rh::rh;
 
-struct Sensor {
+pub struct Sensor {
     id: String,
     temperature: temp::Temp,
     humidity: rh::RH
 }
-struct Readings {
-    temp: temp::Temp,
-    rh: rh::RH,
+pub struct Readings {
+    pub temp: temp::Temp,
+    pub rh: rh::RH,
 }
 
-enum ReadingType{
+pub enum ReadingType{
     Temp,
     Humidity,
 }
 
-enum ReadingKind {
+pub enum ReadingKind {
     Min,
     Max,
     Cur
 }
 impl Sensor {
-    fn get_all(&self) -> Readings {
-        Readings {
-            temp: temp::Temp{min_temp: get_reading(ReadingType::temp,)}
-            rh: self.humidity.clone(),
-        }
+    pub fn get_all(&self) -> Readings {
+        let mut out = Readings {
+            temp: temp::new(),
+            rh: rh::new(),
+        };
+        out.temp.update(self.temperature.get_min());
+        out.temp.update(self.temperature.get_max());
+        out.temp.update(self.temperature.get_cur());
+        out.rh.update(self.humidity.get_max());
+        out.rh.update(self.humidity.get_min());
+        out.rh.update(self.humidity.get_cur());
+        out
     }
-    fn get_reading(&self,  reading: ReadingType, kind: ReadingKind) -> f32 {
+    pub fn get_reading(&self,  reading: ReadingType, kind: ReadingKind) -> f32 {
         match reading {
             self::ReadingType::Temp => {
                 match kind {
