@@ -23,10 +23,7 @@ pub enum ReadingKind {
 }
 impl Sensor {
     pub fn get_all(&self) -> Readings {
-        let mut out = Readings {
-            temp: temp::new(),
-            rh: rh::new(),
-        };
+        let mut out = new_readings();
         out.temp.update(self.temperature.get_min());
         out.temp.update(self.temperature.get_max());
         out.temp.update(self.temperature.get_cur());
@@ -59,5 +56,11 @@ fn new(identifier: String) -> self::Sensor {
         id: identifier,
         temperature: temp::new(),
         humidity: rh::new(),
+    }
+}
+fn new_readings() -> Readings {
+    Readings {
+        temp: temp::new(),
+        rh: rh::new(),
     }
 }
