@@ -6,8 +6,9 @@ struct Sensor {
     temperature: temp::Temp,
     humidity: rh::RH
 }
-struct readings {
-
+struct Readings {
+    temp: temp::Temp,
+    rh: rh::RH,
 }
 
 enum r_type{
