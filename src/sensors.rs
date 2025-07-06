@@ -11,34 +11,37 @@ struct Readings {
     rh: rh::RH,
 }
 
-enum r_type{
-    temp,
-    humidity,
+enum ReadingType{
+    Temp,
+    Humidity,
 }
 
-enum r_kind {
-    min,
-    max,
-    cur
+enum ReadingKind {
+    Min,
+    Max,
+    Cur
 }
-impl sensor {
-    fn get_all(&self) {
-
+impl Sensor {
+    fn get_all(&self) -> Readings {
+        Readings {
+            temp: temp::Temp{min_temp: get_reading(ReadingType::temp,)}
+            rh: self.humidity.clone(),
+        }
     }
-    fn get_reading(&self,  reading: r_type, kind: r_kind) -> f32 {
+    fn get_reading(&self,  reading: ReadingType, kind: ReadingKind) -> f32 {
         match reading {
-            self::r_type::temp => {
+            self::ReadingType::Temp => {
                 match kind {
-                    self::r_kind::min => self.temperature.get_min(),
-                    self::r_kind::max => self.temperature.get_max(),
-                    self::r_kind::cur => self.temperature.get_cur()
+                    self::ReadingKind::Min => self.temperature.get_min(),
+                    self::ReadingKind::Max => self.temperature.get_max(),
+                    self::ReadingKind::Cur => self.temperature.get_cur()
                 }
             }
-            self::r_type::humidity => {
+            self::ReadingType::Humidity => {
                 match kind {
-                    self::r_kind::min => self.humidity.get_min(),
-                    self::r_kind::max => self.humidity.get_max(),
-                    self::r_kind::cur => self.humidity.get_cur(),
+                    self::ReadingKind::Min => self.humidity.get_min(),
+                    self::ReadingKind::Max => self.humidity.get_max(),
+                    self::ReadingKind::Cur => self.humidity.get_cur(),
                 }
             }
         }
