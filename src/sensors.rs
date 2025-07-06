@@ -1,29 +1,15 @@
 pub mod sensor {
     use crate::temp::temp;
     use crate::rh::rh;
+    use super::readings::{ReadingKind, ReadingType};
     pub struct Sensor {
         id: String,
         temperature: temp::Temp,
         humidity: rh::RH
     }
-    pub struct Readings {
-        pub temp: temp::Temp,
-        pub rh: rh::RH,
-    }
-
-    pub enum ReadingType{
-        Temp,
-        Humidity,
-    }
-
-    pub enum ReadingKind {
-        Min,
-        Max,
-        Cur
-    }
     impl Sensor {
-        pub fn get_all(&self) -> Readings {
-            let mut out = new_readings();
+        pub fn get_all(&self) -> super::readings::Readings {
+            let mut out = super::readings::new();
             out.temp.update(self.temperature.get_min());
             out.temp.update(self.temperature.get_max());
             out.temp.update(self.temperature.get_cur());
@@ -36,9 +22,9 @@ pub mod sensor {
             match reading {
                 self::ReadingType::Temp => {
                     match kind {
-                        self::ReadingKind::Min => self.temperature.get_min(),
-                        self::ReadingKind::Max => self.temperature.get_max(),
-                        self::ReadingKind::Cur => self.temperature.get_cur()
+                        ReadingKind::Min => self.temperature.get_min(),
+                        ReadingKind::Max => self.temperature.get_max(),
+                        ReadingKind::Cur => self.temperature.get_cur()
                     }
                 }
                 self::ReadingType::Humidity => {
@@ -59,9 +45,28 @@ pub mod sensor {
         }
     }
 }
-    fn new_readings() -> Readings {
+pub mod readings {
+    use crate::temp::temp;
+    use crate::rh::rh;
+    pub struct Readings {
+        pub temp: temp::Temp,
+        pub rh: rh::RH,
+        
+    }
+    pub enum ReadingType{
+        Temp,
+        Humidity,
+    }
+
+    pub enum ReadingKind {
+        Min,
+        Max,
+        Cur
+    }
+    pub fn new() -> Readings {
         Readings {
             temp: temp::new(),
             rh: rh::new(),
         }
     }
+}
