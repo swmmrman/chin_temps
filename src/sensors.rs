@@ -2,11 +2,13 @@ pub mod sensor {
     use crate::temp::temp;
     use crate::rh::rh;
     use super::readings::{ReadingKind, ReadingType};
+    
     pub struct Sensor {
         id: String,
         temperature: temp::Temp,
         humidity: rh::RH
     }
+
     impl Sensor {
         pub fn get_all(&self) -> super::readings::Readings {
             let mut out = super::readings::new();
@@ -18,6 +20,7 @@ pub mod sensor {
             out.rh.update(self.humidity.get_cur());
             out
         }
+
         pub fn get_reading(&self,  reading: ReadingType, kind: ReadingKind) -> f32 {
             match reading {
                 self::ReadingType::Temp => {
@@ -37,6 +40,7 @@ pub mod sensor {
             }
         }
     }
+
     fn new(identifier: String) -> Sensor {
         Sensor {
             id: identifier,
@@ -45,14 +49,17 @@ pub mod sensor {
         }
     }
 }
+
 pub mod readings {
     use crate::temp::temp;
     use crate::rh::rh;
+    
     pub struct Readings {
         pub temp: temp::Temp,
         pub rh: rh::RH,
         
     }
+
     pub enum ReadingType{
         Temp,
         Humidity,
@@ -63,6 +70,7 @@ pub mod readings {
         Max,
         Cur
     }
+
     pub fn new() -> Readings {
         Readings {
             temp: temp::new(),
