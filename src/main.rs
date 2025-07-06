@@ -1,4 +1,5 @@
 mod serial_parser;
+mod sensors;
 mod evap_data;
 mod temp;
 mod rh;
