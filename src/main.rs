@@ -13,7 +13,7 @@ use crossterm::{ExecutableCommand,
     cursor::{MoveUp}
 };
 extern crate chrono;
-use chrono::{Datelike, Local};
+use chrono::{DateTime, Datelike, Local};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -34,6 +34,7 @@ fn main() {
     let mut cur_day: i32 = date.num_days_from_ce();
     let mut serial_buff: Vec<u8> = vec![0; 256];
     let mut data = evap_data::evap_data::new();
+    let mut five_minute = evap_data::evap_data::new();
     print!("{}","\n".repeat(lines.into()));
     if ! path::Path::exists(out_path) {
         fs::create_dir(out_path).unwrap();
@@ -50,7 +51,8 @@ fn main() {
                 if t > 48 {continue}; // Discard Initial buffer.
                 match reader.add_and_return(&serial_buff, t) {
                     Some(vals) => { 
-                        data.update(vals);
+                        data.update(vals.clone());
+                        five_minute.update(vals);
                         sleep_time = 500; //Raise sleep time after first completed.
                     }
                     None => ()
@@ -65,6 +67,14 @@ fn main() {
                     data.clear();
                     println!("\n{}", new_date.format("%m-%d-%Y %H:%M:%S"));
                     print!("{}", "\n".repeat(lines.into()));
+                }
+                let ts = Local::now().timestamp();
+                if ts % 300 == 0 {
+                    let _ = io::stdout().execute(MoveUp(lines));
+                    println!("{}\n", five_minute.get_evap_data());
+                    println!("{}", new_date.format("%m-%d-%Y %H:%M:%S"));
+                    print!("{}", "\n".repeat(lines.into()));
+                    five_minute.clear();
                 }
             },
             //From the examples..  Do nothing if timed out.
