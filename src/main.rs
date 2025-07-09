@@ -80,10 +80,13 @@ fn main() {
                 }
                 let ts = Local::now().timestamp();
                 if ts % 300 == 0 {
-                    let _ = io::stdout().execute(MoveUp(lines));
-                    println!("{}\n", five_minute.get_evap_data());
-                    println!("{}", new_date.format("%m-%d-%Y %H:%M:%S"));
-                    print!("{}", "\n".repeat(lines.into()));
+                    match log_file.write(five_minute.get_evap_data().as_bytes()) {
+                        Ok(_) => (),
+                        Err(e) => {
+                            println!("Error creating log file: {}", e);
+                            std::process::exit(1);
+                        }
+                    }
                     five_minute.clear();
                 }
             },
