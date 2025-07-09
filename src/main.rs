@@ -1,5 +1,5 @@
 mod serial_parser;
-mod sensors;
+//mod sensors;
 mod evap_data;
 mod temp;
 mod rh;
@@ -49,6 +49,7 @@ fn main() {
         .truncate(true)
         .open(out_path.join(out_file_name)).unwrap();
     let mut reader = serial_parser::serial_parser::new();
+    let mut ts = date.timestamp() - (date.timestamp() % 300);
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
@@ -71,8 +72,9 @@ fn main() {
                     println!("\n{}", new_date.format("%m-%d-%Y %H:%M:%S"));
                     print!("{}", "\n".repeat(lines.into()));
                 }
-                let ts = Local::now().timestamp();
-                if ts % 300 == 0 {
+                let check = check_time(300, ts, true);
+                if check != 0 {
+                    ts = check;
                     write_to_log(&mut five_minute, new_date, &mut log_file);
                 }
             },
@@ -121,4 +123,19 @@ fn write_to_log(
         }
     }
     short_term.clear();
+}
+
+fn check_time(time_frame: i64, last_time: i64, aligned: bool) -> i64 {
+    let cur_ts =  Local::now().timestamp();
+    let time_diff = cur_ts - last_time;
+    if time_diff >= time_frame {
+        let mut ts = cur_ts - (time_diff - time_frame);
+        if aligned {
+             ts -= ts % time_frame;
+        }
+        ts
+    }
+    else {
+        0
+    }
 }
