@@ -5,6 +5,7 @@ mod temp;
 mod rh;
 
 use serialport;
+use std::fs::File;
 use std::{path,fs};
 use std::io::{self, Read, Seek, Write};
 use std::time::Duration;
@@ -17,6 +18,15 @@ use chrono::{DateTime, Datelike, Local};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
+    let logs_path: String = "~/logs/evap/".to_owned();
+    if ! path::Path::exists(path::Path::new(&logs_path)) {
+        fs::create_dir(&logs_path).unwrap()
+    }
+    let mut log_file = fs::OpenOptions::new()
+        .create(true)
+        .write(true)
+        .append(true)
+        .open(path::Path::new(&logs_path).join("evap.log")).unwrap();
     let mut dev = "ACM0";
     if args.len() > 1 {
         dev = &args[1];
