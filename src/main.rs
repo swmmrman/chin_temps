@@ -18,9 +18,10 @@ use chrono::{DateTime, Datelike, Local};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    let logs_path: String = "~/logs/evap/".to_owned();
-    if ! path::Path::exists(path::Path::new(&logs_path)) {
-        fs::create_dir(&logs_path).unwrap()
+    let home_dir = std::env::home_dir().unwrap();
+    let logs_path = home_dir.join("logs/evap/");
+    if ! path::Path::exists(&logs_path) {
+        fs::create_dir_all(&logs_path).unwrap()
     }
     let mut log_file = fs::OpenOptions::new()
         .create(true)
@@ -80,11 +81,14 @@ fn main() {
                 }
                 let ts = Local::now().timestamp();
                 if ts % 300 == 0 {
-                    match log_file.write(five_minute.get_evap_data().as_bytes()) {
+                    let log_string = format!("[{}]\n{}\n", 
+                        new_date.format("%m-%d-%Y %H:%M:%S"),
+                        five_minute.get_evap_data(),
+                    );
+                    match log_file.write(log_string.as_bytes()) {
                         Ok(_) => (),
                         Err(e) => {
-                            println!("Error creating log file: {}", e);
-                            std::process::exit(1);
+                            println!("Error writting to log file: {}", e);
                         }
                     }
                     five_minute.clear();
