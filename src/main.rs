@@ -68,7 +68,6 @@ fn main() {
                     }
                     None => ()
                 };
-                // let data = parse_raw(text);
                 let _ = io::stdout().execute(MoveUp(lines));
                 println!("{}", data.get_evap_data());
                 let new_date = Local::now();
@@ -94,7 +93,7 @@ fn main() {
                     five_minute.clear();
                 }
             },
-            //From the examples..  Do nothing if timed out.
+            //Skip timeouts, quit if device is gone.
             Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
             Err(ref e) if e.kind() == io::ErrorKind::BrokenPipe => {
                 println!("Pipe is broken, device unplugged or double access.");
