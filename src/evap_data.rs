@@ -64,10 +64,10 @@ Diff:{: >7.2}f {: >7.2}%\n\
 Valve: {}\n\
 Max Temps:\t\t\t\tMin Temps:\n\
 In:{: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\n\
-Max RH:\t\t\t\t\tMax TDs:\n\
+Max RH:\t\t\t\t\tMin RH:\n\
 In:{: >7.2}%  Out:{: >7.2}%\t\tHigh: {: >7.2}f  Low: {: >7.2}f\n\
-Min RH:\t\t\t\t\tSensor 3\n\
-In:{: >7.2}%  Out:{: >7.2}%\t\tTemp:{: >7.2}f   RH:{: >7.2}%",
+Max TDs:\t\t\t\tSensor 3\n\
+In:{: >7.2}f  Out:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%",
                 self.temp1.get_cur(),
                 self.humid1.get_cur(),
                 self.temp2.get_cur(),
@@ -81,10 +81,10 @@ In:{: >7.2}%  Out:{: >7.2}%\t\tTemp:{: >7.2}f   RH:{: >7.2}%",
                 self.temp1.get_min(),
                 self.humid2.get_max(),
                 self.humid1.get_max(),
-                self.deltas.get_max(),
-                self.deltas.get_min(),
                 self.humid2.get_min(),
                 self.humid1.get_min(),
+                self.deltas.get_max(),
+                self.deltas.get_min(),
                 self.temp3.get_cur(),
                 self.humid3.get_cur()
             )
