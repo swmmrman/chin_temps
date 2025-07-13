@@ -61,7 +61,9 @@ pub mod evap_data {
 "Out: {: >7.2}f {: >7.2}%\r\n\
 In:  {: >7.2}f {: >7.2}% \r\n\
 Diff:{: >7.2}f {: >7.2}%\n\
+\n\
 Valve: {}\n\
+\n\
 Max Temps:\t\t\t\tMin Temps:\n\
 In:{: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\n\
 Max RH:\t\t\t\t\tMin RH:\n\
