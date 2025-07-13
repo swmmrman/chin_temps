@@ -6,10 +6,9 @@ mod temp;
 mod rh;
 
 use evap_data::evap_data::EvapData;
-
 use logging::logging::{make_log_file, write_to_log};
+
 use serialport;
-use std::fs::File;
 use std::{path,fs};
 use std::io::{self, Read, Seek, Write};
 use std::time::Duration;
@@ -18,8 +17,7 @@ use crossterm::{ExecutableCommand,
     cursor::{MoveUp}
 };
 extern crate chrono;
-use chrono::{DateTime, Datelike, Local};
-//use crate::logging::logging::{make_log_file,write_to_log}
+use chrono::{Datelike, Local};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
