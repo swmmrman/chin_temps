@@ -57,7 +57,17 @@ pub mod evap_data {
             self.deltas.clear();
         }
         pub fn get_evap_data(&self) -> String {
-            format!("Out: {: >7.2}f {: >7.2}%\r\nIn:  {: >7.2}f {: >7.2}% \r\nDiff:{: >7.2}f {: >7.2}%\nValve: {}\nMax Temps:\t\t\t\tMin Temps:\nIn:{: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\nMax RH:\t\t\t\t\tMax TDs:\nIn:{: >7.2}%  Out:{: >7.2}%\t\tHigh: {: >7.2}f  Low: {: >7.2}f\nMin RH:\nIn:{: >7.2}%  Out:{: >7.2}%",
+            format!(
+"Out: {: >7.2}f {: >7.2}%\r\n\
+In:  {: >7.2}f {: >7.2}% \r\n\
+Diff:{: >7.2}f {: >7.2}%\n\
+Valve: {}\n\
+Max Temps:\t\t\t\tMin Temps:\n\
+In:{: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\n\
+Max RH:\t\t\t\t\tMax TDs:\n\
+In:{: >7.2}%  Out:{: >7.2}%\t\tHigh: {: >7.2}f  Low: {: >7.2}f\n\
+Min RH:\t\t\t\t\tSensor 3\n\
+In:{: >7.2}%  Out:{: >7.2}%\t\tTemp:{: >7.2}f   RH:{: >7.2}%",
                 self.temp1.get_cur(),
                 self.humid1.get_cur(),
                 self.temp2.get_cur(),
@@ -75,6 +85,8 @@ pub mod evap_data {
                 self.deltas.get_min(),
                 self.humid2.get_min(),
                 self.humid1.get_min(),
+                self.temp3.get_cur(),
+                self.humid3.get_cur()
             )
         }
     }
