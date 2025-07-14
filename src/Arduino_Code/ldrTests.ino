@@ -23,7 +23,7 @@ DHT dht2(dht2Pin, DHT22);  //Out
 DHT dht3(dht3Pin, DHT22);  //Spare
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 int valvePin = 52;
-String version = "V1.0.0";
+String version = "V1.1.0";
 
 void setup() {
   Serial.begin(115200);
