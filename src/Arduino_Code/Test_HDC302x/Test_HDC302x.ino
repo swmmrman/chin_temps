@@ -20,8 +20,13 @@ void loop() {
 
   sense1.readTemperatureHumidityOnDemand(temp, RH, TRIGGERMODE_LP0);
   Serial.print("Temp: ");
-  Serial.print(temp);
+  Serial.print(ctof(temp));
   Serial.print("f.  RH: ");
   Serial.println(RH);
   delay(1000);
+}
+
+double ctof(double c) {
+  double f = (c * 1.8) + 32;
+  return f;
 }
