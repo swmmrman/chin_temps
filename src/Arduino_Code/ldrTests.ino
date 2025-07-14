@@ -16,10 +16,9 @@ int valveStatus = 0;
 float minHumid;
 float maxHumid;
 int dht1Pin = 2; // Out
-int dht2Pin = 6; // In
 int dht3Pin = 7; // Spare or inside 2.
 DHT dht1(dht1Pin, DHT22);  // Out
-DHT dht2(dht2Pin, DHT22);  // In
+Adafruit_HDC302x in_sensor = Adafruit_HDC302x();  // In
 DHT dht3(dht3Pin, DHT22);  // Spare
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 int valvePin = 52;
@@ -31,15 +30,14 @@ void setup() {
   lcd.backlight();
   pinMode(A0, INPUT);
   pinMode(dht1Pin, INPUT);  // Out
-  pinMode(dht2Pin, INPUT);  // In
   pinMode(dht3Pin, INPUT);  // Spare
   pinMode(valvePin, OUTPUT);
   digitalWrite(valvePin, 0);
   delay(400);
   digitalWrite(valvePin, 1);
-  dht1.begin();
-  dht2.begin();
-  dht3.begin();
+  dht1.begin();                 // Out
+  in_sensor.begin(0x44, &Wire); // In
+  dht3.begin();                 // Spare
   int v = analogRead(A0); 
   for(int i=0; i < numReadings; i++) {
     vals[i] = v;
@@ -47,11 +45,13 @@ void setup() {
   }
   maxHumid = sensorMax - 3;
   minHumid = maxHumid - 3;
+  //Buzzer Code???
   pinMode(9,OUTPUT);
   TCCR2B = TCCR2B & B11111000 | B00000010;
   analogWrite(9, 128);
   delay(250);
   analogWrite(9,0);
+  //
 }
 
 void valveOff(bool wait) {
@@ -80,11 +80,12 @@ void loop() {
   counter = (counter + 1) % numReadings;
   if(counter % 5 == 0){
     float outTemp = dht1.readTemperature(true);
-    float inTemp = dht2.readTemperature(true);
+    double inTemp = 20.55555;
     float spareTemp = dht3.readTemperature(true);
     float outHumid = dht1.readHumidity();
-    float inHumid = dht2.readHumidity();
+    double inHumid = 4.20;
     float spareHumid = dht3.readHumidity();
+    in_sensor.readTemperatureHumidityOnDemand(inTemp, inHumid, TRIGGERMODE_LP0);
     if(timeLeft > 0) {
       timeLeft--;
       if(inHumid > maxHumid) {
