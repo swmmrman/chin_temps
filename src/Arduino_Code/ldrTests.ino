@@ -1,5 +1,6 @@
 
 #include <DHT.h>
+#include <Adafruit_HDC302x.h>
 #include <LiquidCrystal_I2C.h>
 
 int numReadings = 25;
@@ -78,23 +79,23 @@ void loop() {
   total = total - oldV + curV;
   counter = (counter + 1) % numReadings;
   if(counter % 5 == 0){
-    float d1Temp = dht1.readTemperature(true);
-    float d2Temp = dht2.readTemperature(true);
-    float d3Temp = dht3.readTemperature(true);
-    float d1Humid = dht1.readHumidity();
-    float d2Humid = dht2.readHumidity();
-    float d3Humid = dht3.readHumidity();
+    float outTemp = dht1.readTemperature(true);
+    float inTemp = dht2.readTemperature(true);
+    float spareTemp = dht3.readTemperature(true);
+    float outHumid = dht1.readHumidity();
+    float inHumid = dht2.readHumidity();
+    float spareHumid = dht3.readHumidity();
     if(timeLeft > 0) {
       timeLeft--;
-      if(d2Humid > maxHumid) {
+      if(inHumid > maxHumid) {
         valveOff(false);
       }
     }
-    else if(d2Humid < minHumid && valveStatus == 0) {
+    else if(inHumid < minHumid && valveStatus == 0) {
       valveOn();
     }
     else if(valveStatus == 1){
-      if(d2Humid < maxHumid) {
+      if(inHumid < maxHumid) {
         valveOff(true);
       }
       else {
@@ -104,7 +105,7 @@ void loop() {
     else if(valveStatus == 2) {
       timeOut--;
       if(timeOut <= 0) {
-        if(d2Humid < maxHumid) {
+        if(inHumid < maxHumid) {
           valveOn();
         }
         else {
@@ -116,16 +117,16 @@ void loop() {
     //outside info
     lcd.setCursor(0,0);
     lcd.print("Out ");
-    lcd.print(d1Temp);
+    lcd.print(outTemp);
     lcd.print(F("F,   "));
-    lcd.print(d1Humid);
+    lcd.print(outHumid);
     lcd.print(F("%"));
     //Inside line
     lcd.setCursor(0,1);
     lcd.print("In  ");
-    lcd.print(d2Temp);
+    lcd.print(inTemp);
     lcd.print(F("F,   "));
-    lcd.print(d2Humid);
+    lcd.print(inHumid);
     lcd.print(F("%"));
     //Vavle Status
     lcd.setCursor(0,2);
@@ -140,25 +141,25 @@ void loop() {
       lcd.print(F(" Spraying"));
     }
     lcd.setCursor(0,3);
-    lcd.print(F("DHT3:"));
-    if(d3Humid == 100) {
-      lcd.print((String)d3Temp + "f " + (String)d3Humid + "%");
+    lcd.print(F("In2: "));
+    if(spareHumid == 100) {
+      lcd.print((String)spareTemp + "f " + (String)spareHumid + "%");
     }
     else {
-      lcd.print((String)d3Temp + "f   " + (String)d3Humid + "%");
+      lcd.print((String)spareTemp + "f   " + (String)spareHumid + "%");
     }
     
-    Serial.print(d1Temp);
+    Serial.print(outTemp);
     Serial.print(F(","));
-    Serial.print(d2Temp);
+    Serial.print(inTemp);
     Serial.print(F(","));
-    Serial.print(d3Temp);
+    Serial.print(spareTemp);
     Serial.print(F(","));
-    Serial.print(d1Humid);
+    Serial.print(outHumid);
     Serial.print(F(","));
-    Serial.print(d2Humid);
+    Serial.print(inHumid);
     Serial.print(F(","));
-    Serial.print(d3Humid);
+    Serial.print(spareHumid);
     Serial.print(F(","));
     Serial.print(total/numReadings);
     Serial.print(F(","));
