@@ -15,12 +15,12 @@ int waitTime = 11;
 int valveStatus = 0;
 float minHumid;
 float maxHumid;
-int dht1Pin = 2;
-int dht2Pin = 6;
-int dht3Pin = 7;
-DHT dht1(dht1Pin, DHT22);
-DHT dht2(dht2Pin, DHT22);
-DHT dht3(dht3Pin, DHT22);
+int dht1Pin = 2; // In
+int dht2Pin = 6; // Out
+int dht3Pin = 7; // Spare or inside 2.
+DHT dht1(dht1Pin, DHT22);  //In
+DHT dht2(dht2Pin, DHT22);  //Out
+DHT dht3(dht3Pin, DHT22);  //Spare
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 int valvePin = 52;
 String version = "V1.0.0";
@@ -30,9 +30,9 @@ void setup() {
   lcd.init();
   lcd.backlight();
   pinMode(A0, INPUT);
-  pinMode(dht1Pin, INPUT);
-  pinMode(dht2Pin, INPUT);
-  pinMode(dht3Pin, INPUT);
+  pinMode(dht1Pin, INPUT);  //In
+  pinMode(dht2Pin, INPUT);  //Out
+  pinMode(dht3Pin, INPUT);  //Spare
   pinMode(valvePin, OUTPUT);
   digitalWrite(valvePin, 0);
   delay(400);
