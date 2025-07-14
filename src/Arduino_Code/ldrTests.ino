@@ -43,6 +43,7 @@ void setup() {
     vals[i] = v;
     total += v;
   }
+  in_sensor.heaterEnable(HEATER_OFF);  //Make sure heater is off.
   maxHumid = sensorMax - 3;
   minHumid = maxHumid - 3;
   //Buzzer Code???
