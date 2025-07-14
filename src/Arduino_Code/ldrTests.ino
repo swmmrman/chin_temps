@@ -66,6 +66,10 @@ void valveOff(bool wait) {
   digitalWrite(valvePin, 1);
 }
 
+double CToF(double temp) {
+  return (((9.0/5.0) * temp) + 32);
+}
+
 void valveOn() {
   valveStatus = 1;
   timeLeft = runTime;
@@ -80,12 +84,13 @@ void loop() {
   counter = (counter + 1) % numReadings;
   if(counter % 5 == 0){
     float outTemp = dht1.readTemperature(true);
-    double inTemp = 20.55555;
+    double inC = CToF(20.55555);
     float spareTemp = dht3.readTemperature(true);
     float outHumid = dht1.readHumidity();
     double inHumid = 4.20;
     float spareHumid = dht3.readHumidity();
-    in_sensor.readTemperatureHumidityOnDemand(inTemp, inHumid, TRIGGERMODE_LP0);
+    in_sensor.readTemperatureHumidityOnDemand(inC, inHumid, TRIGGERMODE_LP0);
+    double inTemp = CToF(inC);
     if(timeLeft > 0) {
       timeLeft--;
       if(inHumid > maxHumid) {
