@@ -44,8 +44,8 @@ void setup() {
     total += v;
   }
   in_sensor.heaterEnable(HEATER_OFF);  //Make sure heater is off.
-  maxHumid = sensorMax - 3;
-  minHumid = maxHumid - 3;
+  maxHumid = sensorMax - 8;
+  minHumid = maxHumid - 5;
   //Buzzer Code???
   pinMode(9,OUTPUT);
   TCCR2B = TCCR2B & B11111000 | B00000010;
