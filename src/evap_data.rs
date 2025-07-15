@@ -16,6 +16,10 @@ pub mod evap_data {
     }
 
     impl EvapData {
+        //Call with the parsed data from the serial parser.  Validates all values.
+        //The first 3 are temps, Next 3 Humidity, 7th is LDR(unused), last is valve
+        //status. Deltase is calculated from the values of temp1 and 2.  Temp and humidity 1
+        //are outside, Temp and humidity 2 are inside. 
         pub fn update(&mut self, vals: Vec<String>) {
             match validate(&vals) {
                 true => {
