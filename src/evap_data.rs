@@ -50,6 +50,7 @@ pub mod evap_data {
                 _ => "What?         ".to_string(),
             }
         }
+        //Blanks all values. Currently ingores LDR as it is unused.
         pub fn clear(&mut self) {
             self.temp1.clear();
             self.temp2.clear();
@@ -96,7 +97,7 @@ High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%",
             )
         }
     }
-
+    //Return a new empty EvapData
     pub fn new() -> EvapData{
         EvapData { 
             temp1:temp::new(),
