@@ -17,10 +17,10 @@ pub mod evap_data {
     }
 
     impl EvapData {
-        //Call with the parsed data from the serial parser.  Validates all values.
-        //The first 3 are temps, Next 3 Humidity, 7th is LDR(unused), last is valve
-        //status. Deltase is calculated from the values of temp1 and 2.  Temp and humidity 1
-        //are outside, Temp and humidity 2 are inside. 
+        /// Call with the parsed data from the serial parser.  Validates all values.
+        /// The first 3 are temps, Next 3 Humidity, 7th is LDR(unused), last is valve
+        /// status. Deltas is calculated from the values of temp1 and 2.  Temp and humidity 1
+        /// are outside, Temp and humidity 2 are inside. 
         pub fn update(&mut self, vals: Vec<String>) {
             match validate(&vals) {
                 true => {
@@ -51,7 +51,7 @@ pub mod evap_data {
                 _ => "What?         ".to_string(),
             }
         }
-        //Blanks all values. Currently ingores LDR as it is unused.
+        /// Blanks all values. Currently ingores LDR as it is unused.
         pub fn clear(&mut self) {
             self.temp1.clear();
             self.temp2.clear();
@@ -103,7 +103,7 @@ High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%",
             )
         }
     }
-    //Return a new empty EvapData
+    /// Return a new empty EvapData
     pub fn new() -> EvapData{
         EvapData { 
             temp1:temp::new(),
@@ -117,9 +117,9 @@ High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%",
             deltas:temp::new()
         }
     }
-    //Validates the serial parser string vec.  First 6 are temps and RH.
-    //LDR readings are i32,  Valid range needs checked and added.
-    //Valve status is 0, 1, or 2 for closed open, and sensing.
+    /// Validates the serial parser string vec.  First 6 are temps and RH.
+    /// LDR readings are i32,  Valid range needs checked and added.
+    /// Valve status is 0, 1, or 2 for closed open, and sensing.
     fn validate(vals: &Vec<String>) -> bool {
         for val in &vals[0..5] {
             match val.parse::<f32>() {
