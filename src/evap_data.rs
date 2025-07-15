@@ -4,15 +4,16 @@ pub mod evap_data {
 
 //#[derive(Debug)]
     pub struct EvapData {
-        pub temp1: temp::Temp,
-        pub temp2: temp::Temp,
-        pub temp3: temp::Temp,
-        pub humid1: rh::RH,    
+        pub temp1: temp::Temp,  //Inside
+        pub temp2: temp::Temp,  //Outside
+        pub temp3: temp::Temp,  //Spare
+        pub humid1: rh::RH,     
         pub humid2: rh::RH,
         pub humid3: rh::RH,
-        ldr: i32,
-        pub valve_status: i8,
-        pub deltas: temp::Temp,
+        ldr: i32,               //Not working
+        pub valve_status: i8,   //0-2 normal. oThers are failures
+        pub deltas: temp::Temp, //Diff of sensor 1 and 2 temps.
+        //pub delta_hs: rh::RH, //Add later might be neat to see.
     }
 
     impl EvapData {
