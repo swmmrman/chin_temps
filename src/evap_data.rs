@@ -62,7 +62,8 @@ pub mod evap_data {
             self.valve_status = -1;
             self.deltas.clear();
         }
-        //Returns a formated string sutable for logging or displaying to terminal.
+        /// Returns a formated string sutable for logging or displaying to terminal.
+        /// Not currently HTML friendly.  Formatting will break.
         //Possibly return a line count as well.
         //CSV function later. Could be used for html with returns replaced with
         //<br> and tabs or spaces with &nbsp..  probably easier to parse csv with js.
