@@ -55,6 +55,8 @@ void setup() {
   //
 }
 
+//Call with wait to true for sense time.
+//False simply clears the timer and shuts off the vavle.
 void valveOff(bool wait) {
   if(wait) {
     valveStatus = 2;
