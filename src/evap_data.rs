@@ -110,6 +110,9 @@ High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%",
             deltas:temp::new()
         }
     }
+    //Validates the serial parser string vec.  First 6 are temps and RH.
+    //LDR readings are i32,  Valid range needs checked and added.
+    //Valve status is 0, 1, or 2 for closed open, and sensing.
     fn validate(vals: &Vec<String>) -> bool {
         for val in &vals[0..5] {
             match val.parse::<f32>() {
