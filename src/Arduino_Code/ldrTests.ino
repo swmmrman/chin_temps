@@ -69,10 +69,13 @@ void valveOff(bool wait) {
   digitalWrite(valvePin, 1);
 }
 
+//Converts to F.
 double CToF(double temp) {
-  return (((9.0/5.0) * temp) + 32);
+  return(((9.0/5.0) * temp) + 32);
 }
 
+//Turn the vavle and and sets timeleft.
+//Valve status of 1 is on, 2 sense, 0, off.
 void valveOn() {
   valveStatus = 1;
   timeLeft = runTime;
