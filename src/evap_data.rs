@@ -40,10 +40,10 @@ pub mod evap_data {
         }
         fn valve_status(&self) -> String {
             match self.valve_status{
-                0 => "Off  ".to_string(),
-                1 => "On   ".to_string(),
-                2 => "Wait ".to_string(),
-                _ => "What?".to_string(),
+                0 => "Closed        ".to_string(),
+                1 => "Open          ".to_string(),
+                2 => "Sensing Closed".to_string(),
+                _ => "What?         ".to_string(),
             }
         }
         pub fn clear(&mut self) {
