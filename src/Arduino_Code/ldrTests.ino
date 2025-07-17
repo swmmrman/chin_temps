@@ -143,14 +143,17 @@ void loop() {
     lcd.print("Out ");
     pad(outTemp);
     lcd.print(outTemp);
-    lcd.print(F("F,  "));
+    lcd.print(F("F, "));
+    pad(outHumid);
     lcd.print(outHumid);
     lcd.print(F("%"));
     //Inside line
     lcd.setCursor(0,1);
     lcd.print("In  ");
+    pad(inTemp);
     lcd.print(inTemp);
-    lcd.print(F("F,   "));
+    lcd.print(F("F, "));
+    pad(inHumid);
     lcd.print(inHumid);
     lcd.print(F("%"));
     //Vavle Status
