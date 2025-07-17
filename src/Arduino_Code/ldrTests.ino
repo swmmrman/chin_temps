@@ -9,7 +9,7 @@ int vals[25];
 int counter = 0;
 int total = 0;
 int timeLeft = 0; //Time left for spraying in seconds
-int runTime = 5; //Add 1 second to desired time
+int runTime = 5; //Spray time. Add 1 second to desired time
 int timeOut = 0; //Delay time remaining for sensing.
 int waitTime = 11; //Length of delay for sensing.
 int valveStatus = 0;
@@ -46,13 +46,6 @@ void setup() {
   in_sensor.heaterEnable(HEATER_OFF);  //Make sure heater is off.
   maxHumid = sensorMax - 8;
   minHumid = maxHumid - 5;
-  //Buzzer Code???
-  pinMode(9,OUTPUT);
-  TCCR2B = TCCR2B & B11111000 | B00000010;
-  analogWrite(9, 128);
-  delay(250);
-  analogWrite(9,0);
-  //
 }
 
 //Call with wait to true for sense time.
@@ -137,7 +130,6 @@ void loop() {
         }
       }
     }
-    //lcd.clear();
     //outside info
     lcd.setCursor(0,0);
     lcd.print("Out ");
