@@ -80,7 +80,8 @@ In:  {: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\n\
 Max RH:\t\t\t\t\tMin RH:\n\
 In:  {: >7.2}%  Out:{: >7.2}%\t\tIn:   {: >7.2}%  Out: {: >7.2}%\n\
 Max TDs:\t\t\t\tSensor 3\n\
-High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f  RH:   {: >7.2}%",
+High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f  RH:   {: >7.2}%\n\
+{}",
                 self.temp1.get_cur(),
                 self.humid1.get_cur(),
                 self.temp2.get_cur(),
@@ -99,7 +100,8 @@ High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f  RH:   {: >7.2}%",
                 self.deltas.get_max(),
                 self.deltas.get_min(),
                 self.temp3.get_cur(),
-                self.humid3.get_cur()
+                self.humid3.get_cur(),
+                self.ldr,
             )
         }
     }
