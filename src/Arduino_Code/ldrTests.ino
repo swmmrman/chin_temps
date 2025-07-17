@@ -97,16 +97,16 @@ void loop() {
     float spareHumid = dht3.readHumidity();
     in_sensor.readTemperatureHumidityOnDemand(inC, inHumid, TRIGGERMODE_LP0);
     double inTemp = CToF(inC);
+    //Check for outside temp is under 64 and shut off.
+    if(outTemp < 63 && valveStatus != 0) {
+      valveOff(false);
+    }
     // Check if timeLeft is not zero,(Spraying)
-    if(timeLeft > 0) {
+    else if(timeLeft > 0) {
       timeLeft--;
       if(inHumid > maxHumid) {
         valveOff(false);
       }
-    }
-    //Check for outside temp is under 64 and shut off.
-    else if(outTemp < 63 && valveStatus != 0) {
-      valveOff(false);
     }
     //Valve is off and humidity inside has drop below threshold.
     else if(inHumid < minHumid && valveStatus == 0) {
