@@ -8,10 +8,10 @@ float sensorMax = 100;
 int vals[25];
 int counter = 0;
 int total = 0;
-int timeLeft = 0; //seconds
+int timeLeft = 0; //Time left for spraying in seconds
 int runTime = 5; //Add 1 second to desired time
-int timeOut = 0;
-int waitTime = 11;
+int timeOut = 0; //Delay time remaining for sensing.
+int waitTime = 11; //Length of delay for sensing.
 int valveStatus = 0;
 float minHumid;
 float maxHumid;
@@ -97,9 +97,11 @@ void loop() {
     float spareHumid = dht3.readHumidity();
     in_sensor.readTemperatureHumidityOnDemand(inC, inHumid, TRIGGERMODE_LP0);
     double inTemp = CToF(inC);
-    //Check for outside temp is under 64 and shut off.
-    if(outTemp < 63 && valveStatus != 0) {
-      valveOff(false);
+    //Check for outside temp is under 64 and shut off or do nothing.
+    if(outTemp < 63) {
+      if( valveStatus != 0) {
+        valveOff(false);
+      }
     }
     // Check if timeLeft is not zero,(Spraying)
     else if(timeLeft > 0) {
