@@ -74,6 +74,14 @@ void valveOn() {
   timeLeft = runTime;
   digitalWrite(valvePin, 0);
 }
+void pad(float temp) {
+  if(temp <100){
+    lcd.print(" ");
+  }
+  if(temp < 10) {
+    lcd.print(" ");
+  }
+}
 
 void loop() {
   int oldV = vals[counter];
@@ -133,8 +141,9 @@ void loop() {
     //outside info
     lcd.setCursor(0,0);
     lcd.print("Out ");
+    pad(outTemp);
     lcd.print(outTemp);
-    lcd.print(F("F,   "));
+    lcd.print(F("F,  "));
     lcd.print(outHumid);
     lcd.print(F("%"));
     //Inside line
