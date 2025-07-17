@@ -169,13 +169,12 @@ void loop() {
       lcd.print(F(" Spraying"));
     }
     lcd.setCursor(0,3);
-    lcd.print(F("In2: "));
-    if(spareHumid == 100) {
-      lcd.print((String)spareTemp + "f " + (String)spareHumid + "%");
-    }
-    else {
-      lcd.print((String)spareTemp + "f   " + (String)spareHumid + "%");
-    }
+    lcd.print(F("In2:"));
+    pad(spareTemp);
+    lcd.print(spareTemp);
+    lcd.print("F  ");
+    pad(spareHumid);
+    lcd.print((String)spareHumid + "%");
     
     Serial.print(outTemp);
     Serial.print(F(","));
