@@ -80,7 +80,7 @@ In:  {: >7.2}f  Out:{: >7.2}f\t\tIn:   {: >7.2}f  Out: {: >7.2}f\n\
 Max RH:\t\t\t\t\tMin RH:\n\
 In:  {: >7.2}%  Out:{: >7.2}%\t\tIn:   {: >7.2}%  Out: {: >7.2}%\n\
 Max TDs:\t\t\t\tSensor 3\n\
-High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f  RH:   {: >7.2}%\n\
+High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%\n\
 {}",
                 self.temp1.get_cur(),
                 self.humid1.get_cur(),
