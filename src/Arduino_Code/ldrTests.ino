@@ -206,7 +206,7 @@ void loop() {
     Serial.print(F(","));
     Serial.print(spareHumid);
     Serial.print(F(","));
-    Serial.print(total/numReadings);
+    Serial.print(threshhold);
     Serial.print(F(","));
     Serial.println(valveStatus);
   }
