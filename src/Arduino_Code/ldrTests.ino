@@ -84,6 +84,13 @@ void pad(float temp) {
 }
 
 void loop() {
+  String input = "";
+  bool hitNewLine = false;
+  while(Serial.available() && !hitNewLine){
+    char inByte = (char)Serial.read();
+    if(inByte == "\n") { hitNewLine = true; }
+    else { input += inByte; }
+  }
   int oldV = vals[counter];
   int curV = analogRead(A0);
   vals[counter] = curV;
