@@ -24,6 +24,7 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 int valvePin = 52;
 String version = "V1.1.0";
 double offset = 0.0;
+double threshhold = 0.0;
 
 void setup() {
   Serial.begin(115200);
@@ -45,8 +46,9 @@ void setup() {
     total += v;
   }
   in_sensor.heaterEnable(HEATER_OFF);  //Make sure heater is off.
-  maxHumid = sensorMax - 8;
-  minHumid = maxHumid - 5;
+  maxHumid = sensorMax - 4.0;
+  minHumid = maxHumid - 5.0;
+  threshhold = minHumid;
 }
 
 //Call with wait to true for sense time.
@@ -92,6 +94,7 @@ void loop() {
       char inByte = (char)Serial.read();
       if(inByte == '\n') {
         offset += input.toFloat();
+        threshhold = minHumid + offset;
         hitNewLine = true;
       }
       else {
@@ -105,7 +108,6 @@ void loop() {
   total = total - oldV + curV;
   counter = (counter + 1) % numReadings;
   if(counter % 5 == 0){
-    Serial.println(offset);
     float outTemp = dht1.readTemperature(true);
     double inC = CToF(20.55555);
     float spareTemp = dht3.readTemperature(true);
@@ -113,7 +115,7 @@ void loop() {
     double inHumid = 4.20;
     float spareHumid = dht3.readHumidity();
     in_sensor.readTemperatureHumidityOnDemand(inC, inHumid, TRIGGERMODE_LP0);
-    double inTemp = CToF(inC) + offset;
+    double inTemp = CToF(inC);
     //Check for outside temp is under 64 and shut off or do nothing.
     if(outTemp < 63) {
       if( valveStatus != 0) {
@@ -128,7 +130,7 @@ void loop() {
       }
     }
     //Valve is off and humidity inside has drop below threshold.
-    else if(inHumid < minHumid && valveStatus == 0) {
+    else if(inHumid < threshhold && valveStatus == 0) {
       valveOn();
     }
     //Currently spaying, Check humidity.  Switch to sense
