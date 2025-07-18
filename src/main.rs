@@ -21,7 +21,7 @@ use chrono::{Datelike, Local};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    let mut dev = "ACM0";
+    let mut dev = "USB0";
     if args.len() > 1 {
         dev = &args[1];
     }
