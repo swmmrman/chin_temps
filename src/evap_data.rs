@@ -10,7 +10,9 @@ pub mod evap_data {
         pub humid1: rh::RH,     
         pub humid2: rh::RH,
         pub humid3: rh::RH,
-        ldr: f32,               //Not working
+        pub low_limit: f32,
+        pub high_limit: f32, 
+        ldr: i32,               //Not working
         pub valve_status: i8,   //0-2 normal. oThers are failures
         pub deltas: temp::Temp, //Diff of sensor 1 and 2 temps.
         //pub delta_hs: rh::RH, //Add later might be neat to see.
@@ -30,8 +32,10 @@ pub mod evap_data {
                     self.humid1.update(vals[3].parse::<f32>().unwrap());
                     self.humid2.update(vals[4].parse::<f32>().unwrap());
                     self.humid3.update(vals[5].parse::<f32>().unwrap());
-                    self.ldr = vals[6].parse::<f32>().unwrap();
-                    self.valve_status = vals[7].parse::<i8>().unwrap();
+                    self.low_limit = vals[6].parse::<f32>().unwrap();
+                    self.high_limit = vals[7].parse::<f32>().unwrap();
+                    self.ldr = vals[8].parse::<i32>().unwrap();
+                    self.valve_status = vals[9].parse::<i8>().unwrap();
                     self.deltas.update(self.get_delta_t());
                 }
                 false => (),
@@ -81,7 +85,7 @@ Max RH:\t\t\t\t\tMin RH:\n\
 In:  {: >7.2}%  Out:{: >7.2}%\t\tIn:   {: >7.2}%  Out: {: >7.2}%\n\
 Max TDs:\t\t\t\tSensor 3\n\
 High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%\n\
-{: >5.2}",
+Min%{: >6.2} Max %{: >6.2} LDR: {}",
                 self.temp1.get_cur(),
                 self.humid1.get_cur(),
                 self.temp2.get_cur(),
@@ -101,7 +105,9 @@ High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%\n\
                 self.deltas.get_min(),
                 self.temp3.get_cur(),
                 self.humid3.get_cur(),
-                self.ldr,
+                self.low_limit,
+                self.high_limit,
+                self.ldr
             )
         }
     }
@@ -114,7 +120,9 @@ High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%\n\
             humid1: rh::new(),
             humid2: rh::new(),
             humid3: rh::new(),
-            ldr: -500.0,
+            low_limit: 0.0,
+            high_limit: 0.0,
+            ldr: -500,
             valve_status: -1,
             deltas:temp::new()
         }
@@ -123,7 +131,7 @@ High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%\n\
     /// LDR readings are i32,  Valid range needs checked and added.
     /// Valve status is 0, 1, or 2 for closed open, and sensing.
     fn validate(vals: &Vec<String>) -> bool {
-        for val in &vals[0..5] {
+        for val in &vals[0..7] {
             match val.parse::<f32>() {
             Ok(_) => {
                 continue;
@@ -131,11 +139,11 @@ High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%\n\
             _ => return false
             }
         }
-        match &vals[6].parse::<f32>() {
+        match &vals[8].parse::<i32>() {
             Ok(_) => (),
             _ => return false
         }
-        match &vals[7].parse::<i8>() {
+        match &vals[9].parse::<i8>() {
             Ok(_) => (),
             _ => return false
         }
