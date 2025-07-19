@@ -23,8 +23,8 @@ DHT dht3(dht3Pin, DHT22);  // Spare
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 int valvePin = 52;
 String version = "V1.1.0";
-double offset = 0.0;
-double  = 0.0;
+double lowOffsset = 0.0;
+double highOffset =0.0;
 
 void setup() {
   Serial.begin(115200);
@@ -49,6 +49,7 @@ void setup() {
   maxHumid = sensorMax - 4.0;
   minHumid = maxHumid - 5.0;
   hiLimit = minHumid;
+  lowLimit = 
 }
 
 //Call with wait to true for sense time.
@@ -93,8 +94,8 @@ void loop() {
     while(hitNewLine == false){
       char inByte = (char)Serial.read();
       if(inByte == '\n') {
-        offset += input.toFloat();
-        hiLimit = minHumid + offset;
+        hiOffsset += input.toFloat();
+        hiLimit = minHumid + hiOffsset;
         hitNewLine = true;
       }
       else {
