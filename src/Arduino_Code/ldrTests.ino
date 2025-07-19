@@ -24,7 +24,7 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 int valvePin = 52;
 String version = "V1.1.0";
 double offset = 0.0;
-double threshhold = 0.0;
+double  = 0.0;
 
 void setup() {
   Serial.begin(115200);
@@ -48,7 +48,7 @@ void setup() {
   in_sensor.heaterEnable(HEATER_OFF);  //Make sure heater is off.
   maxHumid = sensorMax - 4.0;
   minHumid = maxHumid - 5.0;
-  threshhold = minHumid;
+  hiLimit = minHumid;
 }
 
 //Call with wait to true for sense time.
@@ -94,7 +94,7 @@ void loop() {
       char inByte = (char)Serial.read();
       if(inByte == '\n') {
         offset += input.toFloat();
-        threshhold = minHumid + offset;
+        hiLimit = minHumid + offset;
         hitNewLine = true;
       }
       else {
@@ -130,7 +130,7 @@ void loop() {
       }
     }
     //Valve is off and humidity inside has drop below threshold.
-    else if(inHumid < threshhold && valveStatus == 0) {
+    else if(inHumid < hiLimit && valveStatus == 0) {
       valveOn();
     }
     //Currently spaying, Check humidity.  Switch to sense
@@ -206,7 +206,7 @@ void loop() {
     Serial.print(F(","));
     Serial.print(spareHumid);
     Serial.print(F(","));
-    Serial.print(threshhold);
+    Serial.print(hiLimit);
     Serial.print(F(","));
     Serial.println(valveStatus);
   }
