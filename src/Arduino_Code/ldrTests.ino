@@ -211,6 +211,8 @@ void loop() {
     Serial.print(F(","));
     Serial.print(highLimit);
     Serial.print(F(","));
+    Serial.print(total/numReadings);
+    Serial.print(F(","));
     Serial.println(valveStatus);
   }
   delay(200);
