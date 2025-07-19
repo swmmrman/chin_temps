@@ -13,8 +13,6 @@ int runTime = 5; //Spray time. Add 1 second to desired time
 int timeOut = 0; //Delay time remaining for sensing.
 int waitTime = 11; //Length of delay for sensing.
 int valveStatus = 0;
-float minHumid;
-float maxHumid;
 int dht1Pin = 2; // Out
 int dht3Pin = 7; // Spare or inside 2.
 DHT dht1(dht1Pin, DHT22);  // Out
@@ -23,8 +21,10 @@ DHT dht3(dht3Pin, DHT22);  // Spare
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 int valvePin = 52;
 String version = "V1.1.0";
-double lowOffsset = 0.0;
-double highOffset =0.0;
+double lowOffset = 0.0;
+double highOffset = 0.0;
+double highLimit = 96.0;
+double lowLimit = 91.0;
 
 void setup() {
   Serial.begin(115200);
@@ -46,10 +46,6 @@ void setup() {
     total += v;
   }
   in_sensor.heaterEnable(HEATER_OFF);  //Make sure heater is off.
-  maxHumid = sensorMax - 4.0;
-  minHumid = maxHumid - 5.0;
-  hiLimit = minHumid;
-  lowLimit = 
 }
 
 //Call with wait to true for sense time.
@@ -94,8 +90,8 @@ void loop() {
     while(hitNewLine == false){
       char inByte = (char)Serial.read();
       if(inByte == '\n') {
-        hiOffsset += input.toFloat();
-        hiLimit = minHumid + hiOffsset;
+        lowOffset += input.toFloat();
+        lowLimit += lowOffset;
         hitNewLine = true;
       }
       else {
@@ -126,18 +122,18 @@ void loop() {
     // Check if timeLeft is not zero,(Spraying)
     else if(timeLeft > 0) {
       timeLeft--;
-      if(inHumid > maxHumid) {
+      if(inHumid > highLimit) {
         valveOff(false);
       }
     }
     //Valve is off and humidity inside has drop below threshold.
-    else if(inHumid < hiLimit && valveStatus == 0) {
+    else if(inHumid < lowLimit && valveStatus == 0) {
       valveOn();
     }
     //Currently spaying, Check humidity.  Switch to sense
     //Or off if humidity has risen high enouhg.
     else if(valveStatus == 1){
-      if(inHumid < maxHumid) {
+      if(inHumid < highLimit) {
         valveOff(true);
       }
       else {
@@ -149,7 +145,7 @@ void loop() {
     else if(valveStatus == 2) {
       timeOut--;
       if(timeOut <= 0) {
-        if(inHumid < maxHumid) {
+        if(inHumid < highLimit) {
           valveOn();
         }
         else {
@@ -207,7 +203,7 @@ void loop() {
     Serial.print(F(","));
     Serial.print(spareHumid);
     Serial.print(F(","));
-    Serial.print(hiLimit);
+    Serial.print(lowLimit);
     Serial.print(F(","));
     Serial.println(valveStatus);
   }
