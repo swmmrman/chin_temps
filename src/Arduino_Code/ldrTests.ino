@@ -20,9 +20,7 @@ Adafruit_HDC302x in_sensor = Adafruit_HDC302x();  // In
 DHT dht3(dht3Pin, DHT22);  // Spare
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 int valvePin = 52;
-String version = "V1.1.0";
-double lowOffset = 0.0;
-double highOffset = 0.0;
+String version = "V1.1.1";
 double highLimit = 96.0;
 double lowLimit = 91.0;
 
@@ -90,8 +88,14 @@ void loop() {
     while(hitNewLine == false){
       char inByte = (char)Serial.read();
       if(inByte == '\n') {
-        lowOffset += input.toFloat();
-        lowLimit += lowOffset;
+        String command = input.substring(0,1);
+        double offset = (double)input.substring(2).toFloat();
+        if(command == "H") {
+          highLimit += offset;
+        }
+        else if(command == "L") {
+          lowLimit += offset;
+        }
         hitNewLine = true;
       }
       else {
@@ -204,6 +208,8 @@ void loop() {
     Serial.print(spareHumid);
     Serial.print(F(","));
     Serial.print(lowLimit);
+    Serial.print(F(","));
+    Serial.print(highLimit);
     Serial.print(F(","));
     Serial.println(valveStatus);
   }
