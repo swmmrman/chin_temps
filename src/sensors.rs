@@ -39,6 +39,10 @@ pub mod sensor {
                 }
             }
         }
+        pub fn update(&mut self, temp:f32, humidity:f32) {
+            self.temperature.update(temp);
+            self.humidity.update(humidity);
+        }
     }
 
     fn new(identifier: String) -> Sensor {
