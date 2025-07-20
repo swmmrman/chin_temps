@@ -93,10 +93,10 @@ In:  {: >7.2}%  Out:{: >7.2}%\t\tIn:   {: >7.2}%  Out: {: >7.2}%\n\
 Max TDs:\t\t\t\tSensor 3\n\
 High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%\n\
 Min%{: >6.2} Max %{: >6.2} LDR: {}",
-                inside.temp.get_cur(),
-                inside.rh.get_cur(),
                 outside.temp.get_cur(),
                 outside.rh.get_cur(),
+                inside.temp.get_cur(),
+                inside.rh.get_cur(),
                 self.get_delta(ReadingType::Temp),
                 self.get_delta(ReadingType::Humidity),
                 self.valve_status(),
