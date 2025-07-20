@@ -31,7 +31,7 @@ fn main() {
     let dev_path = format!("/dev/tty{}", dev);
     let out_path = path::Path::new("/tmp/page/");
     let out_file_name = "temp_in.txt".to_owned();
-    let socket = setup_socket("/tmp/temp_socket".to_owned());
+    let mut socket = setup_socket("/tmp/temp_socket".to_owned());
     let lines: u16 = 13;
     let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
     let mut port = serialport::new(dev_path, 115200)
@@ -94,6 +94,7 @@ fn main() {
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file.write(format!("{: >5.2}", data.get_inside_temp()).as_bytes()).unwrap();
         sleep(Duration::from_millis(sleep_time));
+        let offset = read_socket(&mut socket);
     }
 }
 
@@ -120,7 +121,7 @@ fn setup_socket(socket_path: String) -> std::fs::File {
             std::process::exit(1);
         },
     }
-    let mut reader = match unix_named_pipe::open_read(socket_path) {
+    let reader = match unix_named_pipe::open_read(socket_path) {
         Ok(r) => r,
         Err(e) => {
             println!("Failed to open socket for reading: {}", e);
@@ -129,4 +130,22 @@ fn setup_socket(socket_path: String) -> std::fs::File {
     };
     reader
 
+}
+fn read_socket(socket_file: &mut std::fs::File) -> f32 {
+    let mut offest = 0.0;
+    let mut string_buffer = String::new();
+    match socket_file.read_to_string(&mut string_buffer) {
+        Ok(_) => {
+            offest = parse_offset(&string_buffer);
+        },
+        Err(_) => (),
+    }
+    offest
+}
+
+fn parse_offset(buff: &String) -> f32 {
+    match buff.parse::<f32>() {
+        Ok(o) => o,
+        Err(_) => 0.0,
+    }
 }
