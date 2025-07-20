@@ -127,9 +127,9 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin: {: >7.2}f   Max: {: >7.2}%",
     pub fn new() -> EvapData{
         EvapData { 
             sensors: SensorArray { 
-                inside: sensor::new("inside".to_string()),
-                outside: sensor::new("outside".to_string()),
-                spare: sensor::new("spare".to_string()),
+                inside: sensor::new("In".to_string()),
+                outside: sensor::new("Out".to_string()),
+                spare: sensor::new("Spare".to_string()),
             },
             low_limit: 0.0,
             high_limit: 0.0,
