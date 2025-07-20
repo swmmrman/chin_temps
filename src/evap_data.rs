@@ -1,15 +1,17 @@
 pub mod evap_data {
+    use crate::sensors::sensor;
     use crate::temp::temp;
     use crate::rh::rh;
 
 //#[derive(Debug)]
+    pub struct SensorArray{ 
+        inside: sensor::Sensor,
+        outside: sensor::Sensor,
+        spare: sensor::Sensor,
+    }
+    
     pub struct EvapData {
-        pub temp1: temp::Temp,  //Inside
-        pub temp2: temp::Temp,  //Outside
-        pub temp3: temp::Temp,  //Spare
-        pub humid1: rh::RH,     
-        pub humid2: rh::RH,
-        pub humid3: rh::RH,
+        sensors: SensorArray,
         pub low_limit: f32,
         pub high_limit: f32, 
         ldr: i32,               //Not working
@@ -114,12 +116,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}",
     /// Return a new empty EvapData
     pub fn new() -> EvapData{
         EvapData { 
-            temp1:temp::new(),
-            temp2:temp::new(),
-            temp3:temp::new(),
-            humid1: rh::new(),
-            humid2: rh::new(),
-            humid3: rh::new(),
+
             low_limit: 0.0,
             high_limit: 0.0,
             ldr: -500,
