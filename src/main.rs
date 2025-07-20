@@ -31,6 +31,7 @@ fn main() {
     let dev_path = format!("/dev/tty{}", dev);
     let out_path = path::Path::new("/tmp/page/");
     let out_file_name = "temp_in.txt".to_owned();
+    let socket = setup_socket("/tmp/temp_socket".to_owned());
     let lines: u16 = 13;
     let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
     let mut port = serialport::new(dev_path, 115200)
@@ -109,4 +110,23 @@ fn check_time(time_frame: i64, last_time: i64, aligned: bool) -> i64 {
     else {
         0
     }
+}
+
+fn setup_socket(socket_path: String) -> std::fs::File {
+    match unix_named_pipe::create(&socket_path, None) {
+        Ok(r) => (),
+        Err(e) => {
+            println!("Failed to create the socket: {}", e);
+            std::process::exit(1);
+        },
+    }
+    let mut reader = match unix_named_pipe::open_read(socket_path) {
+        Ok(r) => r,
+        Err(e) => {
+            println!("Failed to open socket for reading: {}", e);
+            std::process::exit(2);
+        }   
+    };
+    reader
+
 }
