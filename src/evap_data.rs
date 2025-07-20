@@ -52,7 +52,7 @@ pub mod evap_data {
         fn get_delta(&self, reading_type: ReadingType) -> f32 {
             let outside_cur =self.sensors.outside.get_reading(reading_type.clone(), ReadingKind::Cur);
             let inside_cur = self.sensors.inside.get_reading(reading_type, ReadingKind::Cur);
-            outside_cur - inside_cur
+            inside_cur - outside_cur
         }
         fn valve_status(&self) -> String {
             match self.valve_status{
