@@ -21,6 +21,11 @@ pub mod rh {
             self.max_rh
         }
         pub fn update(&mut self, new_val: f32) {
+            let rh_diff= (self.cur_rh -new_val).abs();
+            //return on sensor glitch.
+            if rh_diff > 10.00 {
+                return
+            }
             if self.min_rh.is_nan() {
                 self.min_rh = new_val;
                 self.max_rh = new_val;
