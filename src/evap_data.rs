@@ -118,6 +118,9 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}",
                 self.ldr
             )
         }
+        pub fn get_inside_temp(&self) -> f32 {
+            self.sensors.inside.get_reading(ReadingType::Temp, ReadingKind::Cur)
+        }
     }
     /// Return a new empty EvapData
     pub fn new() -> EvapData{
