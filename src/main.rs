@@ -16,6 +16,8 @@ use std::thread::sleep;
 use crossterm::{ExecutableCommand,
     cursor::{MoveUp}
 };
+use unix_named_pipe;
+
 extern crate chrono;
 use chrono::{Datelike, Local};
 
