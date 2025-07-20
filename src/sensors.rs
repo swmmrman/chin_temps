@@ -45,7 +45,7 @@ pub mod sensor {
         }
     }
 
-    fn new(identifier: String) -> Sensor {
+    pub fn new(identifier: String) -> Sensor {
         Sensor {
             id: identifier,
             temperature: temp::new(),

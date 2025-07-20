@@ -1,6 +1,6 @@
 pub mod evap_data {
     use crate::sensors::readings::{ReadingKind, ReadingType};
-    use crate::sensors::sensor;
+    use crate::sensors::{self, sensor};
     use crate::temp::temp;
     use crate::rh::rh;
 
@@ -68,8 +68,8 @@ pub mod evap_data {
             self.temp1.clear();
             self.temp2.clear();
             self.temp3.clear();
-            self.humid1.clear();
-            self.humid2.clear();
+            outside.rh.clear();
+            inside.rh.clear();
             self.humid3.clear();
             self.valve_status = -1;
             self.deltas.clear();
@@ -80,6 +80,9 @@ pub mod evap_data {
         //CSV function later. Could be used for html with returns replaced with
         //<br> and tabs or spaces with &nbsp..  probably easier to parse csv with js.
         pub fn get_evap_data(&self) -> String {
+            let inside = self.sensors.inside.get_all();
+            let outside = self.sensors.outside.get_all();
+            let spare = self.sensors.spare.get_all();
             format!(
 "Out: {: >7.2}f {: >7.2}%\r\n\
 In:  {: >7.2}f {: >7.2}% \r\n\
@@ -94,25 +97,25 @@ In:  {: >7.2}%  Out:{: >7.2}%\t\tIn:   {: >7.2}%  Out: {: >7.2}%\n\
 Max TDs:\t\t\t\tSensor 3\n\
 High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%\n\
 Min%{: >6.2} Max %{: >6.2} LDR: {}",
-                self.temp1.get_cur(),
-                self.humid1.get_cur(),
-                self.temp2.get_cur(),
-                self.humid2.get_cur(),
-                self.get_delta_t(),
-                self.get_delta_h(),
+                inside.temp.get_cur(),
+                inside.rh.get_cur(),
+                outside.temp.get_cur(),
+                outside.rh.get_cur(),
+                self.get_delta(ReadingType::Temp),
+                self.get_delta(ReadingType::Humidity),
                 self.valve_status(),
-                self.temp2.get_max(),
-                self.temp1.get_max(),
-                self.temp2.get_min(),
-                self.temp1.get_min(),
-                self.humid2.get_max(),
-                self.humid1.get_max(),
-                self.humid2.get_min(),
-                self.humid1.get_min(),
+                inside.temp.get_max(),
+                outside.temp.get_max(),
+                inside.temp.get_min(),
+                outside.temp.get_min(),
+                inside.rh.get_max(),
+                outside.rh.get_max(),
+                inside.rh.get_min(),
+                outside.rh.get_min(),
                 self.deltas.get_max(),
                 self.deltas.get_min(),
-                self.temp3.get_cur(),
-                self.humid3.get_cur(),
+                spare.temp.get_cur(),
+                spare.rh.get_cur(),
                 self.low_limit,
                 self.high_limit,
                 self.ldr
@@ -122,7 +125,11 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}",
     /// Return a new empty EvapData
     pub fn new() -> EvapData{
         EvapData { 
-
+            sensors: SensorArray { 
+                inside: sensor::new("inside".to_string()),
+                outside: sensor::new("outside".to_string()),
+                spare: sensor::new("spare".to_string()),
+            },
             low_limit: 0.0,
             high_limit: 0.0,
             ldr: -500,
