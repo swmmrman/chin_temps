@@ -1,8 +1,7 @@
 pub mod evap_data {
     use crate::sensors::readings::{ReadingKind, ReadingType};
-    use crate::sensors::{self, sensor};
+    use crate::sensors::sensor;
     use crate::temp::temp;
-    use crate::rh::rh;
 
 //#[derive(Debug)]
     pub struct SensorArray{ 
