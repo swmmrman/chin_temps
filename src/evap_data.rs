@@ -9,7 +9,7 @@ pub mod evap_data {
         outside: sensor::Sensor,
         spare: sensor::Sensor,
     }
-    
+
     pub struct EvapData {
         sensors: SensorArray,
         pub low_limit: f32,
@@ -28,12 +28,18 @@ pub mod evap_data {
         pub fn update(&mut self, vals: Vec<String>) {
             match validate(&vals) {
                 true => {
-                    self.temp1.update(vals[0].parse::<f32>().unwrap());
-                    self.temp2.update(vals[1].parse::<f32>().unwrap());
-                    self.temp3.update(vals[2].parse::<f32>().unwrap());
-                    self.humid1.update(vals[3].parse::<f32>().unwrap());
-                    self.humid2.update(vals[4].parse::<f32>().unwrap());
-                    self.humid3.update(vals[5].parse::<f32>().unwrap());
+                    self.sensors.inside.update(
+                        vals[1].parse::<f32>().unwrap(),
+                        vals[4].parse::<f32>().unwrap(),
+                    );
+                    self.sensors.outside.update(
+                        vals[0].parse::<f32>().unwrap(),
+                        vals[3].parse::<f32>().unwrap(),
+                    );
+                    self.sensors.spare.update(
+                        vals[2].parse::<f32>().unwrap(),
+                        vals[5].parse::<f32>().unwrap(),
+                    );
                     self.low_limit = vals[6].parse::<f32>().unwrap();
                     self.high_limit = vals[7].parse::<f32>().unwrap();
                     self.ldr = vals[8].parse::<i32>().unwrap();
