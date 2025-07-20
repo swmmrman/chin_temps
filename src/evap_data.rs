@@ -65,12 +65,9 @@ pub mod evap_data {
         }
         /// Blanks all values. Currently ingores LDR as it is unused.
         pub fn clear(&mut self) {
-            self.temp1.clear();
-            self.temp2.clear();
-            self.temp3.clear();
-            outside.rh.clear();
-            inside.rh.clear();
-            self.humid3.clear();
+            self.sensors.inside.clear();
+            self.sensors.outside.clear();
+            self.sensors.spare.clear();
             self.valve_status = -1;
             self.deltas.clear();
         }

@@ -43,6 +43,10 @@ pub mod sensor {
             self.temperature.update(temp);
             self.humidity.update(humidity);
         }
+        pub fn clear(&mut self) {
+            self.temperature.clear();
+            self.humidity.clear();
+        }
     }
 
     pub fn new(identifier: String) -> Sensor {
