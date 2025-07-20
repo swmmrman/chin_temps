@@ -1,4 +1,5 @@
 pub mod evap_data {
+    use crate::sensors::readings::{ReadingKind, ReadingType};
     use crate::sensors::sensor;
     use crate::temp::temp;
     use crate::rh::rh;
@@ -44,16 +45,15 @@ pub mod evap_data {
                     self.high_limit = vals[7].parse::<f32>().unwrap();
                     self.ldr = vals[8].parse::<i32>().unwrap();
                     self.valve_status = vals[9].parse::<i8>().unwrap();
-                    self.deltas.update(self.get_delta_t());
+                    self.deltas.update(self.get_delta(ReadingType::Temp));
                 }
                 false => (),
             }
         }
-        fn get_delta_t(&self) -> f32 {
-            self.temp2.get_cur() - self.temp1.get_cur()
-        }
-        fn get_delta_h(&self) -> f32 {
-            self.humid2.get_cur() - self.humid1.get_cur()
+        fn get_delta(&self, reading_type: ReadingType) -> f32 {
+            let outside_cur =self.sensors.outside.get_reading(reading_type.clone(), ReadingKind::Cur);
+            let inside_cur = self.sensors.inside.get_reading(reading_type, ReadingKind::Cur);
+            outside_cur - inside_cur
         }
         fn valve_status(&self) -> String {
             match self.valve_status{

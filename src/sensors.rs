@@ -64,6 +64,7 @@ pub mod readings {
         
     }
 
+    #[derive(Clone)]
     pub enum ReadingType{
         Temp,
         Humidity,
