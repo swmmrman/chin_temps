@@ -47,6 +47,9 @@ pub mod sensor {
             self.temperature.clear();
             self.humidity.clear();
         }
+        pub fn get_id(&self) -> String {
+            self.id.clone()
+        }
     }
 
     pub fn new(identifier: String) -> Sensor {

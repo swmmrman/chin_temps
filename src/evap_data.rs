@@ -78,9 +78,8 @@ pub mod evap_data {
         pub fn get_evap_data(&self) -> String {
             let inside = self.sensors.inside.get_all();
             let outside = self.sensors.outside.get_all();
-            let spare = self.sensors.spare.get_all();
             format!(
-"Out: {: >7.2}f {: >7.2}%\r\n\
+"{}: {: >7.2}f {: >7.2}%\r\n\
 In:  {: >7.2}f {: >7.2}% \r\n\
 Diff:{: >7.2}f {: >7.2}%\n\
 \n\
@@ -92,7 +91,8 @@ Max RH:\t\t\t\t\tMin RH:\n\
 In:  {: >7.2}%  Out:{: >7.2}%\t\tIn:   {: >7.2}%  Out: {: >7.2}%\n\
 Max TDs:\t\t\t\tSensor 3\n\
 High:{: >7.2}f  Low:{: >7.2}f\t\tTemp:{: >7.2}f   RH:  {: >7.2}%\n\
-Min%{: >6.2} Max %{: >6.2} LDR: {}",
+Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin: {: >7.2}f   Max: {: >7.2}%",
+                self.sensors.outside.get_id(),
                 outside.temp.get_cur(),
                 outside.rh.get_cur(),
                 inside.temp.get_cur(),
@@ -110,11 +110,13 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}",
                 outside.rh.get_min(),
                 self.deltas.get_max(),
                 self.deltas.get_min(),
-                spare.temp.get_cur(),
-                spare.rh.get_cur(),
+                self.sensors.spare.get_reading(ReadingType::Temp, ReadingKind::Cur),
+                self.sensors.spare.get_reading(ReadingType::Humidity, ReadingKind::Cur),
                 self.low_limit,
                 self.high_limit,
-                self.ldr
+                self.ldr,
+                self.sensors.spare.get_reading(ReadingType::Temp, ReadingKind::Min),
+                self.sensors.spare.get_reading(ReadingType::Temp, ReadingKind::Max),
             )
         }
         pub fn get_inside_temp(&self) -> f32 {
