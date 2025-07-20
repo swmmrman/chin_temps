@@ -1,5 +1,5 @@
 mod serial_parser;
-//mod sensors;
+mod sensors;
 mod evap_data;
 mod logging;
 mod temp;
