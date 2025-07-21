@@ -182,6 +182,6 @@ fn update_limits(command: String, offset: f32, sp: &mut Box<dyn SerialPort + 'st
     else {
         new_offset = offset;
     }
-    let out_string = format!("{} {}", main_command, new_offset); 
+    let out_string = format!("{} {}\n", main_command, new_offset);
     sp.write(out_string.as_bytes()).unwrap();
 }
