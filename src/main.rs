@@ -8,7 +8,8 @@ mod rh;
 use evap_data::evap_data::EvapData;
 use logging::logging::{make_log_file, write_to_log};
 
-use serialport;
+use serialport::{self, SerialPort};
+use std::ops::Sub;
 use std::process::Command;
 use std::{path,fs};
 use std::io::{self, Read, Seek, Write};
@@ -96,7 +97,7 @@ fn main() {
         out_file.write(format!("{: >5.2}", data.get_inside_temp()).as_bytes()).unwrap();
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
-        update_limits(command, offset);
+        update_limits(command, offset, &mut port, &data);
     }
 }
 
@@ -163,19 +164,21 @@ fn parse_offset(buff: &mut String) -> (String,f32) {
     (command, value)
 }
 
-fn update_limits(command: String, offset: f32) {
+fn update_limits(command: String, offset: f32, sp: &mut Box<dyn SerialPort + 'static>, ed: &EvapData) {
     let c = command.to_uppercase();
-    let sub_command = String::new();
-    if c.len() > 1 {
-        sub_command =match &c[1..1] {
-            "A" => (), //Absolute value
-            "R" => (), //Reset and use offset.
-            _ => (), //Neither or bad command.
-        };
+    let main_command = &c[0..0];
+    //Grab current low limit,  If Command is H, overwrite with high limit.
+    let mut cur_set = ed.low_limit;
+    let new_offset;
+    if main_command == "H" {
+        cur_set = ed.high_limit;
     }
-    let main_command = match &c[0..0] {
-        "H" => (), //Change high limit
-        "L" => (), //Change low limit
-        _ => (), //Invalid
-    };
+    if c.len() > 1 && &c[1..1] == "A" {
+        new_offset = cur_set - offset;
+    }
+    else {
+        new_offset = offset;
+    }
+    let out_string = format!("{} {}", main_command, new_offset); 
+    sp.write(out_string.as_bytes()).unwrap();
 }
