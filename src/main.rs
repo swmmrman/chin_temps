@@ -161,7 +161,7 @@ fn parse_offset(buff: &mut String) -> (String,f32) {
     };
     let value = match val.parse::<f32>() {
         Ok(o) => o,
-        Err(_) => 0.0,
+        Err(_) => 69.420,
     };
     (command, value)
 }
