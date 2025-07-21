@@ -9,8 +9,6 @@ use evap_data::evap_data::EvapData;
 use logging::logging::{make_log_file, write_to_log};
 
 use serialport::{self, SerialPort};
-use std::ops::Sub;
-use std::process::Command;
 use std::{path,fs};
 use std::io::{self, Read, Seek, Write};
 use std::time::Duration;
@@ -118,7 +116,7 @@ fn check_time(time_frame: i64, last_time: i64, aligned: bool) -> i64 {
 
 fn setup_socket(socket_path: String) -> std::fs::File {
     match unix_named_pipe::create(&socket_path, None) {
-        Ok(r) => (),
+        Ok(_) => (),
         Err(e) => {
             println!("Failed to create the socket: {}", e);
             std::process::exit(1);
