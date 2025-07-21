@@ -156,7 +156,7 @@ fn read_socket(socket_file: &mut std::fs::File) -> (String, f32) {
 fn parse_offset(buff: &mut String) -> (String,f32) {
     let (command, val) = match buff.find(",") {
         Some(t) => {
-            let val = &buff[t+1..];
+            let val = &buff[t+1..].trim().to_owned();
             let com = &buff[..t];
             (com.to_owned(), val.to_owned())
         },
