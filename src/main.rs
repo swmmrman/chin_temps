@@ -9,6 +9,7 @@ use evap_data::evap_data::EvapData;
 use logging::logging::{make_log_file, write_to_log};
 
 use serialport;
+use std::process::Command;
 use std::{path,fs};
 use std::io::{self, Read, Seek, Write};
 use std::time::Duration;
@@ -131,21 +132,32 @@ fn setup_socket(socket_path: String) -> std::fs::File {
     reader
 
 }
-fn read_socket(socket_file: &mut std::fs::File) -> f32 {
-    let mut offest = 0.0;
+fn read_socket(socket_file: &mut std::fs::File) -> (String, f32) {
+    let mut offset = 0.0;
     let mut string_buffer = String::new();
+    let mut command = String::new();
     match socket_file.read_to_string(&mut string_buffer) {
         Ok(_) => {
-            offest = parse_offset(&string_buffer);
+            (command, offset) = parse_offset(&mut string_buffer);
         },
         Err(_) => (),
     }
-    offest
+    (command, offset)
 }
 
-fn parse_offset(buff: &String) -> f32 {
-    match buff.parse::<f32>() {
+fn parse_offset(buff: &mut String) -> (String,f32) {
+    let (command, val) = match buff.find(" ") {
+        Some(t) => {
+            let val = buff.split_off(t); 
+            (buff.to_owned(), val)
+        },
+        None => { 
+            ("".to_owned(), "".to_owned())
+        },
+    };
+    let value = match val.parse::<f32>() {
         Ok(o) => o,
         Err(_) => 0.0,
-    }
+    };
+    (command, value)
 }
