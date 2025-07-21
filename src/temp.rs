@@ -8,8 +8,9 @@ pub mod temp {
     impl Temp {
         pub fn update(&mut self, new_temp: f32) {
             //filter off errors on the first temp
-            let temp_diff = self.cur_temp - &new_temp;
-            if temp_diff.abs() < 10.0f32 {self.cur_temp = new_temp;}
+            //let temp_diff = (self.cur_temp - &new_temp).abs();
+            //if temp_diff < 10.0 {self.cur_temp = new_temp;}
+            self.cur_temp = new_temp;
             //Clear NaNs first
             if self.cur_temp.is_nan() { self.cur_temp = new_temp }
             if self.min_temp.is_nan() { self.min_temp = new_temp }

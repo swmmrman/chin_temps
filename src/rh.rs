@@ -26,10 +26,10 @@ pub mod rh {
                 self.min_rh = new_val;
                 self.max_rh = new_val;
             }
-            else if self.min_rh > new_val && rh_diff < 10.0 {
+            if self.min_rh > new_val {
                 self.min_rh = new_val;
             }
-            else if self.max_rh < new_val && rh_diff < 10.0 {
+            if self.max_rh < new_val {
                 self.max_rh = new_val;
             }
             self.cur_rh = new_val;
