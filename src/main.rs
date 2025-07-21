@@ -139,8 +139,10 @@ fn read_socket(socket_file: &mut std::fs::File) -> (String, f32) {
     let mut string_buffer = String::new();
     let mut command = String::new();
     match socket_file.read_to_string(&mut string_buffer) {
-        Ok(_) => {
+        Ok(t) => {
+            if t > 0 {
             (command, offset) = parse_offset(&mut string_buffer);
+            }
         },
         Err(_) => (),
     }
