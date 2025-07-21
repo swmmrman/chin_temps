@@ -31,7 +31,7 @@ fn main() {
     let dev_path = format!("/dev/tty{}", dev);
     let out_path = path::Path::new("/tmp/page/");
     let out_file_name = "temp_in.txt".to_owned();
-    let mut socket = setup_socket("/tmp/temp_socket".to_owned());
+    let mut socket = setup_socket("/tmp/chin_temp".to_owned());
     let lines: u16 = 13;
     let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
     let mut port = serialport::new(dev_path, 115200)
