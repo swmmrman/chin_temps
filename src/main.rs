@@ -164,17 +164,19 @@ fn parse_offset(buff: &mut String) -> (String,f32) {
 }
 
 fn update_limits(command: String, offset: f32) {
-    if command.len() > 1 {
-        match &command[1..1].to_uppercase() {
+    let c = command.to_uppercase();
+    if c.len() > 1 {
+        let sub_command =match &c[1..1] {
             "A" => (), //Absolute value
             "R" => (), //Reset and use offset.
             _ => (), //Neither or bad command.
-        }
+        };
     }
     else {
-        match &command[0..0].to_uppercase() {
+        let main_command = match &c[0..0] {
             "H" => (), //Change high limit
             "L" => (), //Change low limit
-        }
+            _ => (), //Invalid
+        };
     }
 }
