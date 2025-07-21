@@ -31,7 +31,11 @@ fn main() {
     let dev_path = format!("/dev/tty{}", dev);
     let out_path = path::Path::new("/tmp/page/");
     let out_file_name = "temp_in.txt".to_owned();
-    let mut socket = setup_socket("/tmp/chin_temp".to_owned());
+    let socket_path = path::Path::new("/tmp/chin_temp");
+    if  socket_path.exists() {
+        std::fs::remove_file(socket_path);
+    }
+    let mut socket = setup_socket(socket_path);
     let lines: u16 = 13;
     let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
     let mut port = serialport::new(dev_path, 115200)
@@ -116,7 +120,7 @@ fn check_time(time_frame: i64, last_time: i64, aligned: bool) -> i64 {
     }
 }
 
-fn setup_socket(socket_path: String) -> std::fs::File {
+fn setup_socket(socket_path: &path::Path) -> std::fs::File {
     match unix_named_pipe::create(&socket_path, None) {
         Ok(_) => (),
         Err(e) => {
