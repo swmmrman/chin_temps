@@ -33,7 +33,7 @@ fn main() {
     let out_file_name = "temp_in.txt".to_owned();
     let socket_path = path::Path::new("/tmp/chin_temp");
     if  socket_path.exists() {
-        std::fs::remove_file(socket_path);
+        std::fs::remove_file(socket_path).unwrap();
     }
     let mut socket = setup_socket(socket_path);
     let lines: u16 = 13;
@@ -156,7 +156,7 @@ fn read_socket(socket_file: &mut std::fs::File) -> (String, f32) {
 fn parse_offset(buff: &mut String) -> (String,f32) {
     let (command, val) = match buff.find(",") {
         Some(t) => {
-            let val = &buff[t+1..].trim().to_owned();
+            let val = &buff[t+1..];
             let com = &buff[..t];
             (com.to_owned(), val.to_owned())
         },
