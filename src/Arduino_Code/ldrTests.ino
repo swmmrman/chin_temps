@@ -32,9 +32,9 @@ void setup() {
   pinMode(dht1Pin, INPUT);  // Out
   pinMode(dht3Pin, INPUT);  // Spare
   pinMode(valvePin, OUTPUT);
-  digitalWrite(valvePin, 0);
-  delay(400);
   digitalWrite(valvePin, 1);
+  delay(400);
+  digitalWrite(valvePin, 0);
   dht1.begin();                 // Out
   in_sensor.begin(0x44, &Wire); // In
   dht3.begin();                 // Spare
@@ -57,7 +57,7 @@ void valveOff(bool wait) {
     valveStatus = 0;
   }
   timeLeft = 0;
-  digitalWrite(valvePin, 1);
+  digitalWrite(valvePin, 0);
 }
 
 //Converts to F.
@@ -70,7 +70,7 @@ double CToF(double temp) {
 void valveOn() {
   valveStatus = 1;
   timeLeft = runTime;
-  digitalWrite(valvePin, 0);
+  digitalWrite(valvePin, 1);
 }
 void pad(float temp) {
   if(temp <100){
