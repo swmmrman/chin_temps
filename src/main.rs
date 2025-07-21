@@ -95,7 +95,8 @@ fn main() {
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file.write(format!("{: >5.2}", data.get_inside_temp()).as_bytes()).unwrap();
         sleep(Duration::from_millis(sleep_time));
-        let offset = read_socket(&mut socket);
+        let (command, offset) = read_socket(&mut socket);
+        update_limits(command, offset);
     }
 }
 
@@ -160,4 +161,20 @@ fn parse_offset(buff: &mut String) -> (String,f32) {
         Err(_) => 0.0,
     };
     (command, value)
+}
+
+fn update_limits(command: String, offset: f32) {
+    if command.len() > 1 {
+        match &command[1..1].to_uppercase() {
+            "A" => (), //Absolute value
+            "R" => (), //Reset and use offset.
+            _ => (), //Neither or bad command.
+        }
+    }
+    else {
+        match &command[0..0].to_uppercase() {
+            "H" => (), //Change high limit
+            "L" => (), //Change low limit
+        }
+    }
 }
