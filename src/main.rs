@@ -96,7 +96,7 @@ fn main() {
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
         if command != "" {
-        update_limits(command, offset, &mut port, &data);
+            update_limits(command, offset, &mut port, &data);
         }
     }
 }
@@ -141,7 +141,7 @@ fn read_socket(socket_file: &mut std::fs::File) -> (String, f32) {
     match socket_file.read_to_string(&mut string_buffer) {
         Ok(t) => {
             if t > 0 {
-            (command, offset) = parse_offset(&mut string_buffer);
+                (command, offset) = parse_offset(&mut string_buffer);
             }
         },
         Err(_) => (),
@@ -169,15 +169,15 @@ fn parse_offset(buff: &mut String) -> (String,f32) {
 
 fn update_limits(command: String, offset: f32, sp: &mut Box<dyn SerialPort + 'static>, ed: &EvapData) {
     let c = command.to_uppercase();
-    let main_command = &c[0..0];
+    let main_command = &c[0..1];
     //Grab current low limit,  If Command is H, overwrite with high limit.
     let mut cur_set = ed.low_limit;
     let new_offset;
     if main_command == "H" {
         cur_set = ed.high_limit;
     }
-    if c.len() > 1 && &c[1..1] == "A" {
-        new_offset = cur_set - offset;
+    if c.len() > 1 && &c[1..] == "A" {
+        new_offset = offset - cur_set;
     }
     else {
         new_offset = offset;
