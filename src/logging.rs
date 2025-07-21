@@ -25,7 +25,7 @@ pub mod logging {
             new_date: DateTime<Local>,
             log_file: &mut File,
         ) {
-        let log_string = format!("[{}]\n{}\n", 
+        let log_string = format!("\n[{}]\n{}\n", 
             new_date.format("%m-%d-%Y %H:%M:%S"),
             short_term.get_evap_data(),
         );
