@@ -95,7 +95,9 @@ fn main() {
         out_file.write(format!("{: >5.2}", data.get_inside_temp()).as_bytes()).unwrap();
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
+        if command != "" {
         update_limits(command, offset, &mut port, &data);
+        }
     }
 }
 
