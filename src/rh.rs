@@ -34,6 +34,11 @@ pub mod rh {
             }
             self.cur_rh = new_val;
         }
+        pub fn update_unchecked(&mut self, new_val: f32) {
+            self.cur_rh = new_val;
+            self.max_rh = self.max_rh.max(new_val);
+            self.min_rh = self.min_rh.min(new_val);
+        }
     }
 
     pub fn new() -> RH{
