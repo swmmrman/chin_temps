@@ -6,6 +6,10 @@ pub mod temp {
     }
 
     impl Temp {
+        //Updates the temp struct,  Checks for large jumps due to sensor glitch.
+        //Sets all values if currently NANs.
+        //Sets min/max as needed.
+        //Current temp is always updated incase of temporary sensor failure.
         pub fn update(&mut self, new_temp: f32) {
             let temp_diff = (self.cur_temp - &new_temp).abs() < 2.0;
             self.cur_temp = new_temp;
@@ -35,6 +39,7 @@ pub mod temp {
         pub fn get_max(&self) -> f32 {
             self.max_temp
         }
+        //Clears the temp strut,  Sets all values to NAN.
         pub fn clear(&mut self) {
             self.cur_temp = f32::NAN;
             self.min_temp = f32::NAN;

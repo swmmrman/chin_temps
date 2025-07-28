@@ -6,6 +6,7 @@ pub mod rh {
     }
 
     impl RH {
+        //Clears the RH struct, setting all values to NAN.
         pub fn clear(&mut self) {
             self.min_rh = f32::NAN;
             self.max_rh = f32::NAN;
@@ -23,7 +24,7 @@ pub mod rh {
         pub fn get_max(&self) -> f32 {
             self.max_rh
         }
-        //Checked update of the temp struct.
+        //Checked update of the RH struct.
         //Sets all values to the new if NAN in min_rh
         //Updates min and max as needed.
         pub fn update(&mut self, new_val: f32) {
