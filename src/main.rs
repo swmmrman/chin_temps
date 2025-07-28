@@ -19,7 +19,7 @@ use crossterm::{ExecutableCommand,
 use unix_named_pipe;
 
 extern crate chrono;
-use chrono::{Datelike, Local};
+use chrono::{DateTime, Datelike, Local};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -29,8 +29,6 @@ fn main() {
     }
     let mut log_file = make_log_file();
     let dev_path = format!("/dev/tty{}", dev);
-    let out_path = path::Path::new("/tmp/page/");
-    let out_file_name = "temp_in.txt".to_owned();
     let socket_path = path::Path::new("/tmp/chin_temp");
     if  socket_path.exists() {
         std::fs::remove_file(socket_path).unwrap();
@@ -42,22 +40,13 @@ fn main() {
         .timeout(Duration::from_millis(10))
         .open().expect("failed to open port");
     let date = Local::now();
-    println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
     let mut cur_day: i32 = date.num_days_from_ce();
     let mut serial_buff: Vec<u8> = vec![0; 256];
     let mut data = evap_data::evap_data::new();
     let mut five_minute = evap_data::evap_data::new();
-    print!("{}","\n".repeat(lines.into()));
-    if ! path::Path::exists(out_path) {
-        fs::create_dir(out_path).unwrap();
-    }
-    let mut out_file = fs::OpenOptions::new()
-        .create(true)
-        .write(true)
-        .truncate(true)
-        .open(out_path.join(out_file_name)).unwrap();
     let mut reader = serial_parser::serial_parser::new();
     let mut ts = date.timestamp() - (date.timestamp() % 300);
+    let mut out_file = setup(&date, &lines.into());
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
@@ -103,6 +92,21 @@ fn main() {
             update_limits(command, offset, &mut port, &data);
         }
     }
+}
+
+fn setup(date: &DateTime<Local>, lines: &usize) -> std::fs::File {
+    let out_path = path::Path::new("/tmp/page/");
+    let out_file_name = "temp_in.txt".to_owned();
+    println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
+    print!("{}","\n".repeat(*lines));
+    if ! path::Path::exists(out_path) {
+        fs::create_dir(out_path).unwrap();
+    }
+    fs::OpenOptions::new()
+        .create(true)
+        .write(true)
+        .truncate(true)
+        .open(out_path.join(out_file_name)).unwrap()
 }
 
 fn check_time(time_frame: i64, last_time: i64, aligned: bool) -> i64 {
