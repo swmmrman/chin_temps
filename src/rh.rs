@@ -23,6 +23,9 @@ pub mod rh {
         pub fn get_max(&self) -> f32 {
             self.max_rh
         }
+        //Checked update of the temp struct.
+        //Sets all values to the new if NAN in min_rh
+        //Updates min and max as needed.
         pub fn update(&mut self, new_val: f32) {
             let rh_diff= (self.cur_rh - new_val).abs();
             if self.min_rh.is_nan() {
