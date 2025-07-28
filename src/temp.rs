@@ -58,11 +58,12 @@ pub mod temp {
     pub fn f_to_c(temp: f32) -> f32{
         (5.0/9.0)* temp - 32.0
     }
-
+    /// Convert celcius to farenheit.
     pub fn c_to_f(temp: f32) -> f32 {
         (9.0/5.0) * (temp + 32.0)
     }
-
+    /// Uses the Magnus-Tetens formula to calculate the dewpoint,  Returns an f32.
+    /// Temp is in farenheit, RH as percentage.
     pub fn dew_point(temp: f32, rh: f32) -> f32 {
         // Magnus-Tetens formula
         // Td = (b * α(T,RH)) / (a - α(T,RH))
@@ -79,6 +80,7 @@ pub mod temp {
         let dp = (b * alpha(temp_c, rhd))/ (a-alpha(temp_c, rhd));
         c_to_f(dp)
     }
+    /// Part of calculating the dewpoint formula
     fn alpha(t: f32, rh: f32) -> f32 {
         let a = 17.27;
         let b = 237.7;
