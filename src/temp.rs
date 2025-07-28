@@ -7,14 +7,12 @@ pub mod temp {
 
     impl Temp {
         pub fn update(&mut self, new_temp: f32) {
-            //filter off errors on the first temp
-            //let temp_diff = (self.cur_temp - &new_temp).abs();
-            //if temp_diff < 10.0 {self.cur_temp = new_temp;}
+            let temp_diff = (self.cur_temp - &new_temp).abs() < 2.0;
             self.cur_temp = new_temp;
             //Clear NaNs first
-            if self.cur_temp.is_nan() { self.cur_temp = new_temp }
-            if self.min_temp.is_nan() { self.min_temp = new_temp }
-            if self.max_temp.is_nan() { self.max_temp = new_temp }
+            if self.cur_temp.is_nan() && temp_diff { self.cur_temp = new_temp }
+            if self.min_temp.is_nan() && temp_diff { self.min_temp = new_temp }
+            if self.max_temp.is_nan() && temp_diff { self.max_temp = new_temp }
             //Then check min/max
             if self.cur_temp < self.min_temp { self.min_temp = new_temp; }
             if self.cur_temp > self.max_temp { self.max_temp = new_temp; }
