@@ -141,8 +141,8 @@ fn setup_socket(socket_path: &path::Path) -> std::fs::File {
         }   
     };
     reader
-
 }
+
 fn read_socket(socket_file: &mut std::fs::File) -> (String, f32) {
     let mut offset = 0.0;
     let mut string_buffer = String::new();
@@ -158,17 +158,29 @@ fn read_socket(socket_file: &mut std::fs::File) -> (String, f32) {
     (command, offset)
 }
 
+/// Parse the buffer, Returns the command and value as a tuple.
+/// Returns ("","") if format is not statisfied.
+/// Returns the command and a value of 69.420 if no valid f32 can be constructed.
+/// Expected format is T[A],V
+/// Where T is H for H limit or L for Low limit.
+/// A is optional and specifies and absolute value.
+/// V is the relative or absolute value.
 fn parse_offset(buff: &mut String) -> (String,f32) {
+    // Split the string into the value and command from csv.
+    // return empty strings if no ,s are present.
     let (command, val) = match buff.find(",") {
+        //Comma found, split at t.
         Some(t) => {
             let val = &buff[t+1..].trim().to_owned();
             let com = &buff[..t];
             (com.to_owned(), val.to_owned())
         },
+        //Comma not found,  Return as error.
         None => { 
             ("".to_owned(), "".to_owned())
         },
     };
+    //Extract the value.
     let value = match val.parse::<f32>() {
         Ok(o) => o,
         Err(_) => 69.420,
