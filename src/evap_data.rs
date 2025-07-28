@@ -49,11 +49,13 @@ pub mod evap_data {
                 false => (),
             }
         }
+        /// Returns the current temperature change across the media.  Can return NAN if currently unset.
         fn get_delta(&self, reading_type: ReadingType) -> f32 {
             let outside_cur =self.sensors.outside.get_reading(reading_type.clone(), ReadingKind::Cur);
             let inside_cur = self.sensors.inside.get_reading(reading_type, ReadingKind::Cur);
             inside_cur - outside_cur
         }
+        /// Get the current valve status.  What indicates either not written to, or an error has occured.
         fn valve_status(&self) -> String {
             match self.valve_status{
                 0 => "Closed        ".to_string(),

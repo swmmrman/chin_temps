@@ -10,6 +10,7 @@ pub mod sensor {
     }
 
     impl Sensor {
+        /// Returns all values from a sensor.  Values are returned in a readings struct.
         pub fn get_all(&self) -> super::readings::Readings {
             let mut out = super::readings::new();
             out.temp.update_unchecked(
@@ -24,7 +25,7 @@ pub mod sensor {
             );
             out
         }
-
+        /// Returns a single reading of the requested type, and kind.
         pub fn get_reading(&self,  reading: ReadingType, kind: ReadingKind) -> f32 {
             match reading {
                 self::ReadingType::Temp => {
@@ -43,10 +44,12 @@ pub mod sensor {
                 }
             }
         }
+        /// Updates the temp and rh structs, updates are checked.
         pub fn update(&mut self, temp:f32, humidity:f32) {
             self.temperature.update(temp);
             self.humidity.update(humidity);
         }
+        /// Calls the clear function of the temp and rh structs.
         pub fn clear(&mut self) {
             self.temperature.clear();
             self.humidity.clear();
