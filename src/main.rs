@@ -45,8 +45,7 @@ fn main() {
     let mut data = evap_data::evap_data::new();
     let mut five_minute = evap_data::evap_data::new();
     let mut reader = serial_parser::serial_parser::new();
-    let mut ts = date.timestamp() - (date.timestamp() % 300);
-    let mut out_file = setup(&date, &lines.into());
+    let (mut out_file, mut ts) = setup(&date, &lines.into());
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
@@ -94,19 +93,21 @@ fn main() {
     }
 }
 
-fn setup(date: &DateTime<Local>, lines: &usize) -> std::fs::File {
+fn setup(date: &DateTime<Local>, lines: &usize) -> (std::fs::File, i64) {
     let out_path = path::Path::new("/tmp/page/");
     let out_file_name = "temp_in.txt".to_owned();
     println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
     print!("{}","\n".repeat(*lines));
+    let ts = date.timestamp() - (date.timestamp() % 300);
     if ! path::Path::exists(out_path) {
         fs::create_dir(out_path).unwrap();
     }
-    fs::OpenOptions::new()
+    let outfile = fs::OpenOptions::new()
         .create(true)
         .write(true)
         .truncate(true)
-        .open(out_path.join(out_file_name)).unwrap()
+        .open(out_path.join(out_file_name)).unwrap();
+    (outfile, ts)
 }
 
 fn check_time(time_frame: i64, last_time: i64, aligned: bool) -> i64 {
