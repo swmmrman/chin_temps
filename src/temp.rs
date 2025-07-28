@@ -17,10 +17,10 @@ pub mod temp {
             if self.cur_temp < self.min_temp { self.min_temp = new_temp; }
             if self.cur_temp > self.max_temp { self.max_temp = new_temp; }
         }
-        pub fn update_unchecked(&mut self, new_temp: f32) {
-            self.cur_temp = new_temp;
-            self.max_temp = self.max_temp.max(new_temp);
-            self.min_temp = self.min_temp.min(new_temp);
+        pub fn update_unchecked(&mut self, min: f32, max: f32, cur: f32) {
+            self.min_temp = min;
+            self.max_temp = max;
+            self.cur_temp = cur;
         }
         pub fn get_cur(&self) -> f32 {
             self.cur_temp

@@ -12,12 +12,16 @@ pub mod sensor {
     impl Sensor {
         pub fn get_all(&self) -> super::readings::Readings {
             let mut out = super::readings::new();
-            out.temp.update_unchecked(self.temperature.get_min());
-            out.temp.update_unchecked(self.temperature.get_max());
-            out.temp.update_unchecked(self.temperature.get_cur());
-            out.rh.update_unchecked(self.humidity.get_max());
-            out.rh.update_unchecked(self.humidity.get_min());
-            out.rh.update_unchecked(self.humidity.get_cur());
+            out.temp.update_unchecked(
+                self.temperature.get_min(),
+                self.temperature.get_max(),
+                self.temperature.get_cur()
+            );
+            out.rh.update_unchecked(
+                self.humidity.get_min(),
+                self.humidity.get_max(),
+                self.humidity.get_cur()
+            );
             out
         }
 
