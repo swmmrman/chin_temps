@@ -34,7 +34,7 @@ fn main() {
         std::fs::remove_file(socket_path).unwrap();
     }
     let mut socket = setup_socket(socket_path);
-    let lines: u16 = 13;
+    let lines: u16 = 14;
     let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
     let mut port = serialport::new(dev_path, 115200)
         .timeout(Duration::from_millis(10))
@@ -84,7 +84,7 @@ fn main() {
             Err(e) => eprintln!("{:?}", e),
         }
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
-        out_file.write(format!("{: >5.2}", data.get_inside_temp()).as_bytes()).unwrap();
+        out_file.write(format!("{: >5.2}\n", data.get_inside_temp()).as_bytes()).unwrap();
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
         if command != "" {

@@ -54,4 +54,34 @@ pub mod temp {
             cur_temp: f32::NAN
         }
     }
+    /// Convert fahrenheit to celcius.  Always returns.
+    pub fn f_to_c(temp: f32) -> f32{
+        (5.0/9.0)* temp - 32.0
+    }
+
+    pub fn c_to_f(temp: f32) -> f32 {
+        (9.0/5.0) * (temp + 32.0)
+    }
+
+    pub fn dew_point(temp: f32, rh: f32) -> f32 {
+        // Magnus-Tetens formula
+        // Td = (b * α(T,RH)) / (a - α(T,RH))
+        // Td = dewpoint temp
+        // RH = RH as decimal.
+        // a = 17.27 
+        // b = 237.7c
+        // T = temp in c
+        // α = (T,RH) = ((a * T) / (b + T)) + ln(RH)
+        let a = 17.27;
+        let b = 237.7;
+        let rhd = rh / 100.0;
+        let temp_c = f_to_c(temp);
+        let dp = (b * alpha(temp_c, rhd))/ (a-alpha(temp_c, rhd));
+        c_to_f(dp)
+    }
+    fn alpha(t: f32, rh: f32) -> f32 {
+        let a = 17.27;
+        let b = 237.7;
+        ((a * t) / (b + t)) + (rh).ln()
+    }
 }

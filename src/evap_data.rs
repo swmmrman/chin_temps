@@ -82,8 +82,9 @@ pub mod evap_data {
             let outside = self.sensors.outside.get_all();
             format!(
 "{}: {: >7.2}f {: >7.2}%\r\n\
-In:  {: >7.2}f {: >7.2}% \r\n\
-Diff:{: >7.2}f {: >7.2}%\n\
+In:  {: >7.2}f {: >7.2}%\r\n\
+Diff:{: >7.2}f {: >7.2}%\r\n\
+Dew: {: >7.2}f \r\n\
 \n\
 Valve: {}\n\
 \n\
@@ -101,6 +102,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin: {: >7.2}f   Max: {: >7.2}f",
                 inside.rh.get_cur(),
                 self.get_delta(ReadingType::Temp),
                 self.get_delta(ReadingType::Humidity),
+                temp::dew_point(outside.temp.get_cur(), outside.rh.get_cur()),
                 self.valve_status(),
                 inside.temp.get_max(),
                 outside.temp.get_max(),
