@@ -49,7 +49,7 @@ pub mod tools {
                 std::process::exit(1);
             },
         };
-        let config = match ron::from_str::<self::Config>(&config_string) {
+        let config: Config = match ron::from_str(&config_string) {
             Ok(t) => t,
             Err(e) => {
                 println!("Failure reading config {:?}", e);
