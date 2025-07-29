@@ -4,7 +4,7 @@ if [ $(id -u) -ne 0 ]
     exit
 fi
 
-if [ ! -e /etc/chin_temps/]
+if [ ! -e /etc/chin_temps/ ]
     then
     mkdir /etc/chin_temps/
 fi
