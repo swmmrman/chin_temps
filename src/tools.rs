@@ -23,12 +23,20 @@ pub mod tools {
     }
 
     pub fn setup_config_file() -> std::fs::File {
-        let conf_path = path::Path::new("/etc/chin_temps/config.ron");
-        fs::OpenOptions::new()
+        let conf_path = path::Path::new("/etc/chin_temps/");
+        let file = match fs::OpenOptions::new()
             .create(false)
             .write(true)
-            .open(conf_path).unwrap()
-        
+            .read(true)
+            .open(conf_path.join("config.ron")) {
+                Ok(f) => f,
+                Err(e) => {
+                    println!("Config file error: {}", e);
+                    std::process::exit(1);
+                }
+        };
+        file
+    }
     }
 
 
