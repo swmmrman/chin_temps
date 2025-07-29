@@ -23,13 +23,11 @@ extern crate chrono;
 use chrono::{Datelike, Local};
 
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
-    let mut dev = "USB0";
-    if args.len() > 1 {
-        dev = &args[1];
-    }
+    // let args: Vec<String> = std::env::args().collect();
+    let mut config_file = setup_config_file();
+    let config = read_config(&mut config_file);
     let mut log_file = make_log_file();
-    let dev_path = format!("/dev/tty{}", dev);
+    let dev_path = config.device;
     let socket_path = path::Path::new("/tmp/chin_temp");
     if  socket_path.exists() {
         std::fs::remove_file(socket_path).unwrap();
@@ -47,6 +45,9 @@ fn main() {
     let mut five_minute = evap_data::evap_data::new();
     let mut reader = serial_parser::serial_parser::new();
     let (mut out_file, mut ts) = setup(&date, &lines.into());
+    std::thread::sleep(Duration::from_secs(2));
+    update_limits("HA".to_string(), config.high_rh, &mut port, &data);
+    update_limits("LA".to_string(), config.low_rh, &mut port, &data);
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
