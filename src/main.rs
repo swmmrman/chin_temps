@@ -86,7 +86,7 @@ fn main() {
             Err(e) => eprintln!("{:?}", e),
         }
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
-        out_file.write(format!("{: >5.2}\n", data.get_inside_temp()).as_bytes()).unwrap();
+        out_file.write(format!("{: >5.2}", data.get_inside_temp()).as_bytes()).unwrap();
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
         if command != "" {
