@@ -4,6 +4,8 @@ pub mod tools {
     use serialport::{self, SerialPort};
     use std::io::Read;
     use crate::EvapData;
+    use ron;
+    use serde;
 
     pub fn setup(date: &DateTime<Local>, lines: &usize) -> (std::fs::File, i64) {
         let out_path = path::Path::new("/tmp/page/");
@@ -154,10 +156,10 @@ pub mod tools {
         let out_string = format!("{} {}\n", main_command, new_offset);
         sp.write(out_string.as_bytes()).unwrap();
     }
-
+#[derive(serde::Deserialize)]
     pub struct Config {
-        device: String,
-        low_rh: f32,
-        high_rh: f32,
+        pub device: String,
+        pub low_rh: f32,
+        pub high_rh: f32,
     }
 }
