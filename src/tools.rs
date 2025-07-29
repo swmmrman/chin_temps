@@ -22,6 +22,16 @@ pub mod tools {
         (outfile, ts)
     }
 
+    pub fn setup_config_file() -> std::fs::File {
+        let conf_path = path::Path::new("/etc/chin_temps/config.ron");
+        fs::OpenOptions::new()
+            .create(false)
+            .write(true)
+            .open(conf_path).unwrap()
+        
+    }
+
+
     pub fn check_time(time_frame: i64, last_time: i64, aligned: bool) -> i64 {
         let cur_ts =  Local::now().timestamp();
         let time_diff = cur_ts - last_time;
@@ -117,5 +127,11 @@ pub mod tools {
         }
         let out_string = format!("{} {}\n", main_command, new_offset);
         sp.write(out_string.as_bytes()).unwrap();
+    }
+
+    pub struct Config {
+        device: String,
+        low_rh: f32,
+        high_rh: f32,
     }
 }
