@@ -60,6 +60,12 @@ fn main() {
                     }
                     None => ()
                 };
+                if data.high_limit != config.high_rh {
+                    update_limits("HA".to_owned(), config.high_rh, &mut port, &data);
+                }
+                if data.low_limit != config.low_rh {
+                    update_limits("LA".to_owned(), config.low_rh, &mut port, &data);
+                }
                 let _ = io::stdout().execute(MoveUp(lines));
                 println!("{}", data.get_evap_data());
                 let new_date = Local::now();
