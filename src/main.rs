@@ -30,12 +30,7 @@ fn main() {
     if socket_path.exists() {
         std::fs::remove_file(socket_path).unwrap();
     }
-    let fan_socket_path = path::Path::new("/tmp/fan_call");
-    if fan_socket_path.exists() {
-        std::fs::remove_file(fan_socket_path).unwrap();
-    }
     let mut socket = setup_socket(socket_path);
-    let mut fan_socket = setup_socket(fan_socket_path);
     let lines: u16 = 14;
     let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
     let mut port = serialport::new(dev_path, 115200)
