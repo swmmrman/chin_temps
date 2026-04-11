@@ -1,23 +1,21 @@
-mod serial_parser;
-mod sensors;
 mod evap_data;
 mod logging;
-mod temp;
 mod rh;
+mod sensors;
+mod serial_parser;
+mod temp;
 mod tools;
 
 use evap_data::evap_data::EvapData;
 use logging::logging::{make_log_file, write_to_log};
 use tools::tools::*;
 
+use crossterm::{ExecutableCommand, cursor::MoveUp};
 use serialport;
-use std::path;
 use std::io::{self, Read, Seek, Write};
-use std::time::Duration;
+use std::path;
 use std::thread::sleep;
-use crossterm::{ExecutableCommand,
-    cursor::{MoveUp}
-};
+use std::time::Duration;
 
 extern crate chrono;
 use chrono::{Datelike, Local};
@@ -29,15 +27,21 @@ fn main() {
     let mut log_file = make_log_file();
     let dev_path = config.device;
     let socket_path = path::Path::new("/tmp/chin_temp");
-    if  socket_path.exists() {
+    if socket_path.exists() {
         std::fs::remove_file(socket_path).unwrap();
     }
+    let fan_socket_path = path::Path::new("/tmp/fan_call");
+    if fan_socket_path.exists() {
+        std::fs::remove_file(fan_socket_path).unwrap();
+    }
     let mut socket = setup_socket(socket_path);
+    let mut fan_socket = setup_socket(fan_socket_path);
     let lines: u16 = 14;
     let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
     let mut port = serialport::new(dev_path, 115200)
         .timeout(Duration::from_millis(10))
-        .open().expect("failed to open port");
+        .open()
+        .expect("failed to open port");
     let date = Local::now();
     let mut cur_day: i32 = date.num_days_from_ce();
     let mut serial_buff: Vec<u8> = vec![0; 256];
@@ -51,14 +55,16 @@ fn main() {
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
-                if t > 60 {continue}; // Discard Initial buffer.
+                if t > 60 {
+                    continue;
+                }; // Discard Initial buffer.
                 match reader.add_and_return(&serial_buff, t) {
-                    Some(vals) => { 
+                    Some(vals) => {
                         data.update(vals.clone());
                         five_minute.update(vals);
                         sleep_time = 500; //Raise sleep time after first completed.
                     }
-                    None => ()
+                    None => (),
                 };
                 if data.high_limit != config.high_rh {
                     update_limits("HA".to_owned(), config.high_rh, &mut port, &data);
@@ -81,18 +87,20 @@ fn main() {
                     ts = check;
                     write_to_log(&mut five_minute, new_date, &mut log_file);
                 }
-            },
+            }
             //Skip timeouts, quit if device is gone.
             Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
             Err(ref e) if e.kind() == io::ErrorKind::BrokenPipe => {
                 println!("Pipe is broken, device unplugged or double access.");
-                std::process::exit(1);   
-            },
+                std::process::exit(1);
+            }
             //Print error otherwise
             Err(e) => eprintln!("{:?}", e),
         }
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
-        out_file.write(format!("{: >5.2}", data.get_inside_temp()).as_bytes()).unwrap();
+        out_file
+            .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
+            .unwrap();
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
         if command != "" {
@@ -100,4 +108,3 @@ fn main() {
         }
     }
 }
-
