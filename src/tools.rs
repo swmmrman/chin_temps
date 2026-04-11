@@ -1,27 +1,35 @@
 pub mod tools {
-    use std::{fs, path};
-    use chrono::{DateTime, Local};
-    use serialport::{self, SerialPort};
-    use std::io::Read;
     use crate::EvapData;
+    use chrono::{DateTime, Local};
     use ron;
     use serde;
+    use serialport::{self, SerialPort};
+    use std::io::Read;
+    use std::{fs, path};
 
-    pub fn setup(date: &DateTime<Local>, lines: &usize) -> (std::fs::File, i64) {
+    pub fn setup(date: &DateTime<Local>, lines: &usize) -> (std::fs::File, std::fs::File, i64) {
         let out_path = path::Path::new("/tmp/page/");
         let out_file_name = "temp_in.txt".to_owned();
+        let fan_file_name = "fan_call".to_owned();
         println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
-        print!("{}","\n".repeat(*lines));
+        print!("{}", "\n".repeat(*lines));
         let ts = date.timestamp() - (date.timestamp() % 300);
-        if ! path::Path::exists(out_path) {
+        if !path::Path::exists(out_path) {
             fs::create_dir(out_path).unwrap();
         }
         let outfile = fs::OpenOptions::new()
             .create(true)
             .write(true)
             .truncate(true)
-            .open(out_path.join(out_file_name)).unwrap();
-        (outfile, ts)
+            .open(out_path.join(out_file_name))
+            .unwrap();
+        let fanfile = fs::OpenOptions::new()
+            .create(true)
+            .write(true)
+            .truncate(true)
+            .open(out_path.join(fan_file_name))
+            .unwrap();
+        (outfile, fanfile, ts)
     }
 
     pub fn setup_config_file() -> std::fs::File {
@@ -30,12 +38,13 @@ pub mod tools {
             .create(false)
             .write(true)
             .read(true)
-            .open(conf_path.join("config.ron")) {
-                Ok(f) => f,
-                Err(e) => {
-                    println!("Config file error: {}", e);
-                    std::process::exit(1);
-                }
+            .open(conf_path.join("config.ron"))
+        {
+            Ok(f) => f,
+            Err(e) => {
+                println!("Config file error: {}", e);
+                std::process::exit(1);
+            }
         };
         file
     }
@@ -47,7 +56,7 @@ pub mod tools {
             Err(e) => {
                 println!("Failure reading from config file: {:?}", e);
                 std::process::exit(1);
-            },
+            }
         };
         let config: Config = match ron::from_str(&config_string) {
             Ok(t) => t,
@@ -59,9 +68,8 @@ pub mod tools {
         config
     }
 
-
     pub fn check_time(time_frame: i64, last_time: i64, aligned: bool) -> i64 {
-        let cur_ts =  Local::now().timestamp();
+        let cur_ts = Local::now().timestamp();
         let time_diff = cur_ts - last_time;
         if time_diff >= time_frame {
             let mut ts = cur_ts - (time_diff - time_frame);
@@ -69,8 +77,7 @@ pub mod tools {
                 ts -= ts % time_frame;
             }
             ts
-        }
-        else {
+        } else {
             0
         }
     }
@@ -81,14 +88,14 @@ pub mod tools {
             Err(e) => {
                 println!("Failed to create the socket: {}", e);
                 std::process::exit(1);
-            },
+            }
         }
         let reader = match unix_named_pipe::open_read(socket_path) {
             Ok(r) => r,
             Err(e) => {
                 println!("Failed to open socket for reading: {}", e);
                 std::process::exit(2);
-            }   
+            }
         };
         reader
     }
@@ -102,7 +109,7 @@ pub mod tools {
                 if t > 0 {
                     (command, offset) = parse_offset(&mut string_buffer);
                 }
-            },
+            }
             Err(_) => (),
         }
         (command, offset)
@@ -115,20 +122,18 @@ pub mod tools {
     /// Where T is H for H limit or L for Low limit.
     /// A is optional and specifies and absolute value.
     /// V is the relative or absolute value.
-    pub fn parse_offset(buff: &mut String) -> (String,f32) {
+    pub fn parse_offset(buff: &mut String) -> (String, f32) {
         // Split the string into the value and command from csv.
         // return empty strings if no ,s are present.
         let (command, val) = match buff.find(",") {
             //Comma found, split at t.
             Some(t) => {
-                let val = &buff[t+1..].trim().to_owned();
+                let val = &buff[t + 1..].trim().to_owned();
                 let com = &buff[..t];
                 (com.to_owned(), val.to_owned())
-            },
+            }
             //Comma not found,  Return as error.
-            None => { 
-                ("".to_owned(), "".to_owned())
-            },
+            None => ("".to_owned(), "".to_owned()),
         };
         //Extract the value.
         let value = match val.parse::<f32>() {
@@ -138,7 +143,12 @@ pub mod tools {
         (command, value)
     }
 
-    pub fn update_limits(command: String, offset: f32, sp: &mut Box<dyn SerialPort + 'static>, ed: &EvapData) {
+    pub fn update_limits(
+        command: String,
+        offset: f32,
+        sp: &mut Box<dyn SerialPort + 'static>,
+        ed: &EvapData,
+    ) {
         let c = command.to_uppercase();
         let main_command = &c[0..1];
         //Grab current low limit,  If Command is H, overwrite with high limit.
@@ -149,14 +159,13 @@ pub mod tools {
         }
         if c.len() > 1 && &c[1..] == "A" {
             new_offset = offset - cur_set;
-        }
-        else {
+        } else {
             new_offset = offset;
         }
         let out_string = format!("{} {}\n", main_command, new_offset);
         sp.write(out_string.as_bytes()).unwrap();
     }
-#[derive(serde::Deserialize)]
+    #[derive(serde::Deserialize)]
     pub struct Config {
         pub device: String,
         pub low_rh: f32,
