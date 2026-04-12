@@ -23,9 +23,9 @@ use chrono::{Datelike, Local};
 fn main() {
     // let args: Vec<String> = std::env::args().collect();
     let mut config_file = setup_config_file();
-    let config = read_config(&mut config_file);
+    let mut config = read_config(&mut config_file);
     let mut log_file = make_log_file();
-    let dev_path = config.device;
+    let dev_path = config.device.clone();
     let socket_path = path::Path::new("/tmp/chin_temp");
     if socket_path.exists() {
         std::fs::remove_file(socket_path).unwrap();
@@ -101,7 +101,8 @@ fn main() {
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
         if command != "" {
-            update_limits(command, offset, &mut port, &data);
+            update_limits(command.clone(), offset, &mut port, &data);
+            update_config(command, offset, &mut config);
         }
     }
 }

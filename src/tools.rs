@@ -165,6 +165,17 @@ pub mod tools {
         let out_string = format!("{} {}\n", main_command, new_offset);
         sp.write(out_string.as_bytes()).unwrap();
     }
+
+    pub fn update_config(limit: String, value: f32, conf: &mut Config) {
+        let lim = &limit[0..1].to_ascii_lowercase();
+        if lim == "h" {
+            conf.high_rh = value;
+        }
+        if lim == "l" {
+            conf.low_rh = value;
+        }
+    }
+
     #[derive(serde::Deserialize)]
     pub struct Config {
         pub device: String,
