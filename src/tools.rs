@@ -10,7 +10,7 @@ pub mod tools {
     pub fn setup(date: &DateTime<Local>, lines: &usize) -> (std::fs::File, std::fs::File, i64) {
         let out_path = path::Path::new("/tmp/page/");
         let out_file_name = "temp_in.txt".to_owned();
-        let fan_file_name = "fan_call".to_owned();
+        let fan_file_name = "fan_call.txt".to_owned();
         println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
         print!("{}", "\n".repeat(*lines));
         let ts = date.timestamp() - (date.timestamp() % 300);
