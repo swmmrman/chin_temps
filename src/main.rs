@@ -43,7 +43,7 @@ fn main() {
     let mut data = evap_data::evap_data::new();
     let mut five_minute = evap_data::evap_data::new();
     let mut reader = serial_parser::serial_parser::new();
-    let (mut out_file, mut fan_file, mut ts) = setup(&date, &lines.into());
+    let (mut out_file, mut fan_file, mut call_file, mut ts) = setup(&date, &lines.into());
     std::thread::sleep(Duration::from_secs(2));
     update_limits("HA".to_string(), config.high_rh, &mut port, &data);
     update_limits("LA".to_string(), config.low_rh, &mut port, &data);
