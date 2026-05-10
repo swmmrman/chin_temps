@@ -7,10 +7,14 @@ pub mod tools {
     use std::io::Read;
     use std::{fs, path};
 
-    pub fn setup(date: &DateTime<Local>, lines: &usize) -> (std::fs::File, std::fs::File, i64) {
+    pub fn setup(
+        date: &DateTime<Local>,
+        lines: &usize,
+    ) -> (std::fs::File, std::fs::File, std::fs::File, i64) {
         let out_path = path::Path::new("/tmp/page/");
         let out_file_name = "temp_in.txt".to_owned();
         let fan_file_name = "fan_call.txt".to_owned();
+        let call_file_name = "call.txt".to_owned();
         println!("{}", date.format("%m-%d-%Y %H:%M:%S"));
         print!("{}", "\n".repeat(*lines));
         let ts = date.timestamp() - (date.timestamp() % 300);
@@ -29,7 +33,13 @@ pub mod tools {
             .truncate(true)
             .open(out_path.join(fan_file_name))
             .unwrap();
-        (outfile, fanfile, ts)
+        let callfile = fs::OpenOptions::new()
+            .create(true)
+            .write(false)
+            .truncate(false)
+            .open(out_path.join(call_file_name))
+            .unwrap();
+        (outfile, fanfile, callfile, ts)
     }
 
     pub fn setup_config_file() -> std::fs::File {
