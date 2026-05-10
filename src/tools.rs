@@ -78,6 +78,23 @@ pub mod tools {
         config
     }
 
+    pub fn read_call(call_file: &mut std::fs::File) -> String {
+        let mut call = String::new();
+        match call_file.read_to_string(&mut call) {
+            Ok(_) => (),
+            Err(e) => {
+                println!("File missing {:?}", e);
+                std::process::exit(1);
+            }
+        };
+        let fan_call = if call == "True" {
+            "on".to_owned()
+        } else {
+            "off".to_owned()
+        };
+        fan_call
+    }
+
     pub fn check_time(time_frame: i64, last_time: i64, aligned: bool) -> i64 {
         let cur_ts = Local::now().timestamp();
         let time_diff = cur_ts - last_time;
