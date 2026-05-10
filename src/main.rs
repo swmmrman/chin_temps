@@ -92,8 +92,12 @@ fn main() {
             //Print error otherwise
             Err(e) => eprintln!("{:?}", e),
         }
+        let mut call = read_call(&mut call_file);
+        if data.get_inside_temp_2() > 68.0f32 {
+            call = "on".to_owned()
+        }
         fan_file.seek(io::SeekFrom::Start(0)).unwrap();
-        fan_file.write("on".as_bytes()).unwrap();
+        fan_file.write(call.as_bytes()).unwrap();
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file
             .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
