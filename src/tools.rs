@@ -36,6 +36,7 @@ pub mod tools {
         let callfile = fs::OpenOptions::new()
             .create(false)
             .write(false)
+            .read(true)
             .truncate(false)
             .open(out_path.join(call_file_name))
             .unwrap();
