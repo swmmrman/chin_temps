@@ -34,7 +34,7 @@ pub mod tools {
             .open(out_path.join(fan_file_name))
             .unwrap();
         let callfile = fs::OpenOptions::new()
-            .create(true)
+            .create(false)
             .write(false)
             .truncate(false)
             .open(out_path.join(call_file_name))
