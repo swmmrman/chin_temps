@@ -3,8 +3,8 @@ pub mod evap_data {
     use crate::sensors::sensor;
     use crate::temp::temp;
 
-//#[derive(Debug)]
-    pub struct SensorArray{ 
+    //#[derive(Debug)]
+    pub struct SensorArray {
         inside: sensor::Sensor,
         outside: sensor::Sensor,
         spare: sensor::Sensor,
@@ -13,18 +13,18 @@ pub mod evap_data {
     pub struct EvapData {
         sensors: SensorArray,
         pub low_limit: f32,
-        pub high_limit: f32, 
-        ldr: i32,               //Not working
-        pub valve_status: i8,   //0-2 normal. oThers are failures
+        pub high_limit: f32,
+        ldr: i32,             //Not working
+        pub valve_status: i8, //0-2 normal. oThers are failures
         pub deltas: temp::Temp, //Diff of sensor 1 and 2 temps.
-        //pub delta_hs: rh::RH, //Add later might be neat to see.
+                              //pub delta_hs: rh::RH, //Add later might be neat to see.
     }
 
     impl EvapData {
         /// Call with the parsed data from the serial parser.  Validates all values.
         /// The first 3 are temps, Next 3 Humidity, 7th is LDR(unused), last is valve
         /// status. Deltas is calculated from the values of temp1 and 2.  Temp and humidity 1
-        /// are outside, Temp and humidity 2 are inside. 
+        /// are outside, Temp and humidity 2 are inside.
         pub fn update(&mut self, vals: Vec<String>) {
             match validate(&vals) {
                 true => {
@@ -51,13 +51,19 @@ pub mod evap_data {
         }
         /// Returns the current temperature change across the media.  Can return NAN if currently unset.
         fn get_delta(&self, reading_type: ReadingType) -> f32 {
-            let outside_cur =self.sensors.outside.get_reading(reading_type.clone(), ReadingKind::Cur);
-            let inside_cur = self.sensors.inside.get_reading(reading_type, ReadingKind::Cur);
+            let outside_cur = self
+                .sensors
+                .outside
+                .get_reading(reading_type.clone(), ReadingKind::Cur);
+            let inside_cur = self
+                .sensors
+                .inside
+                .get_reading(reading_type, ReadingKind::Cur);
             inside_cur - outside_cur
         }
         /// Get the current valve status.  What indicates either not written to, or an error has occured.
         fn valve_status(&self) -> String {
-            match self.valve_status{
+            match self.valve_status {
                 0 => "Closed        ".to_string(),
                 1 => "Open          ".to_string(),
                 2 => "Sensing Closed".to_string(),
@@ -81,7 +87,7 @@ pub mod evap_data {
             let inside = self.sensors.inside.get_all();
             let outside = self.sensors.outside.get_all();
             format!(
-"{}: {: >7.2}f {: >7.2}%\r\n\
+                "{}: {: >7.2}f {: >7.2}%\r\n\
 In:  {: >7.2}f {: >7.2}%\r\n\
 Diff:{: >7.2}f {: >7.2}%\r\n\
 Dew: {: >7.2}f \r\n\
@@ -114,13 +120,21 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
                 outside.rh.get_min(),
                 self.deltas.get_max(),
                 self.deltas.get_min(),
-                self.sensors.spare.get_reading(ReadingType::Temp, ReadingKind::Cur),
-                self.sensors.spare.get_reading(ReadingType::Humidity, ReadingKind::Cur),
+                self.sensors
+                    .spare
+                    .get_reading(ReadingType::Temp, ReadingKind::Cur),
+                self.sensors
+                    .spare
+                    .get_reading(ReadingType::Humidity, ReadingKind::Cur),
                 self.low_limit,
                 self.high_limit,
                 self.ldr,
-                self.sensors.spare.get_reading(ReadingType::Temp, ReadingKind::Min),
-                self.sensors.spare.get_reading(ReadingType::Temp, ReadingKind::Max),
+                self.sensors
+                    .spare
+                    .get_reading(ReadingType::Temp, ReadingKind::Min),
+                self.sensors
+                    .spare
+                    .get_reading(ReadingType::Temp, ReadingKind::Max),
             )
         }
         pub fn get_inside_temp(&self) -> f32 {
@@ -128,9 +142,9 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
     }
     /// Return a new empty EvapData
-    pub fn new() -> EvapData{
-        EvapData { 
-            sensors: SensorArray { 
+    pub fn new() -> EvapData {
+        EvapData {
+            sensors: SensorArray {
                 inside: sensor::new("In".to_string()),
                 outside: sensor::new("Out".to_string()),
                 spare: sensor::new("Spare".to_string()),
@@ -139,7 +153,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             high_limit: 96.0,
             ldr: -500,
             valve_status: -1,
-            deltas:temp::new()
+            deltas: temp::new(),
         }
     }
     /// Validates the serial parser string vec.  First 6 are temps and RH.
@@ -148,19 +162,19 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
     fn validate(vals: &Vec<String>) -> bool {
         for val in &vals[0..7] {
             match val.parse::<f32>() {
-            Ok(_) => {
-                continue;
-            }
-            _ => return false
+                Ok(_) => {
+                    continue;
+                }
+                _ => return false,
             }
         }
         match &vals[8].parse::<i32>() {
             Ok(_) => (),
-            _ => return false
+            _ => return false,
         }
         match &vals[9].parse::<i8>() {
             Ok(_) => (),
-            _ => return false
+            _ => return false,
         }
         true
     }
