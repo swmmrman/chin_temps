@@ -10,7 +10,7 @@ use evap_data::evap_data::EvapData;
 use logging::logging::{make_log_file, write_to_log};
 use tools::tools::*;
 
-use crossterm::{cursor::MoveUp, ExecutableCommand};
+use crossterm::{ExecutableCommand, cursor::MoveUp};
 use serialport;
 use std::io::{self, Read, Seek, Write};
 use std::path;
