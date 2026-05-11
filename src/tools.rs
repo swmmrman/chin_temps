@@ -88,12 +88,11 @@ pub mod tools {
                 std::process::exit(1);
             }
         };
-        let fan_call = if call == "True" {
+        if call == "True" {
             "on".to_owned()
         } else {
             "off".to_owned()
-        };
-        fan_call
+        }
     }
 
     pub fn check_time(time_frame: i64, last_time: i64, aligned: bool) -> i64 {
