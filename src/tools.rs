@@ -82,12 +82,13 @@ pub mod tools {
     pub fn read_call(call_file: &mut std::fs::File) -> String {
         let mut call = String::new();
         match call_file.read_to_string(&mut call) {
-            Ok(_) => (),
+            Ok(c) => c,
             Err(e) => {
                 println!("File missing {:?}", e);
                 std::process::exit(1);
             }
         };
+        call.truncate(call.len() - 1);
         if call == "True" {
             "on".to_owned()
         } else {
