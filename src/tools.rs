@@ -4,7 +4,7 @@ pub mod tools {
     use ron;
     use serde;
     use serialport::{self, SerialPort};
-    use std::io::Read;
+    use std::io::{Read, Seek};
     use std::{fs, path};
 
     pub fn setup(
@@ -81,6 +81,10 @@ pub mod tools {
 
     pub fn read_call(call_file: &mut std::fs::File) -> String {
         let mut call = String::new();
+        match call_file.seek(std::io::SeekFrom::Start(0)) {
+            Ok(_) => (),
+            Err(_) => return "on".to_string(),
+        }
         match call_file.read_to_string(&mut call) {
             Ok(c) => c,
             Err(e) => {
