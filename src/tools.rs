@@ -92,7 +92,6 @@ pub mod tools {
                 std::process::exit(1);
             }
         };
-        call.truncate(call.len() - 1);
         if call == "True" {
             "on".to_owned()
         } else {
