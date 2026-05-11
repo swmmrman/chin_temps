@@ -99,9 +99,11 @@ fn main() {
         fan_file.seek(io::SeekFrom::Start(0)).unwrap();
         fan_file.write(call.as_bytes()).unwrap();
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
-        out_file
+        let bw: u64 = fan_file
             .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
-            .unwrap();
+            .unwrap() as u64;
+        fan_file.set_len(bw).unwrap();
+        fan_file.flush().unwrap();
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
         if command != "" {
