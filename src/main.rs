@@ -10,7 +10,7 @@ use evap_data::evap_data::EvapData;
 use logging::logging::{make_log_file, write_to_log};
 use tools::tools::*;
 
-use crossterm::{ExecutableCommand, cursor::MoveUp};
+use crossterm::{cursor::MoveUp, ExecutableCommand};
 use serialport;
 use std::io::{self, Read, Seek, Write};
 use std::path;
@@ -97,13 +97,16 @@ fn main() {
             call = "on".to_owned()
         }
         fan_file.seek(io::SeekFrom::Start(0)).unwrap();
-        fan_file.write(call.as_bytes()).unwrap();
-        out_file.seek(io::SeekFrom::Start(0)).unwrap();
-        let bw: u64 = fan_file
-            .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
-            .unwrap() as u64;
+        let bw = match fan_file.write(call.as_bytes()) {
+            Ok(n) => n as u64,
+            Err(_) => 0u64,
+        };
         fan_file.set_len(bw).unwrap();
         fan_file.flush().unwrap();
+        out_file.seek(io::SeekFrom::Start(0)).unwrap();
+        out_file
+            .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
+            .unwrap();
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
         if command != "" {
