@@ -20,7 +20,7 @@ Adafruit_HDC302x in_sensor = Adafruit_HDC302x();  // In
 DHT dht3(dht3Pin, DHT22);  // Spare
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 int valvePin = 52;
-String version = "V1.1.1";
+String version = "V1.2.0";
 double highLimit = 90.0;
 double lowLimit = 85.0;
 
