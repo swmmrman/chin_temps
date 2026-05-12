@@ -3,26 +3,29 @@
 #include <Adafruit_HDC302x.h>
 #include <LiquidCrystal_I2C.h>
 
-int numReadings = 25;
-float sensorMax = 100;
-int vals[25];
+String version = "V1.2.0";
+
 int counter = 0;
-int total = 0;
-int timeLeft = 0; //Time left for spraying in seconds
-int runTime = 5; //Spray time. Add 1 second to desired time
-int timeOut = 0; //Delay time remaining for sensing.
-int waitTime = 11; //Length of delay for sensing.
-int valveStatus = 0;
 int dht1Pin = 2; // Out
 int dht3Pin = 7; // Spare or inside 2.
-DHT dht1(dht1Pin, DHT22);  // Out
-Adafruit_HDC302x in_sensor = Adafruit_HDC302x();  // In
-DHT dht3(dht3Pin, DHT22);  // Spare
-LiquidCrystal_I2C lcd(0x27, 20, 4);
+int numReadings = 25;
+int runTime = 5; //Spray time. Add 1 second to desired time
+float sensorMax = 100;
+int total = 0;
+int timeLeft = 0; //Time left for spraying in seconds
+int timeOut = 0; //Delay time remaining for sensing.
+int vals[25];
+int valveStatus = 0;
 int valvePin = 52;
-String version = "V1.2.0";
+int waitTime = 11; //Length of delay for sensing.
+
 double highLimit = 90.0;
 double lowLimit = 85.0;
+
+Adafruit_HDC302x in_sensor = Adafruit_HDC302x();  // In
+DHT dht1(dht1Pin, DHT22);  // Out
+DHT dht3(dht3Pin, DHT22);  // Spare
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 void setup() {
   Serial.begin(115200);
