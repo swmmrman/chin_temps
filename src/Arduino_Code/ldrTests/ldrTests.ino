@@ -5,6 +5,7 @@
 
 String version = "V1.2.0";
 
+int call = 0;
 int counter = 0;
 int dht1Pin = 2; // Out
 int dht3Pin = 7; // Spare or inside 2.
@@ -91,15 +92,19 @@ void loop() {
     while(hitNewLine == false){
       char inByte = (char)Serial.read();
       if(inByte == '\n') {
+        hitNewLine = true;
         String command = input.substring(0,1);
         double offset = (double)input.substring(2).toFloat();
+        int call_request = (int).input.substring(2).toInt();
         if(command == "H") {
           highLimit += offset;
         }
         else if(command == "L") {
           lowLimit += offset;
         }
-        hitNewLine = true;
+        else if(command == "C") {
+          call = call_request;
+        }
       }
       else {
         input += inByte;
@@ -216,7 +221,9 @@ void loop() {
     Serial.print(F(","));
     Serial.print(total/numReadings);
     Serial.print(F(","));
-    Serial.println(valveStatus);
+    Serial.print(valveStatus);
+    Serail.print(F","));
+    Serail.println(call);
   }
   delay(200);
 }
