@@ -21,8 +21,8 @@ DHT dht3(dht3Pin, DHT22);  // Spare
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 int valvePin = 52;
 String version = "V1.1.1";
-double highLimit = 96.0;
-double lowLimit = 91.0;
+double highLimit = 90.0;
+double lowLimit = 85.0;
 
 void setup() {
   Serial.begin(115200);
@@ -38,7 +38,7 @@ void setup() {
   dht1.begin();                 // Out
   in_sensor.begin(0x44, &Wire); // In
   dht3.begin();                 // Spare
-  int v = analogRead(A0); 
+  int v = analogRead(A0);
   for(int i=0; i < numReadings; i++) {
     vals[i] = v;
     total += v;
@@ -194,7 +194,7 @@ void loop() {
     lcd.print("F  ");
     pad(spareHumid);
     lcd.print((String)spareHumid + "%");
-    
+
     Serial.print(outTemp);
     Serial.print(F(","));
     Serial.print(inTemp);
