@@ -151,6 +151,15 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
                 .spare
                 .get_reading(ReadingType::Temp, ReadingKind::Cur)
         }
+        /// Sets the fan call to on,  if true sets a delay for the fan and
+        /// starts a water call.
+        pub fn set_fan_call(&mut self, fan_file: &mut File, call: i32) {
+            ()
+        }
+        /// Enables and disables the water call.
+        pub fn set_water_call(&mut self, sp: &mut Box<dyn SerialPort + 'static>, call: i32) {
+            ()
+        }
     }
     /// Return a new empty EvapData
     pub fn new() -> EvapData {
@@ -168,15 +177,6 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             valve_status: -1,
             deltas: temp::new(),
         }
-    }
-    /// Sets the fan call to on,  if true sets a delay for the fan and
-    /// starts a water call.
-    pub fn set_fan_call(&mut self, fan_file: &mut File, call: i32) {
-        ()
-    }
-    /// Enables and disables the water call.
-    pub fn set_water_call(&mut self, sp: &mut Box<dyn SerialPort + 'static>, call: i32) {
-        ()
     }
 
     /// Validates the serial parser string vec.  First 6 are temps and RH.
