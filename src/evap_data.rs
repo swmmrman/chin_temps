@@ -3,6 +3,7 @@ pub mod evap_data {
     use crate::sensors::sensor;
     use crate::temp::temp;
     use serialport::SerialPort;
+    use std::fmt::format;
     use std::fs::File;
 
     //#[derive(Debug)]
@@ -162,7 +163,20 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
         /// Enables and disables the water call.
         pub fn set_water_call(&mut self, sp: &mut Box<dyn SerialPort + 'static>, call: i32) {
-            ()
+            if call == self.water_call {
+                return;
+            }
+            match call {
+                0 | 2 => {
+                    self.water_call = call;
+                    sp.write("C0".as_bytes()).unwrap();
+                }
+                1 | 3 => {
+                    self.water_call = call;
+                    sp.write("C1".as_bytes()).unwrap();
+                }
+                _ => (),
+            }
         }
         /// Returns the current fan call as in an i32, 0 = off, 1 = on, 2 = wait
         pub fn get_fan_fall(&self) -> i32 {
