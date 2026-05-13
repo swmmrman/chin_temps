@@ -1,2 +1,3 @@
 /target
 /Cargo.lock
+src/Arduino_Code/ldrTests/build/
