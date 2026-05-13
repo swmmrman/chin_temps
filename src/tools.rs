@@ -183,7 +183,7 @@ pub mod tools {
         let c = command.to_uppercase();
         let main_command = &c[0..1];
         //Grab current low limit,  If Command is H, overwrite with high limit.
-        let mut cur_set = ed.low_limit;
+        let mut cur_set = ed.get_low_limit();
         let new_offset;
         if main_command == "H" {
             cur_set = ed.high_limit;
