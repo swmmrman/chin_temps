@@ -3,7 +3,6 @@ pub mod evap_data {
     use crate::sensors::sensor;
     use crate::temp::temp;
     use serialport::SerialPort;
-    use std::fmt::format;
     use std::fs::File;
 
     //#[derive(Debug)]
