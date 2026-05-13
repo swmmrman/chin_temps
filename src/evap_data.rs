@@ -9,7 +9,7 @@ pub mod evap_data {
     pub struct SensorArray {
         inside: sensor::Sensor,
         outside: sensor::Sensor,
-        spare: sensor::Sensor,
+        interior: sensor::Sensor,
     }
 
     pub struct EvapData {
@@ -40,7 +40,7 @@ pub mod evap_data {
                         vals[0].parse::<f32>().unwrap(),
                         vals[3].parse::<f32>().unwrap(),
                     );
-                    self.sensors.spare.update(
+                    self.sensors.interior.update(
                         vals[2].parse::<f32>().unwrap(),
                         vals[5].parse::<f32>().unwrap(),
                     );
@@ -78,7 +78,7 @@ pub mod evap_data {
         pub fn clear(&mut self) {
             self.sensors.inside.clear();
             self.sensors.outside.clear();
-            self.sensors.spare.clear();
+            self.sensors.interior.clear();
             self.valve_status = -1;
             self.deltas.clear();
         }
@@ -125,19 +125,19 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
                 self.deltas.get_max(),
                 self.deltas.get_min(),
                 self.sensors
-                    .spare
+                    .interior
                     .get_reading(ReadingType::Temp, ReadingKind::Cur),
                 self.sensors
-                    .spare
+                    .interior
                     .get_reading(ReadingType::Humidity, ReadingKind::Cur),
                 self.low_limit,
                 self.high_limit,
                 self.ldr,
                 self.sensors
-                    .spare
+                    .interior
                     .get_reading(ReadingType::Temp, ReadingKind::Min),
                 self.sensors
-                    .spare
+                    .interior
                     .get_reading(ReadingType::Temp, ReadingKind::Max),
             )
         }
@@ -148,7 +148,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
         pub fn get_inside_temp_2(&self) -> f32 {
             self.sensors
-                .spare
+                .interior
                 .get_reading(ReadingType::Temp, ReadingKind::Cur)
         }
         /// Sets the fan call to on,  if true sets a delay for the fan and
@@ -167,7 +167,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             sensors: SensorArray {
                 inside: sensor::new("In".to_string()),
                 outside: sensor::new("Out".to_string()),
-                spare: sensor::new("Spare".to_string()),
+                interior: sensor::new("Inside".to_string()),
             },
             low_limit: 91.0,
             high_limit: 96.0,
