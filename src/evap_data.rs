@@ -96,6 +96,8 @@ In:  {: >7.2}f {: >7.2}%\r\n\
 Diff:{: >7.2}f {: >7.2}%\r\n\
 Dew: {: >7.2}f \r\n\
 \n\
+Fan Call: {}\n\
+Water Call: {}\n\
 Valve: {}\n\
 \n\
 Max Temps:\t\t\t\tMin Temps:\n\
@@ -113,6 +115,8 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
                 self.get_delta(ReadingType::Temp),
                 self.get_delta(ReadingType::Humidity),
                 temp::dew_point(outside.temp.get_cur(), outside.rh.get_cur()),
+                self.fan_call,
+                self.water_call,
                 self.valve_status(),
                 inside.temp.get_max(),
                 outside.temp.get_max(),
@@ -159,6 +163,14 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         /// Enables and disables the water call.
         pub fn set_water_call(&mut self, sp: &mut Box<dyn SerialPort + 'static>, call: i32) {
             ()
+        }
+        /// Returns the current fan call as in an i32, 0 = off, 1 = on, 2 = wait
+        pub fn get_fan_fall(&self) -> i32 {
+            self.fan_call
+        }
+        /// Returns the water call as an i32,  0 = off, 1 = on, 2 = locked off, 3 = locked on
+        pub fn get_water_call(&self) -> i32 {
+            self.water_call
         }
     }
     /// Return a new empty EvapData
