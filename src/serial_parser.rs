@@ -1,13 +1,13 @@
-pub mod serial_parser{
+pub mod serial_parser {
     pub struct Parser {
         partial: String,
         completed: String,
-        last_completed: String
+        last_completed: String,
     }
 
     impl Parser {
-        pub fn add_and_return(&mut self, input: &[u8], t:usize) -> Option<Vec<String>> {
-            Self::convert_add(self,&input[..t]);
+        pub fn add_and_return(&mut self, input: &[u8], t: usize) -> Option<Vec<String>> {
+            Self::convert_add(self, &input[..t]);
             Self::check_partial(self);
             let out = match Self::get_completed(self) {
                 Some(val_string) => {
@@ -15,9 +15,7 @@ pub mod serial_parser{
                     self.clear_completed();
                     output
                 }
-                None => {
-                    return None
-                }
+                None => return None,
             };
             Some(out)
         }
@@ -32,9 +30,8 @@ pub mod serial_parser{
             if !self.completed.is_empty() {
                 let out = Some(self.completed.to_string());
                 Self::clear_completed(self);
-                out 
-            }
-            else { 
+                out
+            } else {
                 None
             }
         }
@@ -44,11 +41,11 @@ pub mod serial_parser{
                 self.completed = self.partial[..index].to_string();
                 //count the commas, discard if < 10 fields.(CSV formatted)
                 let commas = self.completed.matches(",").count();
-                if commas != 9 { 
+                if commas != 9 {
                     println!("{}", commas);
                     self.clear_completed();
                 }
-                self.partial = self.partial[index +2..].to_owned();
+                self.partial = self.partial[index + 2..].to_owned();
             }
         }
         fn clear_completed(&mut self) {
