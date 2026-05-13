@@ -61,7 +61,7 @@ fn main() {
                     }
                     None => (),
                 };
-                if data.high_limit != config.high_rh {
+                if data.get_high_limit() != config.high_rh {
                     update_limits("HA".to_owned(), config.high_rh, &mut port, &data);
                 }
                 if data.get_low_limit() != config.low_rh {

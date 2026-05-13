@@ -16,7 +16,7 @@ pub mod evap_data {
     pub struct EvapData {
         sensors: SensorArray,
         low_limit: f32,
-        pub high_limit: f32,
+        high_limit: f32,
         pub water_call: i32,
         pub fan_call: i32,
         ldr: i32,             //Not working, maybe
@@ -158,6 +158,9 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
         pub fn get_low_limit(&self) -> f32 {
             self.low_limit
+        }
+        pub fn get_high_limit(&self) -> f32 {
+            self.high_limit
         }
         /// Sets the fan call to on,  if true sets a delay for the fan and
         /// starts a water call.

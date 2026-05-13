@@ -186,7 +186,7 @@ pub mod tools {
         let mut cur_set = ed.get_low_limit();
         let new_offset;
         if main_command == "H" {
-            cur_set = ed.high_limit;
+            cur_set = ed.get_high_limit();
         }
         if c.len() > 1 && &c[1..] == "A" {
             new_offset = offset - cur_set;
