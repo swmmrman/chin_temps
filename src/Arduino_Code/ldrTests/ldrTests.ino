@@ -5,7 +5,7 @@
 
 String version = "V1.2.0";
 
-int call = 0;
+int call = 1;
 int counter = 0;
 int dht1Pin = 2; // Out
 int dht3Pin = 7; // Spare or inside 2.
