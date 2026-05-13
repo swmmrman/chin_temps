@@ -41,7 +41,7 @@ pub mod serial_parser {
                 self.completed = self.partial[..index].to_string();
                 //count the commas, discard if < 10 fields.(CSV formatted)
                 let commas = self.completed.matches(",").count();
-                if commas != 9 {
+                if commas != 10 {
                     println!("{}", commas);
                     self.clear_completed();
                 }

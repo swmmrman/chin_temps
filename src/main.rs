@@ -50,7 +50,7 @@ fn main() {
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
-                if t > 60 {
+                if t > 62 {
                     continue;
                 }; // Discard Initial buffer.
                 match reader.add_and_return(&serial_buff, t) {
