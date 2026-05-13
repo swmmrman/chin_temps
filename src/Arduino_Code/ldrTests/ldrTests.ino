@@ -15,7 +15,7 @@ int runTime = 5; // Spray time. Add 1 second to desired time
 int total = 0;
 int timeLeft = 0; // Time left for spraying in seconds
 int timeOut = 0; // Delay time remaining for sensing.
-int vals[numReadings];
+int vals[25];
 int valveStatus = 0;
 int valvePin = 52;
 int waitTime = 11; // Length of delay for sensing.
@@ -95,7 +95,7 @@ void loop() {
         hitNewLine = true;
         String command = input.substring(0,1);
         double offset = (double)input.substring(2).toFloat();
-        int call_request = (int).input.substring(2).toInt();
+        int call_request = (int)input.substring(2).toInt();
         if(command == "H") {
           highLimit += offset;
         }
@@ -222,8 +222,8 @@ void loop() {
     Serial.print(total/numReadings);
     Serial.print(F(","));
     Serial.print(valveStatus);
-    Serail.print(F","));
-    Serail.println(call);
+    Serial.print(F(","));
+    Serial.println(call);
   }
   delay(200);
 }
