@@ -126,7 +126,7 @@ void loop() {
     in_sensor.readTemperatureHumidityOnDemand(inC, inHumid, TRIGGERMODE_LP0);
     double inTemp = CToF(inC);
     //Check for outside temp is under 64 and shut off or do nothing.
-    if(outTemp < 63) {
+    if(outTemp < 63 || call == 0 ) {
       if( valveStatus != 0) {
         valveOff(false);
       }
