@@ -31,7 +31,7 @@ fn main() {
         std::fs::remove_file(socket_path).unwrap();
     }
     let mut socket = setup_socket(socket_path);
-    let lines: u16 = 14;
+    let lines: u16 = 16;
     let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
     let mut port = serialport::new(dev_path, 115200)
         .timeout(Duration::from_millis(10))
