@@ -163,11 +163,11 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
         /// Sets the fan call to on,  if true sets a delay for the fan and
         /// starts a water call.
-        pub fn set_fan_call(&mut self, fan_file: &mut File, call: i32) {
+        pub fn _set_fan_call(&mut self, _fan_file: &mut File, _call: i32) {
             ()
         }
         /// Enables and disables the water call.
-        pub fn set_water_call(&mut self, sp: &mut Box<dyn SerialPort + 'static>, call: i32) {
+        pub fn _set_water_call(&mut self, sp: &mut Box<dyn SerialPort + 'static>, call: i32) {
             if call == self.water_call {
                 return;
             }
@@ -184,11 +184,11 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             }
         }
         /// Returns the current fan call as in an i32, 0 = off, 1 = on, 2 = wait
-        pub fn get_fan_fall(&self) -> i32 {
+        pub fn _get_fan_fall(&self) -> i32 {
             self.fan_call
         }
         /// Returns the water call as an i32,  0 = off, 1 = on, 2 = locked off, 3 = locked on
-        pub fn get_water_call(&self) -> i32 {
+        pub fn _get_water_call(&self) -> i32 {
             self.water_call
         }
     }
