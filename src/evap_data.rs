@@ -14,7 +14,9 @@ pub mod evap_data {
         sensors: SensorArray,
         pub low_limit: f32,
         pub high_limit: f32,
-        ldr: i32,             //Not working
+        pub water_call: i32,
+        pub fan_call: i32,
+        ldr: i32,             //Not working, maybe
         pub valve_status: i8, //0-2 normal. oThers are failures
         pub deltas: temp::Temp, //Diff of sensor 1 and 2 temps.
                               //pub delta_hs: rh::RH, //Add later might be neat to see.
@@ -158,11 +160,23 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             },
             low_limit: 91.0,
             high_limit: 96.0,
+            fan_call: 0,
+            water_call: 1,
             ldr: -500,
             valve_status: -1,
             deltas: temp::new(),
         }
     }
+    /// Sets the fan call to on,  if true sets a delay for the fan and
+    /// starts a water call.
+    pub fn set_fan_call(call: i32) {
+        ()
+    }
+    /// Enables and disables the water call.
+    pub fn set_water_call(call: i32) {
+        ()
+    }
+
     /// Validates the serial parser string vec.  First 6 are temps and RH.
     /// LDR readings are i32,  Valid range needs checked and added.
     /// Valve status is 0, 1, or 2 for closed open, and sensing.
