@@ -18,7 +18,7 @@ int timeLeft = 0; // Time left for spraying in seconds
 int timeOut = 0; // Delay time remaining for sensing.
 int vals[25];
 int valveStatus = 0;
-int valvePin = 52;
+int valvePin = 8;
 int waitTime = 11; // Length of delay for sensing.
 
 double highLimit = 90.0;
