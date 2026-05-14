@@ -8,7 +8,7 @@ String version = "V1.2.0";
 int call = 1;
 int counter = 0;
 int dht1Pin = 2;        // Out
-int dht3Pin = 7;        // Spare or inside 2.
+int dht3Pin = 7;        // Interior or inside 2.
 int numReadings = 25;   // Number of LDR readings. vals[]
 int runTime = 5;        // Spray time. Add 1 second to desired time
 // float sensorMax = 100;
@@ -25,7 +25,7 @@ double lowLimit = 85.0;
 
 Adafruit_HDC302x in_sensor = Adafruit_HDC302x();  // In
 DHT dht1(dht1Pin, DHT22);  // Out
-DHT dht3(dht3Pin, DHT22);  // Spare
+DHT dht3(dht3Pin, DHT22);  // Interior
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 void setup() {
@@ -34,14 +34,14 @@ void setup() {
   lcd.backlight();
   pinMode(A0, INPUT);
   pinMode(dht1Pin, INPUT);  // Out
-  pinMode(dht3Pin, INPUT);  // Spare
+  pinMode(dht3Pin, INPUT);  // Interior
   pinMode(valvePin, OUTPUT);
   digitalWrite(valvePin, 1);
   delay(400);
   digitalWrite(valvePin, 0);
   dht1.begin();                 // Out
   in_sensor.begin(0x44, &Wire); // In
-  dht3.begin();                 // Spare
+  dht3.begin();                 // Interior
   int v = analogRead(A0);
   for(int i=0; i < numReadings; i++) {
     vals[i] = v;
@@ -119,10 +119,10 @@ void loop() {
   if(counter % 5 == 0){
     float outTemp = dht1.readTemperature(true);
     double inC = CToF(20.55555);
-    float spareTemp = dht3.readTemperature(true);
+    float InteriorTemp = dht3.readTemperature(true);
     float outHumid = dht1.readHumidity();
     double inHumid = 4.20;
-    float spareHumid = dht3.readHumidity();
+    float InteriorHumid = dht3.readHumidity();
     in_sensor.readTemperatureHumidityOnDemand(inC, inHumid, TRIGGERMODE_LP0);
     double inTemp = CToF(inC);
     //Check for outside temp is under 64 and shut off or do nothing.
@@ -197,23 +197,23 @@ void loop() {
     }
     lcd.setCursor(0,3);
     lcd.print(F("In2:"));
-    pad(spareTemp);
-    lcd.print(spareTemp);
+    pad(InteriorTemp);
+    lcd.print(InteriorTemp);
     lcd.print("F  ");
-    pad(spareHumid);
-    lcd.print((String)spareHumid + "%");
+    pad(InteriorHumid);
+    lcd.print((String)InteriorHumid + "%");
 
     Serial.print(outTemp);
     Serial.print(F(","));
     Serial.print(inTemp);
     Serial.print(F(","));
-    Serial.print(spareTemp);
+    Serial.print(InteriorTemp);
     Serial.print(F(","));
     Serial.print(outHumid);
     Serial.print(F(","));
     Serial.print(inHumid);
     Serial.print(F(","));
-    Serial.print(spareHumid);
+    Serial.print(InteriorHumid);
     Serial.print(F(","));
     Serial.print(lowLimit);
     Serial.print(F(","));
