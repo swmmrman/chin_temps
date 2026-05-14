@@ -7,18 +7,18 @@ String version = "V1.2.0";
 
 int call = 1;
 int counter = 0;
-int dht1Pin = 2; // Out
-int dht3Pin = 7; // Spare or inside 2.
-int numReadings = 25; // Number of LDR readings. vals[]
-int runTime = 5; // Spray time. Add 1 second to desired time
+int dht1Pin = 2;        // Out
+int dht3Pin = 7;        // Spare or inside 2.
+int numReadings = 25;   // Number of LDR readings. vals[]
+int runTime = 5;        // Spray time. Add 1 second to desired time
 // float sensorMax = 100;
 int total = 0;
-int timeLeft = 0; // Time left for spraying in seconds
-int timeOut = 0; // Delay time remaining for sensing.
+int timeLeft = 0;       // Time left for spraying in seconds
+int timeOut = 0;        // Delay time remaining for sensing.
 int vals[25];
 int valveStatus = 0;
 int valvePin = 52;
-int waitTime = 11; // Length of delay for sensing.
+int waitTime = 11;      // Length of delay for sensing.
 
 double highLimit = 90.0;
 double lowLimit = 85.0;
