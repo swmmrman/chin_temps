@@ -120,13 +120,11 @@ void loop() {
   counter = (counter + 1) % numReadings;
   if(counter % 5 == 0){
     float outTemp = dht1.readTemperature(true);
-    double inC = CToF(20.55555);
+    float inTemp = dht2.readTemperature(true);
     float spareTemp = dht3.readTemperature(true);
     float outHumid = dht1.readHumidity();
-    double inHumid = 4.20;
+    float inHumid = dht2.readHumidity();
     float spareHumid = dht3.readHumidity();
-    in_sensor.readTemperatureHumidityOnDemand(inC, inHumid, TRIGGERMODE_LP0);
-    double inTemp = CToF(inC);
     //Check for outside temp is under 64 and shut off or do nothing.
     if(outTemp < 63 || call == 0 ) {
       if( valveStatus != 0) {
