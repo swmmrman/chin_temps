@@ -1,4 +1,10 @@
 #!/bin/bash
+
+elf=$0
+print_usage() {
+    echo "Usage: $elf board-type sensor type port"
+}
+
 port="/dev/ttyUSB0"
 if [ $# -eq 2 ]; then
     if [ "$1" = "nano" ]; then
@@ -22,5 +28,6 @@ if [ $# -eq 2 ]; then
     arduino-cli compile -b $fqbn $target/$target.ino
     arduino-cli upload -b $fqbn -p $port $target/$target.ino
 else
+    print_usage
     exit 1
 fi
