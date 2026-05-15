@@ -110,8 +110,9 @@ fn main() {
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
         if command != "" {
-            update_limits(command.clone(), offset, &mut port, &data);
-            update_config(command, offset, &mut config);
+            // update_limits(command.clone(), offset, &mut port, &data);
+            // update_config(command, offset, &mut config);
+            parse_command(command, offset, &mut port, &mut data, &mut config);
         }
     }
 }

@@ -167,7 +167,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             ()
         }
         /// Enables and disables the water call.
-        pub fn _set_water_call(&mut self, sp: &mut Box<dyn SerialPort + 'static>, call: i32) {
+        pub fn set_water_call(&mut self, sp: &mut Box<dyn SerialPort + 'static>, call: i32) {
             if call == self.water_call {
                 return;
             }

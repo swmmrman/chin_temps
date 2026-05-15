@@ -207,6 +207,25 @@ pub mod tools {
         }
     }
 
+    pub fn parse_command(
+        command: String,
+        value: f32,
+        sp: &mut Box<dyn SerialPort + 'static>,
+        ed: &mut EvapData,
+        conf: &mut Config,
+    ) {
+        match command.as_str() {
+            "H" | "L" => {
+                update_limits(command.clone(), value, sp, ed);
+                update_config(command, value, conf);
+            }
+            "C" => {
+                ed.set_water_call(sp, value as i32);
+            }
+            _ => (),
+        }
+    }
+
     #[derive(serde::Deserialize)]
     pub struct Config {
         pub device: String,
