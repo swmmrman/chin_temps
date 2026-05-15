@@ -22,6 +22,14 @@ HDC302x sensors have become VERY hard to get.
 The arduino portion can be used alone without the need of a controlling computer.
 It can run in a "safe" mode, where it just maintains the defaults.
 
+
+## How to
+Rust requirements will be include automatically from cargo.toml.
+Simply run cargo build to build.
+You can run the monitor via cargo run. 
+It can also be installed by running the setup.sh file.
+
+
 ## TODO
 * Clean up code.
 * Drawings of each component.
