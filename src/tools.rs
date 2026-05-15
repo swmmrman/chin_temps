@@ -214,7 +214,8 @@ pub mod tools {
         ed: &mut EvapData,
         conf: &mut Config,
     ) {
-        match command.as_str() {
+        let c = command.to_uppercase();
+        match &c[0..1] {
             "H" | "L" => {
                 update_limits(command.clone(), value, sp, ed);
                 update_config(command, value, conf);
