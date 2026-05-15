@@ -155,6 +155,11 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
                 .interior
                 .get_reading(ReadingType::Temp, ReadingKind::Cur)
         }
+        pub fn _get_outside_temp(&self) -> f32 {
+            self.sensors
+                .interior
+                .get_reading(ReadingType::Temp, ReadingKind::Cur)
+        }
         pub fn get_low_limit(&self) -> f32 {
             self.low_limit
         }
