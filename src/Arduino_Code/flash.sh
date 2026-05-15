@@ -1,12 +1,26 @@
 #!/bin/bash
-
+port="/dev/ttyUSB0"
 if [ $# -eq 2 ]; then
-    echo "Compiling for NANO and DHT22"
-    arduino-cli compile -b arduino:avr:nano Water_Controller_DHT22/Water_Controller_DHT22.ino
-    arduino-cli upload -b arduino:avr:nano -p /dev/ttyUSB0 Water_Controller_DHT22/Water_Controller_DHT22.ino
-
+    if [ "$1" = "nano" ]; then
+        fqbn="arduino:avr:nano"
+        board="Arduino Nano"
+    elif [ "$1" = "mega" ]; then
+        fqbn="arduino:avr:mega"
+        board="Arduino Mega"
+    fi
+    if [ "$2" = "DHT22" ]; then
+        sensor="DHT22"
+        target="Water_Controller_DHT22"
+    elif [ "$2" = "HDC" ]; then
+        sensor="HDC302x"
+        target="Water_Controller"
+    else
+        echo "No valid sensor type."
+        exit 1
+    fi
+    echo "Compiling for $1 with $sensor on $port"
+    arduino-cli compile -b $fqbn $target/$target.ino
+    arduino-cli upload -b $fqbn -p $port $target/$target.ino
 else
-    echo "Compiling for mega with HDC3022"
-    arduino-cli compile -b arduino:avr:mega Water_Controller/Water_Controller.ino
-    arduino-cli upload -b arduino:avr:mega -p /dev/ttyUSB0 Water_Controller/Water_Controller.ino
+    exit 1
 fi
