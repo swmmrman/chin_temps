@@ -174,11 +174,11 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             match call {
                 0 | 2 => {
                     self.water_call = call;
-                    sp.write("C,0".as_bytes()).unwrap();
+                    sp.write("C,0\n".as_bytes()).unwrap();
                 }
                 1 | 3 => {
                     self.water_call = call;
-                    sp.write("C,1".as_bytes()).unwrap();
+                    sp.write("C,1\n".as_bytes()).unwrap();
                 }
                 _ => (),
             }
