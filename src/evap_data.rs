@@ -4,6 +4,7 @@ pub mod evap_data {
     use crate::temp::temp;
     use serialport::SerialPort;
     use std::fs::File;
+    use std::io::{Seek, Write};
 
     //#[derive(Debug)]
     pub struct SensorArray {
@@ -168,8 +169,19 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
         /// Sets the fan call to on,  if true sets a delay for the fan and
         /// starts a water call.
-        pub fn _set_fan_call(&mut self, _fan_file: &mut File, _call: i32) {
-            ()
+        pub fn set_fan_call(&mut self, fan_file: &mut File, call: String) {
+            let mut request = 0;
+            if call == "on" {
+                request = 1;
+            }
+            self.fan_call = request;
+            fan_file.seek(std::io::SeekFrom::Start(0)).unwrap();
+            let bw = match fan_file.write(call.as_bytes()) {
+                Ok(n) => n as u64,
+                Err(_) => 0u64,
+            };
+            fan_file.set_len(bw).unwrap();
+            fan_file.flush().unwrap();
         }
         /// Enables and disables the water call.
         pub fn set_water_call(&mut self, sp: &mut Box<dyn SerialPort + 'static>, call: i32) {

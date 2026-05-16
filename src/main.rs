@@ -96,13 +96,7 @@ fn main() {
         if data.get_inside_temp_2() > 68.0f32 {
             call = "on".to_owned()
         }
-        fan_file.seek(io::SeekFrom::Start(0)).unwrap();
-        let bw = match fan_file.write(call.as_bytes()) {
-            Ok(n) => n as u64,
-            Err(_) => 0u64,
-        };
-        fan_file.set_len(bw).unwrap();
-        fan_file.flush().unwrap();
+        data.set_fan_call(&mut fan_file, call);
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file
             .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
