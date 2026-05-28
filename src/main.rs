@@ -40,8 +40,8 @@ fn main() {
     let date = Local::now();
     let mut cur_day: i32 = date.num_days_from_ce();
     let mut serial_buff: Vec<u8> = vec![0; 256];
-    let mut data = evap_data::evap_data::new();
-    let mut five_minute = evap_data::evap_data::new();
+    let mut data = evap_data::evap_data::new(67.0);
+    let mut five_minute = evap_data::evap_data::new(67.0);
     let mut reader = serial_parser::serial_parser::new();
     let (mut out_file, fan_file, mut call_file, mut ts) = setup(&date, &lines.into());
     data.add_fan_file(fan_file);

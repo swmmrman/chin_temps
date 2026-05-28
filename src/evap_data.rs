@@ -17,6 +17,9 @@ pub mod evap_data {
         sensors: SensorArray,
         low_limit: f32,
         high_limit: f32,
+        set_point: f32,
+        on_point: f32,
+        off_point: f32,
         pub water_call: i32,
         pub fan_call: i32,
         fan_file: Option<File>,
@@ -227,7 +230,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
     }
     /// Return a new empty EvapData
-    pub fn new() -> EvapData {
+    pub fn new(set_point: f32) -> EvapData {
         EvapData {
             sensors: SensorArray {
                 inside: sensor::new("In".to_string()),
@@ -236,6 +239,9 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             },
             low_limit: 91.0,
             high_limit: 96.0,
+            set_point: set_point,
+            on_point: set_point + 1.0,
+            off_point: set_point - 1.0,
             fan_call: 0,
             fan_file: None,
             water_call: 1,
