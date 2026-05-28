@@ -176,7 +176,10 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
                 request = 1;
             }
             self.fan_call = request;
-            let mut fan_file = self.fan_file.as_ref().unwrap();
+            let mut fan_file = match self.fan_file.as_ref() {
+                Some(file) => file,
+                None => return,
+            };
             fan_file.seek(std::io::SeekFrom::Start(0)).unwrap();
             let bw = match fan_file.write(call.as_bytes()) {
                 Ok(n) => n as u64,
