@@ -19,6 +19,7 @@ pub mod evap_data {
         high_limit: f32,
         pub water_call: i32,
         pub fan_call: i32,
+        fan_file: Option<Box<File>>,
         ldr: i32,             //Not working, maybe
         pub valve_status: i8, //0-2 normal. oThers are failures
         pub deltas: temp::Temp, //Diff of sensor 1 and 2 temps.
@@ -220,6 +221,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             low_limit: 91.0,
             high_limit: 96.0,
             fan_call: 0,
+            fan_file: None,
             water_call: 1,
             ldr: -500,
             valve_status: -1,
