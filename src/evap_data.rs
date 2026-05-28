@@ -209,7 +209,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             }
         }
         /// Returns the current fan call as in an i32, 0 = off, 1 = on, 2 = wait
-        pub fn _get_fan_fall(&self) -> i32 {
+        pub fn get_fan_call(&self) -> i32 {
             self.fan_call
         }
         /// Returns the water call as an i32,  0 = off, 1 = on, 2 = locked off, 3 = locked on
