@@ -93,8 +93,8 @@ fn main() {
             //Print error otherwise
             Err(e) => eprintln!("{:?}", e),
         }
-        let mut call = read_call(&mut call_file);
-        data.update_status();
+        let call = read_call(&mut call_file);
+        data.update_status(call);
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file
             .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())

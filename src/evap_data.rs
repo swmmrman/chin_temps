@@ -216,8 +216,8 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         pub fn _get_water_call(&self) -> i32 {
             self.water_call
         }
-        pub fn update_status(&mut self) {
-            if self.get_inside_temp_2() > self.on_point {
+        pub fn update_status(&mut self, call: String) {
+            if self.get_inside_temp_2() > self.on_point || call == "on".to_string() {
                 self.set_fan_call("on".to_owned());
             } else if self.off_point > self.get_inside_temp_2() {
                 self.set_fan_call("off".to_owned());
