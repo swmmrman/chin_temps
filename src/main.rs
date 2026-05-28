@@ -94,10 +94,7 @@ fn main() {
             Err(e) => eprintln!("{:?}", e),
         }
         let mut call = read_call(&mut call_file);
-        if data.get_inside_temp_2() > 68.0f32 {
-            call = "on".to_owned()
-        }
-        data.set_fan_call(call);
+        data.update_status();
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file
             .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
