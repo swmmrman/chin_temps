@@ -43,7 +43,8 @@ fn main() {
     let mut data = evap_data::evap_data::new();
     let mut five_minute = evap_data::evap_data::new();
     let mut reader = serial_parser::serial_parser::new();
-    let (mut out_file, mut fan_file, mut call_file, mut ts) = setup(&date, &lines.into());
+    let (mut out_file, fan_file, mut call_file, mut ts) = setup(&date, &lines.into());
+    data.add_fan_file(fan_file);
     std::thread::sleep(Duration::from_secs(2));
     update_limits("HA".to_string(), config.high_rh, &mut port, &data);
     update_limits("LA".to_string(), config.low_rh, &mut port, &data);
@@ -96,7 +97,7 @@ fn main() {
         if data.get_inside_temp_2() > 68.0f32 {
             call = "on".to_owned()
         }
-        data.set_fan_call(&mut fan_file, call);
+        data.set_fan_call(call);
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file
             .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())

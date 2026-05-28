@@ -19,7 +19,7 @@ pub mod evap_data {
         high_limit: f32,
         pub water_call: i32,
         pub fan_call: i32,
-        fan_file: Option<Box<File>>,
+        fan_file: Option<File>,
         ldr: i32,             //Not working, maybe
         pub valve_status: i8, //0-2 normal. oThers are failures
         pub deltas: temp::Temp, //Diff of sensor 1 and 2 temps.
@@ -170,12 +170,13 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
         /// Sets the fan call to on,  if true sets a delay for the fan and
         /// starts a water call.
-        pub fn set_fan_call(&mut self, fan_file: &mut File, call: String) {
+        pub fn set_fan_call(&mut self, call: String) {
             let mut request = 0;
             if call == "on" {
                 request = 1;
             }
             self.fan_call = request;
+            let mut fan_file = self.fan_file.as_ref().unwrap();
             fan_file.seek(std::io::SeekFrom::Start(0)).unwrap();
             let bw = match fan_file.write(call.as_bytes()) {
                 Ok(n) => n as u64,
@@ -208,6 +209,18 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         /// Returns the water call as an i32,  0 = off, 1 = on, 2 = locked off, 3 = locked on
         pub fn _get_water_call(&self) -> i32 {
             self.water_call
+        }
+        pub fn add_fan_file(&mut self, file: File) {
+            match self.fan_file.take() {
+                Some(f) => {
+                    let oldfile = f;
+                    self.fan_file = Some(file);
+                    drop(oldfile)
+                }
+                None => {
+                    self.fan_file = Some(file);
+                }
+            }
         }
     }
     /// Return a new empty EvapData
