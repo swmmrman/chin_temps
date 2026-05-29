@@ -180,7 +180,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             let ts = Local::now().timestamp();
             if call == "on" {
                 if self.fan_call == 0 {
-                    self.delay_start = Local::now().timestamp();
+                    self.delay_start = ts;
                     self.set_water_call(sp, 1);
                     self.fan_call = 2;
                     std::process::exit(1);
