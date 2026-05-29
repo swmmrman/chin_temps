@@ -25,7 +25,7 @@ fn main() {
     let mut config_file = setup_config_file();
     let mut config = read_config(&mut config_file);
     let mut log_file = make_log_file();
-    let mut delay_time = 300; //Soak time.
+    let delay_time = 300; //Soak time.
     let dev_path = config.device.clone();
     let socket_path = path::Path::new("/tmp/chin_temp");
     if socket_path.exists() {
