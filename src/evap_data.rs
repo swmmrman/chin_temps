@@ -2,12 +2,13 @@ pub mod evap_data {
     use crate::sensors::readings::{ReadingKind, ReadingType};
     use crate::sensors::sensor;
     use crate::temp::temp;
+    use chrono::Local;
     use serialport::SerialPort;
     use std::fs::File;
     use std::io::{Seek, Write};
 
-    //#[derive(Debug)]
     pub struct SensorArray {
+        //#[derive(Debug)]
         inside: sensor::Sensor,
         outside: sensor::Sensor,
         interior: sensor::Sensor,
@@ -17,11 +18,13 @@ pub mod evap_data {
         sensors: SensorArray,
         low_limit: f32,
         high_limit: f32,
-        set_point: f32,
+        _set_point: f32,
         on_point: f32,
         off_point: f32,
         pub water_call: i32,
         pub fan_call: i32,
+        delay_start: i64,
+        delay_time: i64,
         fan_file: Option<File>,
         ldr: i32,             //Not working, maybe
         pub valve_status: i8, //0-2 normal. oThers are failures
@@ -173,12 +176,21 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
         /// Sets the fan call to on,  if true sets a delay for the fan and
         /// starts a water call.
-        pub fn set_fan_call(&mut self, call: String) {
+        pub fn set_fan_call(&mut self, call: String, sp: &mut Box<dyn SerialPort + 'static>) {
             let mut request = 0;
             if call == "on" {
-                request = 1;
+                if self.get_fan_call() == 0 && request == 1 {
+                    self.delay_start = Local::now().timestamp();
+                    request = 1;
+                }
+                //No need to check outside temp,  the Arduino does this on its own.
+                if self.delay_start < self.delay_start + self.delay_time {
+                    self.set_water_call(sp, 1);
+                } else {
+                    self.fan_call = 1;
+                }
             }
-            self.fan_call = request;
+
             let mut fan_file = match self.fan_file.as_ref() {
                 Some(file) => file,
                 None => return,
@@ -216,11 +228,11 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         pub fn _get_water_call(&self) -> i32 {
             self.water_call
         }
-        pub fn update_status(&mut self, call: String) {
+        pub fn update_status(&mut self, call: String, sp: &mut Box<dyn SerialPort + 'static>) {
             if self.get_inside_temp_2() > self.on_point || call == "on".to_string() {
-                self.set_fan_call("on".to_owned());
+                self.set_fan_call("on".to_owned(), sp);
             } else if self.off_point > self.get_inside_temp_2() {
-                self.set_fan_call("off".to_owned());
+                self.set_fan_call("off".to_owned(), sp);
             }
         }
         pub fn add_fan_file(&mut self, file: File) {
@@ -237,7 +249,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
     }
     /// Return a new empty EvapData
-    pub fn new(set_point: f32) -> EvapData {
+    pub fn new(set_point: f32, delay_time: i64) -> EvapData {
         EvapData {
             sensors: SensorArray {
                 inside: sensor::new("In".to_string()),
@@ -246,11 +258,13 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             },
             low_limit: 91.0,
             high_limit: 96.0,
-            set_point: set_point,
+            _set_point: set_point,
             on_point: set_point + 1.5,
             off_point: set_point - 1.5,
             fan_call: 0,
             fan_file: None,
+            delay_start: 0, // SEconds to delay
+            delay_time: delay_time,
             water_call: 1,
             ldr: -500,
             valve_status: -1,

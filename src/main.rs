@@ -25,6 +25,7 @@ fn main() {
     let mut config_file = setup_config_file();
     let mut config = read_config(&mut config_file);
     let mut log_file = make_log_file();
+    let mut delay_time = 300; //Soak time.
     let dev_path = config.device.clone();
     let socket_path = path::Path::new("/tmp/chin_temp");
     if socket_path.exists() {
@@ -40,8 +41,8 @@ fn main() {
     let date = Local::now();
     let mut cur_day: i32 = date.num_days_from_ce();
     let mut serial_buff: Vec<u8> = vec![0; 256];
-    let mut data = evap_data::evap_data::new(67.0);
-    let mut five_minute = evap_data::evap_data::new(67.0);
+    let mut data = evap_data::evap_data::new(67.0, delay_time);
+    let mut five_minute = evap_data::evap_data::new(67.0, delay_time);
     let mut reader = serial_parser::serial_parser::new();
     let (mut out_file, fan_file, mut call_file, mut ts) = setup(&date, &lines.into());
     data.add_fan_file(fan_file);
@@ -94,7 +95,7 @@ fn main() {
             Err(e) => eprintln!("{:?}", e),
         }
         let call = read_call(&mut call_file);
-        data.update_status(call);
+        data.update_status(call, &mut port);
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file
             .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
