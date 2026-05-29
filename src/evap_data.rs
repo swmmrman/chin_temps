@@ -226,7 +226,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         pub fn get_fan_call(&self) -> String {
             match self.fan_call {
                 0 => "off".to_string(),
-                1 => "on.".to_string(),
+                1 => "on".to_string(),
                 2 => "wait".to_string(),
                 _ => "off".to_string(),
             }
