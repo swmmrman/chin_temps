@@ -177,16 +177,20 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         /// Sets the fan call to on,  if true sets a delay for the fan and
         /// starts a water call.
         pub fn set_fan_call(&mut self, call: String, sp: &mut Box<dyn SerialPort + 'static>) {
+            let ts = Local::now().timestamp();
             if call == "on" {
-                if self.get_fan_call() == 0 && request == 1 {
+                if self.get_fan_call() == 0 {
                     self.delay_start = Local::now().timestamp();
+                    self.set_water_call(sp, 1);
+                    self.fan_call = 2;
                 }
                 //No need to check outside temp,  the Arduino does this on its own.
-                if self.delay_start < self.delay_start + self.delay_time {
-                    self.set_water_call(sp, 1);
-                } else {
+                else if self.delay_start + self.delay_time > ts {
                     self.fan_call = 1;
                 }
+            } else {
+                self.set_water_call(sp, 0);
+                self.fan_call = 0;
             }
 
             let mut fan_file = match self.fan_file.as_ref() {
