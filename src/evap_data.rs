@@ -104,7 +104,7 @@ In:  {: >7.2}f {: >7.2}%\r\n\
 Diff:{: >7.2}f {: >7.2}%\r\n\
 Dew: {: >7.2}f \r\n\
 \n\
-Fan Call: {}\n\
+Fan Call: {}   \n\
 Water Call: {}\n\
 Valve: {}\n\
 \n\
