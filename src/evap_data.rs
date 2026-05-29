@@ -183,6 +183,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
                     self.delay_start = Local::now().timestamp();
                     self.set_water_call(sp, 1);
                     self.fan_call = 2;
+                    std::process::exit(1);
                 }
                 //No need to check outside temp,  the Arduino does this on its own.
                 else if self.delay_start + self.delay_time > ts {
