@@ -74,7 +74,7 @@ fn main() {
                 if data.get_low_limit() != config.get_low_limit() {
                     update_limits("LA".to_owned(), config.get_low_limit(), &mut port, &data);
                     eprintln!(
-                        "High limit: {} -> {}",
+                        "Low limit: {} -> {}",
                         data.get_low_limit(),
                         config.get_low_limit()
                     );
