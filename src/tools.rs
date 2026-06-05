@@ -200,10 +200,10 @@ pub mod tools {
     pub fn update_config(limit: String, value: f32, conf: &mut Config) {
         let lim = &limit[0..1].to_ascii_lowercase();
         if lim == "h" {
-            conf.high_rh = value;
+            conf.set_high_limit(value);
         }
         if lim == "l" {
-            conf.low_rh = value;
+            conf.set_low_limit(value);
         }
     }
 
