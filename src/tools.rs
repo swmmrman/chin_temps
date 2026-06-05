@@ -240,5 +240,11 @@ pub mod tools {
         pub fn get_high_limit(&self) -> f32 {
             self.high_rh
         }
+        pub fn set_low_limit(&mut self, new_limit: f32) {
+            self.low_rh = new_limit;
+        }
+        pub fn set_high_limit(&mut self, new_limit: f32) {
+            self.high_rh = new_limit;
+        }
     }
 }
