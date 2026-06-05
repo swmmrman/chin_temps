@@ -187,6 +187,9 @@ pub mod tools {
         let new_offset;
         if main_command == "H" {
             cur_set = ed.get_high_limit();
+            eprintln!("High limit: {} -> {}", ed.get_high_limit(), offset);
+        } else {
+            eprintln!("Low limit: {} -> {}", ed.get_low_limit(), offset);
         }
         if c.len() > 1 && &c[1..] == "A" {
             new_offset = offset - cur_set;
