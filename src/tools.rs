@@ -200,16 +200,6 @@ pub mod tools {
         sp.write(out_string.as_bytes()).unwrap();
     }
 
-    pub fn update_config(limit: String, value: f32, conf: &mut Config) {
-        let lim = &limit[0..1].to_ascii_lowercase();
-        if lim == "h" {
-            conf.set_high_limit(value);
-        }
-        if lim == "l" {
-            conf.set_low_limit(value);
-        }
-    }
-
     pub fn parse_command(
         command: String,
         value: f32,
@@ -221,7 +211,7 @@ pub mod tools {
         match &c[0..1] {
             "H" | "L" => {
                 update_limits(command.clone(), value, sp, ed);
-                update_config(command, value, conf);
+                conf.update(command, value);
             }
             "C" => {
                 ed.set_water_call(sp, value as i32);
@@ -248,6 +238,15 @@ pub mod tools {
         }
         pub fn set_high_limit(&mut self, new_limit: f32) {
             self.high_rh = new_limit;
+        }
+        pub fn update(&mut self, limit: String, value: f32) {
+            let lim = &limit[0..1].to_ascii_lowercase();
+            if lim == "h" {
+                self.set_high_limit(value);
+            }
+            if lim == "l" {
+                self.set_low_limit(value);
+            }
         }
     }
 }
