@@ -60,25 +60,6 @@ pub mod tools {
         file
     }
 
-    pub fn read_config(conf_file: &mut std::fs::File) -> self::Config {
-        let mut config_string = String::new();
-        match conf_file.read_to_string(&mut config_string) {
-            Ok(_) => (),
-            Err(e) => {
-                println!("Failure reading from config file: {:?}", e);
-                std::process::exit(1);
-            }
-        };
-        let config: Config = match ron::from_str(&config_string) {
-            Ok(t) => t,
-            Err(e) => {
-                println!("Failure reading config {:?}", e);
-                std::process::exit(1);
-            }
-        };
-        config
-    }
-
     pub fn read_call(call_file: &mut std::fs::File) -> String {
         let mut call = String::new();
         match call_file.seek(std::io::SeekFrom::Start(0)) {

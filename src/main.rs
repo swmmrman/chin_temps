@@ -23,7 +23,7 @@ use chrono::{Datelike, Local};
 fn main() {
     // let args: Vec<String> = std::env::args().collect();
     let mut config_file = setup_config_file();
-    let mut config = read_config(&mut config_file);
+    let mut config = Config::read_config(&mut config_file);
     let mut log_file = make_log_file();
     let delay_time = 300; //Soak time.
     let dev_path = config.device.clone();
