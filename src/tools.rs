@@ -5,6 +5,7 @@ pub mod tools {
     use serde;
     use serialport::{self, SerialPort};
     use std::io::{Read, Seek};
+    use std::time::Duration;
     use std::{fs, path};
 
     pub fn setup(
@@ -201,6 +202,17 @@ pub mod tools {
         sp.write(out_string.as_bytes()).unwrap();
     }
 
+    pub fn reset_arduino(
+        sp: Box<dyn SerialPort + 'static>,
+        path: String,
+    ) -> Box<dyn SerialPort + 'static> {
+        drop(sp);
+        serialport::new(path, 115200)
+            .timeout(Duration::from_millis(10))
+            .open()
+            .expect("Failed to reopen port")
+    }
+
     #[derive(serde::Deserialize)]
     pub struct Config {
         pub device: String,
@@ -246,6 +258,9 @@ pub mod tools {
             if lim == "l" {
                 self.set_low_limit(value);
             }
+        }
+        pub fn get_device_path(&self) -> String {
+            self.device.clone()
         }
     }
 }
