@@ -233,4 +233,12 @@ pub mod tools {
         pub low_rh: f32,
         pub high_rh: f32,
     }
+    impl Config {
+        pub fn get_low_limit(&self) -> f32 {
+            self.low_rh
+        }
+        pub fn get_high_limit(&self) -> f32 {
+            self.high_rh
+        }
+    }
 }
