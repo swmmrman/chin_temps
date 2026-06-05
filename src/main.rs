@@ -26,7 +26,6 @@ fn main() {
     let mut config = Config::read_config(&mut config_file);
     let mut log_file = make_log_file();
     let delay_time = 300; //Soak time.
-    let dev_path = config.device.clone();
     let socket_path = path::Path::new("/tmp/chin_temp");
     if socket_path.exists() {
         std::fs::remove_file(socket_path).unwrap();
@@ -34,7 +33,7 @@ fn main() {
     let mut socket = setup_socket(socket_path);
     let lines: u16 = 16;
     let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
-    let mut port = serialport::new(dev_path, 115200)
+    let mut port = serialport::new(config.get_device_path(), 115200)
         .timeout(Duration::from_millis(10))
         .open()
         .expect("failed to open port");
