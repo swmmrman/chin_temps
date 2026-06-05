@@ -65,9 +65,15 @@ fn main() {
                 };
                 if data.get_high_limit() != config.high_rh {
                     update_limits("HA".to_owned(), config.high_rh, &mut port, &data);
+                    eprintln!(
+                        "High limit: {} -> {}",
+                        data.get_high_limit(),
+                        config.high_rh
+                    );
                 }
                 if data.get_low_limit() != config.low_rh {
                     update_limits("LA".to_owned(), config.low_rh, &mut port, &data);
+                    eprintln!("High limit: {} -> {}", data.get_low_limit(), config.low_rh);
                 }
                 let _ = io::stdout().execute(MoveUp(lines));
                 println!("{}", data.get_evap_data());
