@@ -94,37 +94,24 @@ pub mod tools {
         }
     }
 
-    pub fn setup_socket(socket_path: &path::Path) -> std::fs::File {
-        match unix_named_pipe::create(&socket_path, None) {
-            Ok(_) => (),
-            Err(e) => {
-                println!("Failed to create the socket: {}", e);
-                std::process::exit(1);
+    pub fn parse_command(
+        command: String,
+        value: f32,
+        sp: &mut Box<dyn SerialPort + 'static>,
+        ed: &mut EvapData,
+        conf: &mut Config,
+    ) {
+        let c = command.to_uppercase();
+        match &c[0..1] {
+            "H" | "L" => {
+                update_limits(command.clone(), value, sp, ed);
+                conf.update(command, value);
             }
+            "C" => {
+                ed.set_water_call(sp, value as i32);
+            }
+            _ => (),
         }
-        let reader = match unix_named_pipe::open_read(socket_path) {
-            Ok(r) => r,
-            Err(e) => {
-                println!("Failed to open socket for reading: {}", e);
-                std::process::exit(2);
-            }
-        };
-        reader
-    }
-
-    pub fn read_socket(socket_file: &mut std::fs::File) -> (String, f32) {
-        let mut offset = 0.0;
-        let mut string_buffer = String::new();
-        let mut command = String::new();
-        match socket_file.read_to_string(&mut string_buffer) {
-            Ok(t) => {
-                if t > 0 {
-                    (command, offset) = parse_offset(&mut string_buffer);
-                }
-            }
-            Err(_) => (),
-        }
-        (command, offset)
     }
 
     /// Parse the buffer, Returns the command and value as a tuple.
@@ -155,6 +142,39 @@ pub mod tools {
         (command, value)
     }
 
+    pub fn read_socket(socket_file: &mut std::fs::File) -> (String, f32) {
+        let mut offset = 0.0;
+        let mut string_buffer = String::new();
+        let mut command = String::new();
+        match socket_file.read_to_string(&mut string_buffer) {
+            Ok(t) => {
+                if t > 0 {
+                    (command, offset) = parse_offset(&mut string_buffer);
+                }
+            }
+            Err(_) => (),
+        }
+        (command, offset)
+    }
+
+    pub fn setup_socket(socket_path: &path::Path) -> std::fs::File {
+        match unix_named_pipe::create(&socket_path, None) {
+            Ok(_) => (),
+            Err(e) => {
+                println!("Failed to create the socket: {}", e);
+                std::process::exit(1);
+            }
+        }
+        let reader = match unix_named_pipe::open_read(socket_path) {
+            Ok(r) => r,
+            Err(e) => {
+                println!("Failed to open socket for reading: {}", e);
+                std::process::exit(2);
+            }
+        };
+        reader
+    }
+
     pub fn update_limits(
         command: String,
         offset: f32,
@@ -181,26 +201,6 @@ pub mod tools {
         sp.write(out_string.as_bytes()).unwrap();
     }
 
-    pub fn parse_command(
-        command: String,
-        value: f32,
-        sp: &mut Box<dyn SerialPort + 'static>,
-        ed: &mut EvapData,
-        conf: &mut Config,
-    ) {
-        let c = command.to_uppercase();
-        match &c[0..1] {
-            "H" | "L" => {
-                update_limits(command.clone(), value, sp, ed);
-                conf.update(command, value);
-            }
-            "C" => {
-                ed.set_water_call(sp, value as i32);
-            }
-            _ => (),
-        }
-    }
-
     #[derive(serde::Deserialize)]
     pub struct Config {
         pub device: String,
@@ -208,6 +208,24 @@ pub mod tools {
         pub high_rh: f32,
     }
     impl Config {
+        pub fn read_config(conf_file: &mut std::fs::File) -> self::Config {
+            let mut config_string = String::new();
+            match conf_file.read_to_string(&mut config_string) {
+                Ok(_) => (),
+                Err(e) => {
+                    println!("Failure reading from config file: {:?}", e);
+                    std::process::exit(1);
+                }
+            };
+            let config: Config = match ron::from_str(&config_string) {
+                Ok(t) => t,
+                Err(e) => {
+                    println!("Failure reading config {:?}", e);
+                    std::process::exit(1);
+                }
+            };
+            config
+        }
         pub fn get_low_limit(&self) -> f32 {
             self.low_rh
         }
