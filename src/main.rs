@@ -48,8 +48,6 @@ fn main() {
     let (mut out_file, fan_file, mut call_file, mut ts) = setup(&date, &lines.into());
     data.add_fan_file(fan_file);
     std::thread::sleep(Duration::from_secs(2));
-    update_limits("HA".to_string(), config.high_rh, &mut port, &data);
-    update_limits("LA".to_string(), config.low_rh, &mut port, &data);
     loop {
         match port.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
