@@ -1,3 +1,4 @@
+mod config;
 mod evap_data;
 mod logging;
 mod rh;
@@ -6,6 +7,7 @@ mod serial_parser;
 mod temp;
 mod tools;
 
+use config::config::*;
 use evap_data::evap_data::EvapData;
 use logging::logging::{make_log_file, write_to_log};
 use tools::tools::*;

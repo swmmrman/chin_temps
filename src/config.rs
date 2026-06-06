@@ -1,0 +1,56 @@
+pub mod config {
+    use ron;
+    use serde;
+    use std::io::Read;
+
+    #[derive(serde::Deserialize)]
+    pub struct Config {
+        pub device: String,
+        pub low_rh: f32,
+        pub high_rh: f32,
+    }
+    impl Config {
+        pub fn read_config(conf_file: &mut std::fs::File) -> self::Config {
+            let mut config_string = String::new();
+            match conf_file.read_to_string(&mut config_string) {
+                Ok(_) => (),
+                Err(e) => {
+                    println!("Failure reading from config file: {:?}", e);
+                    std::process::exit(1);
+                }
+            };
+            let config: Config = match ron::from_str(&config_string) {
+                Ok(t) => t,
+                Err(e) => {
+                    println!("Failure reading config {:?}", e);
+                    std::process::exit(1);
+                }
+            };
+            config
+        }
+        pub fn get_low_limit(&self) -> f32 {
+            self.low_rh
+        }
+        pub fn get_high_limit(&self) -> f32 {
+            self.high_rh
+        }
+        pub fn set_low_limit(&mut self, new_limit: f32) {
+            self.low_rh = new_limit;
+        }
+        pub fn set_high_limit(&mut self, new_limit: f32) {
+            self.high_rh = new_limit;
+        }
+        pub fn update(&mut self, limit: String, value: f32) {
+            let lim = &limit[0..1].to_ascii_lowercase();
+            if lim == "h" {
+                self.set_high_limit(value);
+            }
+            if lim == "l" {
+                self.set_low_limit(value);
+            }
+        }
+        pub fn get_device_path(&self) -> String {
+            self.device.clone()
+        }
+    }
+}
