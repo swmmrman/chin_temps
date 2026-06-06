@@ -108,7 +108,8 @@ pub mod tools {
                 conf.update(command, value);
             }
             "C" => {
-                ed.set_water_call(sp, value as i32);
+                ed.set_water_call(sp, value as i32, true);
+                
             }
             _ => (),
         }

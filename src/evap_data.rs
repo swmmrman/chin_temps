@@ -176,12 +176,17 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         }
         /// Sets the fan call to on,  if true sets a delay for the fan and
         /// starts a water call.
-        pub fn set_fan_call(&mut self, call: String, sp: &mut Box<dyn SerialPort + 'static>) {
+        pub fn set_fan_call(
+            &mut self,
+            call: String,
+            sp: &mut Box<dyn SerialPort + 'static>,
+            update: bool,
+        ) {
             let ts = Local::now().timestamp();
             if call == "on" {
                 if self.fan_call == 0 {
                     self.delay_start = ts;
-                    self.set_water_call(sp, 1);
+                    self.set_water_call(sp, 1, update);
                     self.fan_call = 2;
                 }
                 //No need to check outside temp,  the Arduino does this on its own.
@@ -189,7 +194,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
                     self.fan_call = 1;
                 }
             } else {
-                self.set_water_call(sp, 0);
+                self.set_water_call(sp, 0, update);
                 self.fan_call = 0;
             }
 
@@ -206,18 +211,27 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             fan_file.flush().unwrap();
         }
         /// Enables and disables the water call.
-        pub fn set_water_call(&mut self, sp: &mut Box<dyn SerialPort + 'static>, call: i32) {
+        pub fn set_water_call(
+            &mut self,
+            sp: &mut Box<dyn SerialPort + 'static>,
+            call: i32,
+            update: bool,
+        ) {
             if call == self.water_call {
                 return;
             }
             match call {
                 0 | 2 => {
                     self.water_call = call;
-                    sp.write("C,0\n".as_bytes()).unwrap();
+                    if update {
+                        sp.write("C,0\n".as_bytes()).unwrap();
+                    }
                 }
                 1 | 3 => {
                     self.water_call = call;
-                    sp.write("C,1\n".as_bytes()).unwrap();
+                    if update {
+                        sp.write("C,1\n".as_bytes()).unwrap();
+                    }
                 }
                 _ => (),
             }
@@ -235,11 +249,16 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
         pub fn _get_water_call(&self) -> i32 {
             self.water_call
         }
-        pub fn update_status(&mut self, call: String, sp: &mut Box<dyn SerialPort + 'static>) {
+        pub fn update_status(
+            &mut self,
+            call: String,
+            sp: &mut Box<dyn SerialPort + 'static>,
+            update: bool,
+        ) {
             if self.get_inside_temp_2() > self.on_point || call == "on".to_string() {
-                self.set_fan_call("on".to_owned(), sp);
+                self.set_fan_call("on".to_owned(), sp, update);
             } else if self.off_point > self.get_inside_temp_2() {
-                self.set_fan_call("off".to_owned(), sp);
+                self.set_fan_call("off".to_owned(), sp, update);
             }
         }
         pub fn add_fan_file(&mut self, file: File) {
