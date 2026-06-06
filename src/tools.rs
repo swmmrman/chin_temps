@@ -66,11 +66,11 @@ pub mod tools {
             .create(false)
             .write(true)
             .read(true)
-            .open(conf_path.join("config.ron"))
+            .open(conf_path)
         {
             Ok(f) => f,
             Err(e) => {
-                println!("Config file error: {}", e);
+                println!("Watchdog file error: {}", e);
                 std::process::exit(1);
             }
         };
