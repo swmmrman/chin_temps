@@ -88,6 +88,7 @@ fn main() {
                     run_time_config.set_ts(check);
                     write_to_log(&mut five_minute, new_date, &mut log_file);
                 }
+                run_time_config.set_watch_dog_timeout();
             }
             //Skip timeouts, quit if device is gone.
             Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
@@ -107,6 +108,7 @@ fn main() {
         out_file
             .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
             .unwrap();
+        run_time_config.check_watch_dog();
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
         if command != "" {

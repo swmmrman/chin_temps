@@ -60,6 +60,23 @@ pub mod tools {
         file
     }
 
+    pub fn setup_watch_dog_file() -> std::fs::File {
+        let conf_path = path::Path::new("/tmp/page/reset_arduino");
+        let file = match fs::OpenOptions::new()
+            .create(false)
+            .write(true)
+            .read(true)
+            .open(conf_path.join("config.ron"))
+        {
+            Ok(f) => f,
+            Err(e) => {
+                println!("Config file error: {}", e);
+                std::process::exit(1);
+            }
+        };
+        file
+    }
+
     pub fn read_call(call_file: &mut std::fs::File) -> String {
         let mut call = String::new();
         match call_file.seek(std::io::SeekFrom::Start(0)) {

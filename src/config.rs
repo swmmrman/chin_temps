@@ -1,10 +1,13 @@
 pub mod config {
+    use chrono::Local;
     use ron;
     use serde;
     use serialport::SerialPort;
     use std::fs::File;
-    use std::io::Read;
+    use std::io::{Read, Write};
     use std::time::Duration;
+
+    use crate::tools::tools::setup_watch_dog_file;
 
     #[derive(serde::Deserialize)]
     pub struct Config {
@@ -67,6 +70,7 @@ pub mod config {
         pub arduino: Box<dyn SerialPort>,
         rtf: RunTimeFiles,
         ts: i64,
+        watch_dog_timout: i64,
     }
     impl RunTimeConfig {
         pub fn new(
@@ -84,6 +88,7 @@ pub mod config {
                     call_file: call_file,
                 },
                 ts: ts,
+                watch_dog_timout: ts + 20,
             }
         }
         pub fn get_fan_file(&self) -> File {
@@ -104,6 +109,23 @@ pub mod config {
         }
         pub fn get_out_file(&mut self) -> &File {
             &self.rtf.out_file
+        }
+        pub fn set_watch_dog_timeout(&mut self) {
+            self.watch_dog_timout = Local::now().timestamp() + 20;
+        }
+        fn _get_watch_dog_timeout(&self) -> i64 {
+            self.watch_dog_timout
+        }
+        pub fn check_watch_dog(&mut self) {
+            let cur_ts = Local::now().timestamp();
+            if self.watch_dog_timout > cur_ts {
+                self.reset_arduino();
+                self.set_watch_dog_timeout();
+            }
+        }
+        fn reset_arduino(&self) {
+            let mut watch_dog_file = setup_watch_dog_file();
+            watch_dog_file.write("1".as_bytes()).unwrap();
         }
     }
 }
