@@ -30,3 +30,10 @@ GPIO.setup(RESET_PIN, GPIO.OUT)
 
 # Set GPIO pin high.  Reset on Arduino is active low
 GPIO.output(RESET_PIN, GPIO.HIGH)
+
+while True:
+    file = open("/tmp/page/reset_arduino", "r")
+    req = file.read()
+    if req != "":
+        reset_arduino()
+    file.close()
