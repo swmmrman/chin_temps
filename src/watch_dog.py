@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 ## A simple watch dog script to use the RPi to reset a locked up arduino.
+import datetime
 import sys
 from time import sleep
 
@@ -15,9 +16,13 @@ log_file = "~/logs/evap/evap_errors.log"
 
 
 def reset_arduino():
+    out = open(log_file, "a")
+    ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    out.write(f"{ts} Ardiono Stuck.  Reseting.")
     GPIO.output(RESET_PIN, GPIO.LOW)  ## Low triggers reset
     sleep(1)
-    GPIO.output(RESET_PIN, GPIO.HIGH)  ## High activates the reset.
+    GPIO.output(RESET_PIN, GPIO.HIGH)  ## High activates the reset
+    out.close()
 
 
 GPIO.setmode(GPIO.BCM)
