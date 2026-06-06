@@ -70,7 +70,8 @@ pub mod config {
         pub arduino: Box<dyn SerialPort>,
         rtf: RunTimeFiles,
         ts: i64,
-        watch_dog_timout: i64,
+        watch_dog_time: i64,
+        watch_dog_timeout: i64,
     }
     impl RunTimeConfig {
         pub fn new(
@@ -88,7 +89,8 @@ pub mod config {
                     call_file: call_file,
                 },
                 ts: ts,
-                watch_dog_timout: ts + 20,
+                watch_dog_time: 60,
+                watch_dog_timeout: ts + 60,
             }
         }
         pub fn get_fan_file(&self) -> File {
@@ -111,14 +113,14 @@ pub mod config {
             &self.rtf.out_file
         }
         pub fn set_watch_dog_timeout(&mut self) {
-            self.watch_dog_timout = Local::now().timestamp() + 20;
+            self.watch_dog_timeout = Local::now().timestamp() + self.watch_dog_time;
         }
         fn _get_watch_dog_timeout(&self) -> i64 {
-            self.watch_dog_timout
+            self.watch_dog_timeout
         }
         pub fn check_watch_dog(&mut self) {
             let cur_ts = Local::now().timestamp();
-            if self.watch_dog_timout > cur_ts {
+            if self.watch_dog_timeout > cur_ts {
                 self.reset_arduino();
                 self.set_watch_dog_timeout();
             }
