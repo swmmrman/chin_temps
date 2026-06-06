@@ -13,7 +13,6 @@ use logging::logging::{make_log_file, write_to_log};
 use tools::tools::*;
 
 use crossterm::{ExecutableCommand, cursor::MoveUp};
-use serialport;
 use std::io::{self, Read, Seek, Write};
 use std::path;
 use std::thread::sleep;
@@ -41,7 +40,7 @@ fn main() {
     let mut data = evap_data::evap_data::new(67.0, delay_time);
     let mut five_minute = evap_data::evap_data::new(67.0, delay_time);
     let mut reader = serial_parser::serial_parser::new();
-    let mut run_time_config = run_time_config::new(&config, setup(&date, &lines.into()));
+    let mut run_time_config = RunTimeConfig::new(&config, setup(&date, &lines.into()));
     data.add_fan_file(run_time_config.get_fan_file());
     std::thread::sleep(Duration::from_secs(2));
     loop {

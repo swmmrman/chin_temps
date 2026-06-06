@@ -58,28 +58,28 @@ pub mod config {
         }
     }
 
-    pub struct files {
+    pub struct RunTimeFiles {
         out_file: File,
         fan_file: File,
         call_file: File,
     }
 
-    pub struct run_time_config {
+    pub struct RunTimeConfig {
         pub arduino: Box<dyn SerialPort>,
-        files: files,
+        rtf: RunTimeFiles,
         ts: i64,
     }
-    impl run_time_config {
+    impl RunTimeConfig {
         pub fn new(
             config: &Config,
             (out_file, fan_file, call_file, ts): (File, File, File, i64),
-        ) -> run_time_config {
-            run_time_config {
+        ) -> RunTimeConfig {
+            RunTimeConfig {
                 arduino: serialport::new(config.get_device_path(), 115200)
                     .timeout(Duration::from_millis(10))
                     .open()
                     .expect("failed to open port"),
-                files: files {
+                rtf: RunTimeFiles {
                     out_file: out_file,
                     fan_file: fan_file,
                     call_file: call_file,
@@ -89,13 +89,13 @@ pub mod config {
         }
         pub fn get_fan_file(&self) -> File {
             //Just gonna crash for now, if it cant clone the file handle
-            self.files
+            self.rtf
                 .fan_file
                 .try_clone()
                 .expect("Could not clone fan_file handle")
         }
         pub fn get_call_file(&mut self) -> &mut File {
-            &mut self.files.call_file
+            &mut self.rtf.call_file
         }
         pub fn get_ts(&self) -> i64 {
             self.ts
@@ -104,7 +104,7 @@ pub mod config {
             self.ts = new_ts
         }
         pub fn get_out_file(&mut self) -> &File {
-            &self.files.out_file
+            &self.rtf.out_file
         }
         pub fn reset_arduino(&mut self, config: &mut Config) {
             let _ = self.arduino.deref();

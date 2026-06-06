@@ -1,11 +1,10 @@
 pub mod tools {
     use crate::Config;
     use crate::EvapData;
-    use crate::config::config::run_time_config;
+    use crate::config::config::RunTimeConfig;
     use chrono::{DateTime, Local};
     use serialport::{self, SerialPort};
     use std::io::{Read, Seek};
-    use std::time::Duration;
     use std::{fs, path};
 
     pub fn setup(
@@ -100,7 +99,7 @@ pub mod tools {
         value: f32,
         ed: &mut EvapData,
         conf: &mut Config,
-        rt_config: &mut run_time_config,
+        rt_config: &mut RunTimeConfig,
     ) {
         let c = command.to_uppercase();
         match &c[0..1] {
