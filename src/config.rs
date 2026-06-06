@@ -70,7 +70,7 @@ pub mod config {
     }
     impl run_time_config {
         pub fn new(
-            config: Config,
+            config: &Config,
             (out_file, fan_file, call_file, ts): (File, File, File, i64),
         ) -> run_time_config {
             run_time_config {
@@ -93,14 +93,17 @@ pub mod config {
                 .try_clone()
                 .expect("Could not clone fan_file handle")
         }
-        pub fn get_call_file(&self) -> &File {
-            &self.files.fan_file
+        pub fn get_call_file(&mut self) -> &mut File {
+            &mut self.files.call_file
         }
         pub fn get_ts(&self) -> i64 {
             self.ts
         }
         pub fn set_ts(&mut self, new_ts: i64) {
             self.ts = new_ts
+        }
+        pub fn get_out_file(&mut self) -> &File {
+            &self.files.out_file
         }
     }
 }

@@ -41,7 +41,7 @@ fn main() {
     let mut data = evap_data::evap_data::new(67.0, delay_time);
     let mut five_minute = evap_data::evap_data::new(67.0, delay_time);
     let mut reader = serial_parser::serial_parser::new();
-    let run_time_config = run_time_config::new(config, setup(&date, &lines.into()));
+    let mut run_time_config = run_time_config::new(&config, setup(&date, &lines.into()));
     data.add_fan_file(run_time_config.get_fan_file());
     std::thread::sleep(Duration::from_secs(2));
     loop {
@@ -99,8 +99,9 @@ fn main() {
             //Print error otherwise
             Err(e) => eprintln!("{:?}", e),
         }
-        let call = read_call(&mut run_time_config.get_call_file());
+        let call = read_call(run_time_config.get_call_file());
         data.update_status(call, &mut run_time_config.arduino);
+        let mut out_file = run_time_config.get_out_file();
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file
             .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
