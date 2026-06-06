@@ -101,7 +101,7 @@ fn main() {
         let call = read_call(run_time_config.get_call_file());
         data.update_status(call.clone(), &mut run_time_config.arduino, true);
         five_minute.update_status(call, &mut run_time_config.arduino, false);
-        five_minute.set_water_call(&mut run_time_config.arduino, data._get_water_call(), false);
+        five_minute.set_water_call(&mut run_time_config.arduino, data.get_water_call(), false);
         let mut out_file = run_time_config.get_out_file();
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file

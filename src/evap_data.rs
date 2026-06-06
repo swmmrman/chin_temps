@@ -105,7 +105,7 @@ Diff:{: >7.2}f {: >7.2}%\r\n\
 Dew: {: >7.2}f \r\n\
 \n\
 Fan Call: {}   \n\
-Water Call: {}\n\
+Water Call: {: >2}\n\
 Valve: {}\n\
 \n\
 Max Temps:\t\t\t\tMin Temps:\n\
@@ -248,7 +248,7 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
             }
         }
         /// Returns the water call as an i32,  0 = off, 1 = on, 2 = locked off, 3 = locked on
-        pub fn _get_water_call(&self) -> i32 {
+        pub fn get_water_call(&self) -> i32 {
             self.water_call
         }
         pub fn update_status(
