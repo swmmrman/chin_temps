@@ -84,9 +84,9 @@ fn main() {
                     println!("\n{}", new_date.format("%m-%d-%Y %H:%M:%S"));
                     print!("{}", "\n".repeat(lines.into()));
                 }
-                let check = check_time(300, ts, true);
+                let check = check_time(300, run_time_config.get_ts(), true);
                 if check != 0 {
-                    ts = check;
+                    run_time_config.set_ts(check);
                     write_to_log(&mut five_minute, new_date, &mut log_file);
                 }
             }

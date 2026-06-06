@@ -96,5 +96,11 @@ pub mod config {
         pub fn get_call_file(&self) -> &File {
             &self.files.fan_file
         }
+        pub fn get_ts(&self) -> i64 {
+            self.ts
+        }
+        pub fn set_ts(&mut self, new_ts: i64) {
+            self.ts = new_ts
+        }
     }
 }
