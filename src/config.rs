@@ -1,7 +1,10 @@
 pub mod config {
     use ron;
     use serde;
+    use serialport::SerialPort;
+    use std::fs::File;
     use std::io::Read;
+    use std::time::Duration;
 
     #[derive(serde::Deserialize)]
     pub struct Config {
@@ -51,6 +54,30 @@ pub mod config {
         }
         pub fn get_device_path(&self) -> String {
             self.device.clone()
+        }
+    }
+
+    pub struct files {
+        out_file: File,
+        call_file: File,
+    }
+
+    pub struct run_time_config {
+        pub arduino: Box<dyn SerialPort>,
+        files: files,
+    }
+    impl run_time_config {
+        pub fn new(config: Config, out_file: File, call_file: File) -> run_time_config {
+            run_time_config {
+                arduino: serialport::new(config.get_device_path(), 115200)
+                    .timeout(Duration::from_millis(10))
+                    .open()
+                    .expect("failed to open port"),
+                files: files {
+                    out_file: out_file,
+                    call_file: call_file,
+                },
+            }
         }
     }
 }
