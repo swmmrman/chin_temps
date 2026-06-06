@@ -100,7 +100,7 @@ fn main() {
             //Print error otherwise
             Err(e) => eprintln!("{:?}", e),
         }
-        let call = read_call(&mut call_file);
+        let call = read_call(&mut run_time_config.get_call_file());
         data.update_status(call, &mut run_time_config.arduino);
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file

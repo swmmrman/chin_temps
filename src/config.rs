@@ -93,5 +93,8 @@ pub mod config {
                 .try_clone()
                 .expect("Could not clone fan_file handle")
         }
+        pub fn get_call_file(&self) -> &File {
+            &self.files.fan_file
+        }
     }
 }
