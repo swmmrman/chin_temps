@@ -89,8 +89,8 @@ pub mod config {
                     call_file: call_file,
                 },
                 ts: ts,
-                watch_dog_time: 60,
-                watch_dog_timeout: ts + 60,
+                watch_dog_time: 20,
+                watch_dog_timeout: Local::now().timestamp() + 20,
             }
         }
         pub fn get_fan_file(&self) -> File {
@@ -120,9 +120,9 @@ pub mod config {
         }
         pub fn check_watch_dog(&mut self) {
             let cur_ts = Local::now().timestamp();
-            if self.watch_dog_timeout > cur_ts {
-                self.reset_arduino();
+            if self.watch_dog_timeout < cur_ts {
                 self.set_watch_dog_timeout();
+                self.reset_arduino();
             }
         }
         fn reset_arduino(&self) {
