@@ -86,5 +86,12 @@ pub mod config {
                 ts: ts,
             }
         }
+        pub fn get_fan_file(&self) -> File {
+            //Just gonna crash for now, if it cant clone the file handle
+            self.files
+                .fan_file
+                .try_clone()
+                .expect("Could not clone fan_file handle")
+        }
     }
 }

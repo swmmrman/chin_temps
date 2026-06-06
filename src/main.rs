@@ -35,18 +35,14 @@ fn main() {
     let mut socket = setup_socket(socket_path);
     let lines: u16 = 16;
     let mut sleep_time = 50; //Sleep time at end of loop.  Short at start.
-    let mut port = serialport::new(config.get_device_path(), 115200)
-        .timeout(Duration::from_millis(10))
-        .open()
-        .expect("failed to open port");
     let date = Local::now();
     let mut cur_day: i32 = date.num_days_from_ce();
     let mut serial_buff: Vec<u8> = vec![0; 256];
     let mut data = evap_data::evap_data::new(67.0, delay_time);
     let mut five_minute = evap_data::evap_data::new(67.0, delay_time);
     let mut reader = serial_parser::serial_parser::new();
-    let (mut out_file, fan_file, mut call_file, mut ts) = setup(&date, &lines.into());
-    data.add_fan_file(fan_file);
+    let run_time_config = run_time_config::new(config, setup(&date, &lines.into()));
+    data.add_fan_file(run_time_config.get_fan_file());
     std::thread::sleep(Duration::from_secs(2));
     loop {
         match port.read(serial_buff.as_mut_slice()) {
