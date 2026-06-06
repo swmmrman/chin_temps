@@ -14,6 +14,7 @@ use tools::tools::*;
 
 use crossterm::{ExecutableCommand, cursor::MoveUp};
 use serialport;
+use std::intrinsics::rustc_peek;
 use std::io::{self, Read, Seek, Write};
 use std::path;
 use std::thread::sleep;
@@ -45,7 +46,7 @@ fn main() {
     data.add_fan_file(run_time_config.get_fan_file());
     std::thread::sleep(Duration::from_secs(2));
     loop {
-        match port.read(serial_buff.as_mut_slice()) {
+        match run_time_config.arduino.read(serial_buff.as_mut_slice()) {
             Ok(t) => {
                 if t > 62 {
                     continue;
@@ -59,10 +60,20 @@ fn main() {
                     None => (),
                 };
                 if data.get_high_limit() != config.get_high_limit() {
-                    update_limits("HA".to_owned(), config.get_high_limit(), &mut port, &data);
+                    update_limits(
+                        "HA".to_owned(),
+                        config.get_high_limit(),
+                        &mut run_time_config.arduino,
+                        &data,
+                    );
                 }
                 if data.get_low_limit() != config.get_low_limit() {
-                    update_limits("LA".to_owned(), config.get_low_limit(), &mut port, &data);
+                    update_limits(
+                        "LA".to_owned(),
+                        config.get_low_limit(),
+                        &mut run_time_config.arduino,
+                        &data,
+                    );
                 }
                 let _ = io::stdout().execute(MoveUp(lines));
                 println!("{}", data.get_evap_data());
@@ -90,7 +101,7 @@ fn main() {
             Err(e) => eprintln!("{:?}", e),
         }
         let call = read_call(&mut call_file);
-        data.update_status(call, &mut port);
+        data.update_status(call, &mut run_time_config.arduino);
         out_file.seek(io::SeekFrom::Start(0)).unwrap();
         out_file
             .write(format!("{: >5.2}", data.get_inside_temp()).as_bytes())
@@ -100,7 +111,13 @@ fn main() {
         if command != "" {
             // update_limits(command.clone(), offset, &mut port, &data);
             // update_config(command, offset, &mut config);
-            parse_command(command, offset, &mut port, &mut data, &mut config);
+            parse_command(
+                command,
+                offset,
+                &mut run_time_config.arduino,
+                &mut data,
+                &mut config,
+            );
         }
     }
 }
