@@ -110,9 +110,6 @@ pub mod tools {
             "C" => {
                 ed.set_water_call(&mut rt_config.arduino, value as i32, true);
             }
-            "R" => {
-                rt_config.reset_arduino(conf);
-            }
             _ => (),
         }
     }

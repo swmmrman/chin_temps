@@ -4,7 +4,6 @@ pub mod config {
     use serialport::SerialPort;
     use std::fs::File;
     use std::io::Read;
-    use std::ops::Deref;
     use std::time::Duration;
 
     #[derive(serde::Deserialize)]
@@ -105,13 +104,6 @@ pub mod config {
         }
         pub fn get_out_file(&mut self) -> &File {
             &self.rtf.out_file
-        }
-        pub fn reset_arduino(&mut self, config: &mut Config) {
-            let _ = self.arduino.deref();
-            self.arduino = serialport::new(config.get_device_path(), 115200)
-                .timeout(Duration::from_millis(10))
-                .open()
-                .expect("Failed to reopen port");
         }
     }
 }
