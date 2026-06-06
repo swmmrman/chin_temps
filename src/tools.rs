@@ -1,6 +1,7 @@
 pub mod tools {
     use crate::Config;
     use crate::EvapData;
+    use crate::config::config::run_time_config;
     use chrono::{DateTime, Local};
     use serialport::{self, SerialPort};
     use std::io::{Read, Seek};
@@ -97,19 +98,21 @@ pub mod tools {
     pub fn parse_command(
         command: String,
         value: f32,
-        sp: &mut Box<dyn SerialPort + 'static>,
         ed: &mut EvapData,
         conf: &mut Config,
+        rt_config: &mut run_time_config,
     ) {
         let c = command.to_uppercase();
         match &c[0..1] {
             "H" | "L" => {
-                update_limits(command.clone(), value, sp, ed);
+                update_limits(command.clone(), value, &mut rt_config.arduino, ed);
                 conf.update(command, value);
             }
             "C" => {
-                ed.set_water_call(sp, value as i32, true);
-                
+                ed.set_water_call(&mut rt_config.arduino, value as i32, true);
+            }
+            "R" => {
+                rt_config.reset_arduino(conf);
             }
             _ => (),
         }
@@ -200,16 +203,5 @@ pub mod tools {
         }
         let out_string = format!("{} {}\n", main_command, new_offset);
         sp.write(out_string.as_bytes()).unwrap();
-    }
-
-    pub fn reset_arduino(
-        sp: Box<dyn SerialPort + 'static>,
-        path: String,
-    ) -> Box<dyn SerialPort + 'static> {
-        drop(sp);
-        serialport::new(path, 115200)
-            .timeout(Duration::from_millis(10))
-            .open()
-            .expect("Failed to reopen port")
     }
 }

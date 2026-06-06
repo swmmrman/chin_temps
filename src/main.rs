@@ -116,9 +116,9 @@ fn main() {
             parse_command(
                 command,
                 offset,
-                &mut run_time_config.arduino,
                 &mut data,
                 &mut config,
+                &mut run_time_config,
             );
         }
     }
