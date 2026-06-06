@@ -59,15 +59,20 @@ pub mod config {
 
     pub struct files {
         out_file: File,
+        fan_file: File,
         call_file: File,
     }
 
     pub struct run_time_config {
         pub arduino: Box<dyn SerialPort>,
         files: files,
+        ts: i64,
     }
     impl run_time_config {
-        pub fn new(config: Config, out_file: File, call_file: File) -> run_time_config {
+        pub fn new(
+            config: Config,
+            (out_file, fan_file, call_file, ts): (File, File, File, i64),
+        ) -> run_time_config {
             run_time_config {
                 arduino: serialport::new(config.get_device_path(), 115200)
                     .timeout(Duration::from_millis(10))
@@ -75,8 +80,10 @@ pub mod config {
                     .expect("failed to open port"),
                 files: files {
                     out_file: out_file,
+                    fan_file: fan_file,
                     call_file: call_file,
                 },
+                ts: ts,
             }
         }
     }
