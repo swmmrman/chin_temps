@@ -14,7 +14,6 @@ use tools::tools::*;
 
 use crossterm::{ExecutableCommand, cursor::MoveUp};
 use serialport;
-use std::intrinsics::rustc_peek;
 use std::io::{self, Read, Seek, Write};
 use std::path;
 use std::thread::sleep;
