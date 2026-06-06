@@ -198,17 +198,19 @@ Min%{: >6.2} Max %{: >6.2} LDR: {}\t\tMin:  {: >7.2}f   Max: {: >7.2}f",
                 self.fan_call = 0;
             }
 
-            let mut fan_file = match self.fan_file.as_ref() {
-                Some(file) => file,
-                None => return,
-            };
-            fan_file.seek(std::io::SeekFrom::Start(0)).unwrap();
-            let bw = match fan_file.write(self.get_fan_call().as_bytes()) {
-                Ok(n) => n as u64,
-                Err(_) => 0u64,
-            };
-            fan_file.set_len(bw).unwrap();
-            fan_file.flush().unwrap();
+            if update {
+                let mut fan_file = match self.fan_file.as_ref() {
+                    Some(file) => file,
+                    None => return,
+                };
+                fan_file.seek(std::io::SeekFrom::Start(0)).unwrap();
+                let bw = match fan_file.write(self.get_fan_call().as_bytes()) {
+                    Ok(n) => n as u64,
+                    Err(_) => 0u64,
+                };
+                fan_file.set_len(bw).unwrap();
+                fan_file.flush().unwrap();
+            }
         }
         /// Enables and disables the water call.
         pub fn set_water_call(
