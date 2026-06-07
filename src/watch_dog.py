@@ -32,8 +32,12 @@ GPIO.setup(RESET_PIN, GPIO.OUT)
 GPIO.output(RESET_PIN, GPIO.HIGH)
 
 while True:
-    file = open("/tmp/page/reset_arduino", "r")
-    req = file.read()
-    if req != "":
-        reset_arduino()
-    file.close()
+    try:
+        file = open("/tmp/page/reset_arduino", "r")
+        req = file.read()
+        if req != "":
+            reset_arduino()
+        file.close()
+    except KeyboardInterrupt:
+        GPIO.cleanup()
+        sys.exit()
