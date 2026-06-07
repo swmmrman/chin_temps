@@ -12,7 +12,7 @@ if __name__ != "__main__":
 
 RESET_PIN = 26
 reset_file = "/tmp/page/reset_arduino"
-log_file = "/home/pi/logs/evap/evap_errors.log"
+log_file = "/home/pi/logs/evap/evap_error.log"
 
 
 def reset_arduino():
@@ -42,7 +42,7 @@ while True:
         if req != "":
             reset_arduino()
         file.close()
-        sleep(10)
+        sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()
         sys.exit()
