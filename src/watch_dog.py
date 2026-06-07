@@ -18,7 +18,7 @@ log_file = "~/logs/evap/evap_errors.log"
 def reset_arduino():
     out = open(log_file, "a")
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    out.write(f"{ts} Ardiono Stuck.  Reseting.")
+    out.write(f"{ts} Ardiono Stuck.  Reseting.\n")
     GPIO.output(RESET_PIN, GPIO.LOW)  ## Low triggers reset
     sleep(1)
     GPIO.output(RESET_PIN, GPIO.HIGH)  ## High activates the reset
