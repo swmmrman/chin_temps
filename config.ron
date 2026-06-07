@@ -2,7 +2,7 @@ Config(
     device: "/dev/ttyUSB0",
     low_rh: 86.00,
     high_rh: 92.00,
-    history_file: "/var/log/evap/history.log",
     error_file: "/var/log/evap/error.log",
+    history_file: "/var/log/evap/history.log",
     adjustments_file: "/var/log/evap/adjustments.log",
 )
