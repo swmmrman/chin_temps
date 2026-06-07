@@ -12,7 +12,7 @@ if __name__ != "__main__":
 
 RESET_PIN = 26
 reset_file = "/tmp/page/reset_arduino"
-log_file = "~/logs/evap/evap_errors.log"
+log_file = "/home/pi/logs/evap/evap_errors.log"
 
 
 def reset_arduino():
