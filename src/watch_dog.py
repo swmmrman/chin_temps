@@ -26,7 +26,7 @@ def reset_arduino():
 
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(RESET_PIN, GPIO.OUT)
+GPIO.setup(RESET_PIN, GPIO.OUT, GPIO.PUD_OFF, GPIO.HIGH)
 
 # Set GPIO pin high.  Reset on Arduino is active low
 GPIO.output(RESET_PIN, GPIO.HIGH)
