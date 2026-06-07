@@ -36,9 +36,28 @@ pub mod logging {
         short_term.clear();
     }
 
-    pub struct Logfiles {
+    pub struct Logger {
         error_log: File,
         history_log: File,
         adjustments_log: File,
+    }
+    impl Logger {
+        // pub fn new() -> Logger {
+        // }
+        fn initialize_log(file_path: &str) -> File {
+            let file = match fs::OpenOptions::new()
+                .create(true)
+                .write(true)
+                .read(true)
+                .open(file_path)
+            {
+                Ok(f) => f,
+                Err(e) => {
+                    println!("Error setting up log file {:?}: {}", file_path, e);
+                    std::process::exit(1);
+                }
+            };
+            file
+        }
     }
 }
