@@ -42,8 +42,13 @@ pub mod logging {
         adjustments_log: File,
     }
     impl Logger {
-        // pub fn new() -> Logger {
-        // }
+        pub fn new(error_path: &str, history_path: &str, adjustments_path: &str) -> Logger {
+            Logger {
+                error_log: Logger::initialize_log(error_path),
+                history_log: Logger::initialize_log(history_path),
+                adjustments_log: Logger::initialize_log(adjustments_path),
+            }
+        }
         fn initialize_log(file_path: &str) -> File {
             let file = match fs::OpenOptions::new()
                 .create(true)
