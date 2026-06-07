@@ -27,9 +27,9 @@ fn main() {
     let mut config = Config::read_config(&mut config_file);
     let mut log_file = make_log_file();
     let logger = logging::logging::Logger::new(
-        config.error_file,
-        config.history_file,
-        config.adjustments_file,
+        config.error_file.as_str(),
+        config.history_file.as_str(),
+        config.adjustments_file.as_str(),
     );
     let delay_time = 300; //Soak time.
     let socket_path = path::Path::new("/tmp/chin_temp");

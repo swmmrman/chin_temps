@@ -14,6 +14,9 @@ pub mod config {
         pub device: String,
         pub low_rh: f32,
         pub high_rh: f32,
+        pub error_file: String,
+        pub history_file: String,
+        pub adjustments_file: String,
     }
     impl Config {
         pub fn read_config(conf_file: &mut std::fs::File) -> self::Config {
