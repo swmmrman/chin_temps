@@ -30,7 +30,7 @@ GPIO.setup(RESET_PIN, GPIO.OUT, GPIO.PUD_OFF, GPIO.HIGH)
 
 # Set GPIO pin high.  Reset on Arduino is active low
 GPIO.output(RESET_PIN, GPIO.HIGH)
-
+print("Entering watcher loop")
 while True:
     try:
         file = open("/tmp/page/reset_arduino", "r")
