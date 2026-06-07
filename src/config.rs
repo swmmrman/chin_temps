@@ -3,7 +3,6 @@ pub mod config {
     use ron;
     use serde;
     use serialport::SerialPort;
-    use std::error;
     use std::fs::File;
     use std::io::{Read, Write};
     use std::time::Duration;
