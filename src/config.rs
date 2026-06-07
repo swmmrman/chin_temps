@@ -3,11 +3,12 @@ pub mod config {
     use ron;
     use serde;
     use serialport::SerialPort;
+    use std::error;
     use std::fs::File;
     use std::io::{Read, Write};
     use std::time::Duration;
 
-    use crate::tools::tools::setup_watch_dog_file;
+    use crate::tools::tools::{setup_error_file, setup_watch_dog_file};
 
     #[derive(serde::Deserialize)]
     pub struct Config {
@@ -128,6 +129,11 @@ pub mod config {
         fn reset_arduino(&self) {
             let mut watch_dog_file = setup_watch_dog_file();
             watch_dog_file.write("1".as_bytes()).unwrap();
+            drop(watch_dog_file);
+            let mut error_file = setup_error_file();
+            let ts = Local::now().format("%Y-%m-%d %H:%M:%S");
+            let error_message = format!("[{}] Arduino crash detected", ts);
+            error_file.write(error_message.as_bytes()).unwrap();
         }
     }
 }
