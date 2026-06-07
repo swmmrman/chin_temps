@@ -23,6 +23,10 @@ def reset_arduino():
     sleep(1)
     GPIO.output(RESET_PIN, GPIO.HIGH)  ## High activates the reset
     out.close()
+    file = open(reset_file, "w")
+    file.write("")
+    file.flush()
+    file.close()
 
 
 GPIO.setmode(GPIO.BCM)
@@ -38,6 +42,7 @@ while True:
         if req != "":
             reset_arduino()
         file.close()
+        sleep(10)
     except KeyboardInterrupt:
         GPIO.cleanup()
         sys.exit()
