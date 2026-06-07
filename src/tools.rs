@@ -78,7 +78,7 @@ pub mod tools {
     }
 
     pub fn setup_error_file() -> std::fs::File {
-        let conf_path = path::Path::new("/tmp/page/reset_arduino");
+        let conf_path = path::Path::new("/home/pi/logs/evap/evap_error.log");
         let file = match fs::OpenOptions::new()
             .create(false)
             .write(true)
