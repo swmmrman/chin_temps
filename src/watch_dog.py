@@ -48,14 +48,13 @@ else:
 
 print("Entering watcher loop")
 
-reset_file_handle = open("/tmp/page/reset_arduino", "r")
+reset_file_handle = open(RESET_FILE, "r")
 
 while True:
     try:
-        req = file.read()
+        req = reset_file_handle.read()
         if req != "":
             reset_arduino()
-        file.close()
         sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()
