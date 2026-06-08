@@ -95,7 +95,6 @@ fn main() {
                         &five_minute.get_evap_data(),
                         logging::logging::LogType::History,
                     );
-                    // write_to_log(&mut five_minute, new_date, &mut log_file);
                 }
                 run_time_config.set_watch_dog_timeout();
             }
@@ -127,8 +126,6 @@ fn main() {
         sleep(Duration::from_millis(sleep_time));
         let (command, offset) = read_socket(&mut socket);
         if command != "" {
-            // update_limits(command.clone(), offset, &mut port, &data);
-            // update_config(command, offset, &mut config);
             parse_command(
                 command,
                 offset,
