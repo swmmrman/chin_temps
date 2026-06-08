@@ -15,3 +15,8 @@ if [ ! -e /var/log/evap/ ]; then
     touch /var/log/evap/history.log
     touch /var/log/evep/adjustments.log
 fi
+
+if [ ! $(getent group evap)]; then
+    groupadd evap
+    usermod -a -G evap $USER
+fi
