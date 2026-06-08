@@ -2,6 +2,7 @@
 ## A simple watch dog script to use the RPi to reset a locked up arduino.
 import datetime
 import sys
+from pathlib import Path
 from time import sleep
 
 import RPi.GPIO as GPIO
@@ -33,8 +34,7 @@ def reset_arduino():
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(RESET_PIN, GPIO.OUT, GPIO.PUD_OFF, GPIO.HIGH)
 
-# Set GPIO pin high.  Reset on Arduino is active low
-# GPIO.output(RESET_PIN, GPIO.HIGH)
+
 print("Entering watcher loop")
 while True:
     try:
