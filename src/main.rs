@@ -26,7 +26,7 @@ fn main() {
     let mut config_file = setup_config_file();
     let mut config = Config::read_config(&mut config_file);
     let mut log_file = make_log_file();
-    let logger = logging::logging::Logger::new(
+    let mut logger = logging::logging::Logger::new(
         config.error_file.as_str(),
         config.history_file.as_str(),
         config.adjustments_file.as_str(),
@@ -91,7 +91,11 @@ fn main() {
                 let check = check_time(300, run_time_config.get_ts(), true);
                 if check != 0 {
                     run_time_config.set_ts(check);
-                    write_to_log(&mut five_minute, new_date, &mut log_file);
+                    logger.write_to_log(
+                        &five_minute.get_evap_data(),
+                        logging::logging::LogType::History,
+                    );
+                    // write_to_log(&mut five_minute, new_date, &mut log_file);
                 }
                 run_time_config.set_watch_dog_timeout();
             }
