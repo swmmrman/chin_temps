@@ -17,12 +17,9 @@ RESET_FILE = "/tmp/page/reset_arduino"
 LOG_FILE = "/var/logs/evap/watch_dog.log"
 
 
-def reset_arduino():
-    out = open(LOG_FILE, "a")
+def reset_arduino(out):
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     out.write(f"{ts} Arduino Stuck.  Resetting.\n")
-    out.flush()
-    out.close()
     GPIO.output(RESET_PIN, GPIO.LOW)  ## Low triggers reset
     sleep(1)
     GPIO.output(RESET_PIN, GPIO.HIGH)  ## High activates the reset
@@ -50,7 +47,7 @@ while True:
     try:
         req = reset_file_handle.read()
         if req != "":
-            reset_arduino()
+            reset_arduino(log_file_handle)
         sleep(5)
     except KeyboardInterrupt:
         GPIO.cleanup()
