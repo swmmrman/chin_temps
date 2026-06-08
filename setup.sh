@@ -13,10 +13,10 @@ if [ ! -e /var/log/evap/ ]; then
     mkdir -p /var/log/evap/
     touch /var/log/evap/error.log
     touch /var/log/evap/history.log
-    touch /var/log/evep/adjustments.log
+    touch /var/log/evap/adjustments.log
 fi
 
-if [ ! $(getent group evap)]; then
+if [ ! $(getent group evap) ]; then
     groupadd evap
     usermod -a -G evap $USER
 fi
