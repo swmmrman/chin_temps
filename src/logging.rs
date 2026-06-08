@@ -41,6 +41,13 @@ pub mod logging {
         history_log: File,
         adjustments_log: File,
     }
+
+    pub enum LogType {
+        Error,
+        History,
+        Adjustments,
+    }
+
     impl Logger {
         pub fn new(error_path: &str, history_path: &str, adjustments_path: &str) -> Logger {
             Logger {
