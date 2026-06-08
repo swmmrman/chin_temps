@@ -25,3 +25,4 @@ touch /var/log/evap/adjustments.log
 
 chown -R $USER:evap /var/log/evap
 chmod g+w /var/log/evap
+usermod -a -G evap $USER
