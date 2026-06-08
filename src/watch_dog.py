@@ -12,17 +12,17 @@ if __name__ != "__main__":
     sys.exit(1)
 
 RESET_PIN = 26
-reset_file = "/tmp/page/reset_arduino"
-log_file = "/var/logs/evap/watch_dog.log"
+RESET_FILE = "/tmp/page/reset_arduino"
+LOG_FILE = "/var/logs/evap/watch_dog.log"
 
 
 def reset_arduino():
-    out = open(log_file, "a")
+    out = open(LOG_FILE, "a")
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     out.write(f"{ts} Arduino Stuck.  Resetting.\n")
     out.flush()
     out.close()
-    file = open(reset_file, "w")
+    file = open(RESET_FILE, "w")
     file.write("")
     file.flush()
     file.close()
