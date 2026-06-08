@@ -19,4 +19,5 @@ fi
 if [ ! $(getent group evap) ]; then
     groupadd evap
     usermod -a -G evap $USER
+    echo "groups created relog"
 fi
