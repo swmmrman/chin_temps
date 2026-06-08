@@ -102,11 +102,17 @@ fn main() {
             //Skip timeouts, quit if device is gone.
             Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
             Err(ref e) if e.kind() == io::ErrorKind::BrokenPipe => {
-                println!("Pipe is broken, device unplugged or double access.");
+                let message = "Pipe is broken, device unplugged or double access.";
+                eprint!("{:?}", e);
+                logger.write_to_log(message, logging::logging::LogType::Error);
                 std::process::exit(1);
             }
             //Print error otherwise
-            Err(e) => eprintln!("{:?}", e),
+            Err(e) => {
+                let message = format!("{:?}", e);
+                eprintln!("{:?}", e);
+                logger.write_to_log(&message, logging::logging::LogType::Error);
+            }
         }
         let call = read_call(run_time_config.get_call_file());
         data.update_status(call.clone(), &mut run_time_config.arduino, true);
