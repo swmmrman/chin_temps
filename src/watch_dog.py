@@ -3,7 +3,6 @@
 import datetime
 import os
 import sys
-from pathlib import Path
 from time import sleep
 
 import RPi.GPIO as GPIO
