@@ -23,10 +23,6 @@ def reset_arduino():
     out.write(f"{ts} Arduino Stuck.  Resetting.\n")
     out.flush()
     out.close()
-    file = open(RESET_FILE, "w")
-    file.write("")
-    file.flush()
-    file.close()
     GPIO.output(RESET_PIN, GPIO.LOW)  ## Low triggers reset
     sleep(1)
     GPIO.output(RESET_PIN, GPIO.HIGH)  ## High activates the reset
