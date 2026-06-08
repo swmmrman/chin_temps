@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 ## A simple watch dog script to use the RPi to reset a locked up arduino.
 import datetime
+import os
 import sys
 from pathlib import Path
 from time import sleep
@@ -34,11 +35,23 @@ def reset_arduino():
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(RESET_PIN, GPIO.OUT, GPIO.PUD_OFF, GPIO.HIGH)
 
+reset_file_preset = os.path.exists(RESET_FILE)
+log_file_present = os.path.exists(LOG_FILE)
+
+if not reset_file_preset:
+    os.mkfifo(RESET_FILE)
+
+if not log_file_present:
+    log_file_handle = open(LOG_FILE, "w")
+else:
+    log_file_handle = open(LOG_FILE, "a")
 
 print("Entering watcher loop")
+
+reset_file_handle = open("/tmp/page/reset_arduino", "r")
+
 while True:
     try:
-        file = open("/tmp/page/reset_arduino", "r")
         req = file.read()
         if req != "":
             reset_arduino()
