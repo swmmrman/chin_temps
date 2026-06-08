@@ -2,6 +2,7 @@ pub mod tools {
     use crate::Config;
     use crate::EvapData;
     use crate::config::config::RunTimeConfig;
+    use crate::logging::logging;
     use chrono::{DateTime, Local};
     use serialport::{self, SerialPort};
     use std::io::{Read, Seek};
@@ -134,11 +135,12 @@ pub mod tools {
         ed: &mut EvapData,
         conf: &mut Config,
         rt_config: &mut RunTimeConfig,
+        l: &mut logging::Logger,
     ) {
         let c = command.to_uppercase();
         match &c[0..1] {
             "H" | "L" => {
-                update_limits(command.clone(), value, &mut rt_config.arduino, ed);
+                update_limits(command.clone(), value, &mut rt_config.arduino, ed, l);
                 conf.update(command, value);
             }
             "C" => {
@@ -214,6 +216,7 @@ pub mod tools {
         offset: f32,
         sp: &mut Box<dyn SerialPort + 'static>,
         ed: &EvapData,
+        l: &mut logging::Logger,
     ) {
         let c = command.to_uppercase();
         let main_command = &c[0..1];
@@ -222,9 +225,11 @@ pub mod tools {
         let new_offset;
         if main_command == "H" {
             cur_set = ed.get_high_limit();
-            eprintln!("High limit: {} -> {}", ed.get_high_limit(), offset);
+            let message = format!("High limit: {} -> {}", ed.get_high_limit(), offset);
+            l.write_to_log(&message, logging::LogType::Adjustments);
         } else {
-            eprintln!("Low limit: {} -> {}", ed.get_low_limit(), offset);
+            let message = format!("Low limit: {} -> {}", ed.get_low_limit(), offset);
+            l.write_to_log(&message, logging::LogType::Adjustments);
         }
         if c.len() > 1 && &c[1..] == "A" {
             new_offset = offset - cur_set;

@@ -68,6 +68,7 @@ fn main() {
                         config.get_high_limit(),
                         &mut run_time_config.arduino,
                         &data,
+                        &mut logger,
                     );
                 }
                 if data.get_low_limit() != config.get_low_limit() {
@@ -76,6 +77,7 @@ fn main() {
                         config.get_low_limit(),
                         &mut run_time_config.arduino,
                         &data,
+                        &mut logger,
                     );
                 }
                 let _ = io::stdout().execute(MoveUp(lines));
@@ -129,6 +131,7 @@ fn main() {
                 &mut data,
                 &mut config,
                 &mut run_time_config,
+                &mut logger,
             );
         }
     }
