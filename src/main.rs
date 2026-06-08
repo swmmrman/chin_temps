@@ -9,7 +9,6 @@ mod tools;
 
 use config::config::*;
 use evap_data::evap_data::EvapData;
-use logging::logging::{make_log_file, write_to_log};
 use tools::tools::*;
 
 use crossterm::{ExecutableCommand, cursor::MoveUp};
@@ -25,7 +24,6 @@ fn main() {
     // let args: Vec<String> = std::env::args().collect();
     let mut config_file = setup_config_file();
     let mut config = Config::read_config(&mut config_file);
-    let mut log_file = make_log_file();
     let mut logger = logging::logging::Logger::new(
         config.error_file.as_str(),
         config.history_file.as_str(),
