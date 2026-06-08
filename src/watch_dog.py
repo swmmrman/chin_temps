@@ -19,6 +19,7 @@ LOG_FILE = "/var/log/evap/watch_dog.log"
 def reset_arduino(out):
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     out.write(f"{ts} Arduino Stuck.  Resetting.\n")
+    out.flush()
     GPIO.output(RESET_PIN, GPIO.LOW)  ## Low triggers reset
     sleep(1)
     GPIO.output(RESET_PIN, GPIO.HIGH)  ## High activates the reset
