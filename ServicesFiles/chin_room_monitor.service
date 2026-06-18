@@ -1,0 +1,11 @@
+[Unit]
+Description=chin_temps service
+
+[Service]
+WorkingDirectory=/home/pi/gits/Chin-Room-Monitor/
+ExecStart=/home/pi/gits/Chin-Room-Monitor/run.sh USB0 2>/dev/null
+Type=forking
+User=pi
+
+[Install]
+WantedBy=multi-user.target

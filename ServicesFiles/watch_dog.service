@@ -1,0 +1,10 @@
+[Unit]
+Description=watch_dog service
+
+[Service]
+Type=simple
+ExecStart=python3 /media/LinuxStorageCryp/MyCurrentStorage/Coding/Rust/chin_temps/src/watch_dog.py 2>/dev/null
+User=pi
+
+[Install]
+WantedBy=multi-user.target
