@@ -4,7 +4,7 @@ fn print_help(call: String) {
 Usage: {} command value
 
 Commands:
-  tsettemp\tvalue\tSet the temperature setpoint
+  settemp\tvalue\tSet the temperature setpoint
   sethumid\tvalue\tSet the humidity target
         ",
         call
