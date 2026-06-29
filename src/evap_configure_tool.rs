@@ -13,7 +13,7 @@ Commands:
 
 fn main() {
     let mut args = std::env::args();
-    if args.len() < 2 {
+    if args.len() != 3 {
         println!("No args supplied");
         print_help(args.nth(0).unwrap());
         std::process::exit(1);
@@ -22,5 +22,12 @@ fn main() {
         std::process::exit(0);
     }
     let command = args.nth(1);
-    let value = args.nth(2);
+    let v = args.nth(2).unwrap();
+    let value = match v.parse::<i32>() {
+        Ok(val) => val,
+        Err(_) => {
+            eprintln!("Value must be of type int");
+            std::process::exit(1)
+        }
+    };
 }
