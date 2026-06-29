@@ -18,7 +18,9 @@ fn main() {
         print_help(args.nth(0).unwrap());
         std::process::exit(1);
     }
-    for arg in args {
-        println!("{}", arg);
+    if args.any(|x| x == "help".to_string()) {
+        std::process::exit(0);
     }
+    let command = args.nth(1);
+    let value = args.nth(2);
 }
