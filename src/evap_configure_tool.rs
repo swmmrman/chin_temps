@@ -1,7 +1,6 @@
 fn print_help(call: String) {
     println!(
-        "
-Usage: {} command value
+        "Usage: {} command value
 
 Commands:
   settemp\tvalue\tSet the temperature setpoint
