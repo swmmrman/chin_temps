@@ -5,6 +5,7 @@ fn print_help(call: String) {
 Commands:
   settemp\tvalue\tSet the temperature setpoint
   sethumid\tvalue\tSet the humidity target
+  help\t \t Print this help message
         ",
         call
     )
