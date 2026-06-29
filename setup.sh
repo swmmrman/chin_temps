@@ -28,3 +28,6 @@ chmod g+w /var/log/evap
 usermod -a -G evap $USER
 
 cargo install --path .
+
+cp SeviceFiles/*.service /etc/systemd/system/
+systemctl daemon-reload

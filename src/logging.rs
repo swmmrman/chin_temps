@@ -46,7 +46,7 @@ pub mod logging {
                 LogType::Adjustments => &self.adjustments_log,
             };
             let ts = Local::now().format("[%Y-%m-%d %H:%M:%S]");
-            let out_message = format!("{} {}", ts, message);
+            let out_message = format!("{} {}\n", ts, message);
             let _ = file.write(out_message.as_bytes());
         }
     }

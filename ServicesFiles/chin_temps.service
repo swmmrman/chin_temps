@@ -1,0 +1,11 @@
+[Unit]
+Description=chin_temps service
+After=chin_room_monitor.service watch_dog.service
+
+[Service]
+Type=simple
+ExecStart=/home/pi/.cargo/bin/chin_temps 2>/dev/null
+User=pi
+
+[Install]
+WantedBy=multi-user.target
