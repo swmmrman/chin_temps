@@ -2,6 +2,7 @@
 name = "chin_temps"
 version = "0.1.8"
 edition = "2024"
+default-run = "chin_temps"
 
 [dependencies]
 chrono = "0.4.41"
